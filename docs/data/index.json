@@ -1,45 +1,46 @@
 {
     "team": [
         {
-            "name": "Team Member Name 1",
-            "email": "email@eng.pdn.ac.lk",
-            "eNumber": "E/yy/xxx",
-            "github_profile":"#",
-            "linkedin_profile":"#",
+            "name": "Nishankar.S",
+            "email": "e17230@eng.pdn.ac.lk",
+            "eNumber": "E/17/230",
+            "github_profile":"https://github.com/Nishan-Charlie",
+            "linkedin_profile":"www.linkedin.com/in/nishankar-s-423b551b3",
+            "website": "https://www.nishankar.me/"
+        },
+        {
+            "name": "Arshad M.R.M.",
+            "email": "e17015@eng.pdn.ac.lk",
+            "eNumber": "E/17/230",
+            "github_profile":"https://github.com/Arshad-MRM",
+            "linkedin_profile":"www.linkedin.com/in/muhammed-arshad-127537159",
             "website": "#"
         },
         {
-            "name": "Team Member Name 2",
-            "email": "email@eng.pdn.ac.lk",
-            "eNumber": "E/yy/xxx",
-            "github_profile":"#",
-            "linkedin_profile":"#",
-            "website": "#"
-        },
-        {
-            "name": "Team Member Name 3",
-            "email": "email@eng.pdn.ac.lk",
-            "eNumber": "E/yy/xxx",
-            "github_profile":"#",
-            "linkedin_profile":"#",
+            "name": "Varnaraj N.",
+            "email": "e17358@eng.pdn.ac.lk",
+            "eNumber": "E/17/358",
+            "github_profile":"https://github.com/varanaraj",
+            "linkedin_profile":"https://www.linkedin.com/mwlite/in/varnaraj-naguleswaran-2b8293216",
             "website": "#"
         }
     ],
     "supervisors": [
         {
-            "name": "Dr. Supervisor 1",
-            "email": "email@eng.pdn.ac.lk",
-            "linkedin_profile":"#",
-            "researchgate_profile":"#",
-            "website": "#"
+            "name": "Dr. Isuru Nawinne ",
+            "email": "isurunawinne@eng.pdn.ac.lk",
+            "linkedin_profile":"https://www.linkedin.com/in/isuru-nawinne-73302833/",
+            "website": "https://www.researchgate.net/profile/Isuru-Nawinne",
+            "researchgate_profile":"#"
         },
         {
-            "name": "Supervisor 2",
-            "email": "email@eng.pdn.ac.lk",
-            "linkedin_profile":"#",
-            "researchgate_profile":"#",
-            "website": "#"
+            "name": "Dr. Mahanama Wickramasinghe",
+            "email": "mahanamaw@eng.pdn.ac.lk",
+            "linkedin_profile":"https://www.linkedin.com/in/mahanama/",
+            "website": "#",
+            "researchgate_profile":"#"
         }
+
     ],
     "tags": ["Web", "Embedded Systems"]
 }
