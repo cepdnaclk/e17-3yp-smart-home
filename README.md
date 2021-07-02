@@ -9,7 +9,7 @@
 Controling Electric sockets and Switches through mobile app which GUI and user friendly.
 
 ## Team Members
-1. E/17/015 Arshad M.R.M  [[Website](http://www.ce.pdn.ac.lk/e17-batch/), [Email](mailto:e17015@eng.pdn.ac.lk)]
+1. E/17/015 Arshad M.R.M.  [[Website](http://www.ce.pdn.ac.lk/e17-batch/), [Email](mailto:e17015@eng.pdn.ac.lk)]
 2. E/17/230 Nishankar S. [[Website](http://www.ce.pdn.ac.lk/e17-batch/), [Email](mailto:e17230@eng.pdn.ac.lk)]
 3. E/17/358 Varnaraj N. [[Website](http://www.ce.pdn.ac.lk/e17-batch/), [Email](mailto:e17358@eng.pdn.ac.lk)]
 
