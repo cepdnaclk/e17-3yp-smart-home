@@ -16,7 +16,7 @@ title: Smart Home
 ## Team
 -  e/17/015, Arshard M.R.M, [email](mailto:e17015@eng.pdn.ac.lk)
 -  e/17/230, Nishankar S, [email](mailto:e17230@eng.pdn.ac.lk)
--  e/17/358, Varnaraj, [email](mailto:e17358@eng.pdn.ac.lk)
+-  e/17/358, Varnaraj N, [email](mailto:e17358@eng.pdn.ac.lk)
 
 <!-- Image (photo/drawing of the final hardware) should be here -->
 
