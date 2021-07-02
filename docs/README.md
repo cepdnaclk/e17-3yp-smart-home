@@ -3,8 +3,8 @@ layout: home
 permalink: index.html
 
 # Please update this with your repository name and title
-repository-name: eYY-XXX-project-template
-title:
+repository-name: e17-3yp-smart-home
+title: Smart Home
 ---
 
 [comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
@@ -19,9 +19,9 @@ This is a sample image, to show how to add images to your page. To learn more op
 
 
 ## Team
--  eNumber, Name, [email](mailto:name@email.com)
--  eNumber, Name, [email](mailto:name@email.com)
--  eNumber, Name, [email](mailto:name@email.com)
+-  E/17/015 Arshad M.R.M  [[Website](http://www.ce.pdn.ac.lk/e17-batch/), [Email](mailto:e17015@eng.pdn.ac.lk)]
+   E/17/230 Nishankar S. [[Website](http://www.ce.pdn.ac.lk/e17-batch/), [Email](mailto:e17230@eng.pdn.ac.lk)]
+   E/17/358 Varnaraj N. [[Website](http://www.ce.pdn.ac.lk/e17-batch/), [Email](mailto:e17358@eng.pdn.ac.lk)]
 
 ## Table of Contents
 1. [Introduction](#introduction)
