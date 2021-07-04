@@ -14,9 +14,9 @@ title: Smart Home
 ---
 
 ## Team
--  e/17/015, Arshard M.R.M, [email](mailto:e17015@eng.pdn.ac.lk)
--  e/17/230, Nishankar S, [email](mailto:e17230@eng.pdn.ac.lk)
--  e/17/358, Varnaraj N, [email](mailto:e17358@eng.pdn.ac.lk)
+-  E/17/015, Arshard M.R.M, [email](mailto:e17015@eng.pdn.ac.lk)
+-  E/17/230, Nishankar S, [email](mailto:e17230@eng.pdn.ac.lk)
+-  E/17/358, Varnaraj N, [email](mailto:e17358@eng.pdn.ac.lk)
 
 <!-- Image (photo/drawing of the final hardware) should be here -->
 
@@ -35,7 +35,8 @@ title: Smart Home
 
 ## Introduction
 
-Description of the real world problem and solution, impact
+##Over View
+
 
 
 ## Solution Architecture
@@ -64,8 +65,8 @@ What was achieved, future developments, commercialization plans
 
 ## Links
 
-- [Project Repository](https://github.com/cepdnaclk/{{ page.repository-name }}){:target="_blank"}
-- [Project Page](https://cepdnaclk.github.io/{{ page.repository-name}}){:target="_blank"}
+- [Project Repository](https://github.com/cepdnaclk/e17-3yp-smart-home){:target="_blank"}
+- [Project Page](https://cepdnaclk.github.io/e17-3yp-smart-home){:target="_blank"}
 - [Department of Computer Engineering](http://www.ce.pdn.ac.lk/)
 - [University of Peradeniya](https://eng.pdn.ac.lk/)
 
