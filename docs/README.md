@@ -37,7 +37,16 @@ title: Smart Home
 
 
 ### Over View
-We provide 
+The idea of smart home exist for many years. The core idea of Smart Home is remotle controling of switches and bulbs. But we added some inovative features to the core idea
+and make it more smarter.
+
+###Smart Bulbs
+Our goal is to provide a futuristic lightning system to our loyal users. 
+We have also identified smart lighting as an integral part of a smart home.
+Smart lightning mainly focused on energy efficiency and remote control.
+But we also provide many other futuristic features to our smart system. 
+Join us to build a futuristic society with less energy waste.
+Be in control from anywhere with control right in the mobile app.
 
 
 
