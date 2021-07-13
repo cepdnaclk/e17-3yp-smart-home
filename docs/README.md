@@ -40,7 +40,7 @@ title: Smart Home
 The idea of smart home exist for many years. The core idea of Smart Home is remotle controling of switches and bulbs. But we added some inovative features to the core idea
 and make it more smarter.
 
-####Smart Bulbs
+#### Smart Bulbs
 
 Our goal is to provide a futuristic lightning system to our loyal users. 
 We have also identified smart lighting as an integral part of a smart home.
@@ -49,7 +49,9 @@ But we also provide many other futuristic features to our smart system.
 Join us to build a futuristic society with less energy waste.
 Be in control from anywhere with control right in the mobile app.
 
+#### Smart Switches
 
+Smart switches have some features as smart bulbs. They can also controllable by remote or voice command. We can see the power usage and the charge percentage of the mobile or any other device. They are far safer than traditional switches. 
 
 
 
