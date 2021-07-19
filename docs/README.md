@@ -75,7 +75,7 @@ With the environmental conditions the curtains can react.
 * Wall Sockets
 * NodeMCU
 * DC Motor and motor controller
-* Other things (Wires, registers....)
+* Other things (Wires, resistors....)
 
 ### Software side
 
