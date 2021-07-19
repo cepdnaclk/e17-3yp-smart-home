@@ -62,7 +62,7 @@ With the environmental conditions the curtains can react.
 
 ## Solution Architecture
 
-![Solution-Architecture](Solution.png)
+![Solution-Architecture](./images/Solution.png)
 
 ## Hardware and Software Designs
 
