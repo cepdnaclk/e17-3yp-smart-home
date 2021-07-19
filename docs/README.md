@@ -66,7 +66,32 @@ With the environmental conditions the curtains can react.
 
 ## Hardware and Software Designs
 
-Detailed designs with many sub-sections
+### Hardwares 
+ 
+* Arduino UNO
+* Adafruit Lux Sensor
+* Motion Sensor
+* RGB Strips
+* Wall Sockets
+* NodeMCU
+* DC Motor and motor controller
+* Other things (Wires, registers....)
+
+### Software side
+
+We going to build a Mobile application and a web page for the user to login and control the home.
+
+#### FrontEnd Development
+
+* HTML, CSS , Javascripts  
+* Frame work -> React.js
+* App Development -> Flutter
+
+#### BackEnd Development
+
+* Nodejs
+* Frame work -> Express.js
+* Database -> Mongodb
 
 ## Testing
 
