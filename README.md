@@ -24,11 +24,3 @@ Controling Electric sockets and Switches through mobile app which GUI and user f
 1. [Project page](https://cepdnaclk.github.io/e15-4yp-minimal-template)
 2. [Github repo](https://github.com/cepdnaclk/e15-4yp-minimal-template)
 3. [Department of computer engineering](http://ce.pdn.ac.lk)
-
-
-## Publications
-1. [Semester 7 report](https://cepdnaclk.github.io/e15-4yp-minimal-template)
-2. [Semester 7 sldies](https://cepdnaclk.github.io/e15-4yp-minimal-template)
-3. [Semester 8 report](https://cepdnaclk.github.io/e15-4yp-minimal-template)
-4. [Semester 8 slides](https://cepdnaclk.github.io/e15-4yp-minimal-template)
-5. Author1, Author2 and Author2 "Research paper title" in Conference name 2021. [Download PDF ](https://cepdnaclk.github.io/e15-4yp-minimal-template)
