@@ -272,12 +272,14 @@
         <div class="row align-items-center">
           <div class="col-md-4 me-auto">
             <h2 class="mb-4">Hardware Model</h2>
-            <p class="mb-4">This our Hardware diagram of our project.
+            <p class="mb-4">This our Hardware model of our project.
               These are the hardware componets we planned to use:
               <ul>
-                <li><a href="https://randomnerdtutorials.com/esp32-pinout-reference-gpios/">NodeMCU32</a></li>
-                <li><a href="https://cdn-learn.adafruit.com/downloads/pdf/pir-passive-infrared-proximity-motion-sensor.pdf">PIR sensor</a></li>
-                <li><a href="https://datasheet.octopart.com/MAX4822ETP%2B-Maxim-datasheet-8430178.pdf">Relay switch</a></li>
+                <li>
+                  <a href="#nodemcu">NodeMCU32</a>
+                </li>
+                <li><a href="#pir_sensor">PIR sensor</a></li>
+                <li><a href="">Relay switch</a></li>
                 <li><a href="https://www.robotics.org.za/6970622932567">AC Dimmer</a></li>
                 <li><a href="https://www.sparkfun.com/datasheets/BreakoutBoards/0712.pdf">AC Current Sensor</a></li>
                 <li><a href="https://www.autobotic.com.my/ac-voltage-sensor-module-zmpt101b-single-phase">AC Voltage sensor </a></li>
@@ -291,6 +293,88 @@
         </div>
       </div>
     </section>
+
+    <!-- NodeMCU -->
+    <section class="section" id="nodemcu">
+      <div class="container" >
+        <div class="row align-items-center">
+          <div class="col-md-4 me-auto">
+            <h2 class="mb-4">NodeMCU32S</h2>
+            <p class="mb-4">NodeMCU32S is development board which is embeded with the esp32 micro controller which so small but powerfull. It's the perfect controller for our project because it's cheap, it already comes with the wifi module and it has many features. 
+            <br>
+            <br>
+            Feature of the ESP32:
+            <ul>
+              <li>18 Analog to DC converter</li>
+              <li>3 SPI interfaces</li>
+              <li>3 UART interfaces</li>
+              <li>2 I2C interfaces</li>
+              <li>16 PWM output channels</li>
+              <li>2 DAC</li>
+              <li>2 I2S interfaces</li>
+              <li>10 Capacitive sensing GPIOs</li>
+            </ul>
+            
+            <a href="https://randomnerdtutorials.com/esp32-pinout-reference-gpios/"> Referense Link</a><br>
+            <a href="#Hardware">Hardware Model</a>
+            </p>
+          </div>
+          <div class="col-md-6" data-aos="fade-left">
+            <img src="images/Hardware/esp32-pinout-chip-ESP-WROOM-32.webp" alt="Image" class="img-fluid">
+          </div>
+        </div>
+      </div>
+    </section>
+
+<!-- Pir Sensor -->
+<section class="section" id="pir_sensor">
+  <div class="container" >
+    <div class="row align-items-center">
+      <div class="col-md-4 me-auto">
+        <h2 class="mb-4">PIR Sensor</h2>
+        <p class="mb-4">Passive Infrared Sensor commanly known as Proximity motion sensor. PIR sensors are used to detect the movements. It functioning by absorbing the IR rays emits from the objects. Humans and animals emit the IR radiation other than that the hot objects also emits the IR rays so IR sensor detect the movements of the objects. Many variety of sensors in the market they vary with price, sensitivity and range. For this project we HC-SR501. Because it mid range wide, angle, good sensitivity and cheap
+
+          <br><br>
+          <a href="https://cdn-learn.adafruit.com/downloads/pdf/pir-passive-infrared-proximity-motion-sensor.pdf"> Referense Link</a><br>
+          <a href="#Hardware">Hardware Model</a>
+        </p>
+
+
+      </div>
+      <div class="col-md-6" data-aos="fade-left">
+        <img src="images/Hardware/Passive-Infrared-PIR-Sensor-Pinout-Diagram.png" alt="Image" class="img-fluid">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Relay Switch -->
+<section class="section" id="relay">
+  <div class="container" >
+    <div class="row align-items-center">
+      <div class="col-md-4 me-auto">
+        <h2 class="mb-4">3-3.3V Relay </h2>
+        <p class="mb-4">
+          Relay is an electrically operated switch.  It consists of a set of input terminals for a 
+          signal or multiple control signals, and a set of operating contact terminals.  The 
+          switch may have any number of contacts or multiple contact forms, such as make 
+          contacts,  break contacts, or combinations thereof. 
+          <br>
+          Relay are used where it is necessary to control a circuit by an independent low-power 
+          signal, or where several circuits must be controlled by one signal.
+          <br><br>
+          <a href="https://datasheet.octopart.com/MAX4822ETP%2B-Maxim-datasheet-8430178.pdf"> Referense Link</a><br>
+          <a href="#Hardware">Hardware Model</a>
+        </p>
+
+
+      </div>
+      <div class="col-md-6" data-aos="fade-left">
+        <img src="images/Hardware/index.jpg" alt="Image" class="img-fluid">
+      </div>
+    </div>
+  </div>
+</section>
 
     <!-- Software solution-->
     <section class="section" id="Software">
@@ -341,7 +425,6 @@
           <div class="col-md-4 me-auto">
             <h2 class="mb-4">Timeline</h2>
             <p class="mb-4">This the timeline we planned</p>
-            <!-- <p><a href="#" class="btn btn-primary">Download Now</a></p> -->
           </div>
           <div class="col-md-6" data-aos="fade-left">
             <img src="images/Timeline.PNG" alt="Image" class="img-fluid">
