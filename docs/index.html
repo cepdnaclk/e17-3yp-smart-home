@@ -95,8 +95,8 @@
 				</p>				
             </div>
             <div class="col-lg-4 iphone-wrap"><br>
-              <img src="images/" alt="Image" class="phone-1" data-aos="fade-right">
-<!--              <img src="assets/img/phone_2.png" alt="Image" class="phone-2" data-aos="fade-right" data-aos-delay="200">-->
+              <!-- <img src="images/" alt="Image" class="phone-1" data-aos="fade-right"> -->
+             <img src="assets/img/phone_2.png" alt="Image" class="phone-2" data-aos="fade-right" data-aos-delay="200">
             </div>
           </div>
         </div>
@@ -228,8 +228,24 @@
           <div class="col-md-4 ms-auto order-2">
             <h2 class="mb-4" >Solution Architecture</h2>
             <p class="mb-4">
-              We going to use the NodeMCu32s as the central device.
+              Our solution Architecture contains two types of devices, they are 
+              <b>Smart-Bulbs</b> & the <b>Smart-Switchs</b>. They both devices, sensors like motion sensor,
+              AC current sensor, AC voltage sensor and the Rellay are directly connected with the Central Unit.
+              Our mobile application and the central unit connectedto the cloud via internet. So they can communicate 
+              with them-self. The central unit will use the <b>MQTT</b> protocol to communicate with the server.
+              <br><br>
+              The energy consumption monitoring, this is a feature embeded with all the switches to calculate the
+              energy consumption and update it to the cloud. This is can be implemented using Two sensor AC Current sensor
+              and AC voltage sensor. 
 
+              <br><br>
+              Motion Sensing, Motion sensing is another feature built-in with the bulbs, The motion sensors are connected
+              to the central unit. When a motion detected or the central unit wil turn on the bulb and if no motion/human detected
+              the CU will turn off the bulb.
+
+              <br><br>
+              Mobile applications communicate with the central unit through the cloud or diretly using wifi router.
+              The User settings, user data, and the reports will be stored in the cloud/server. 
             </p>
             
           </div>
@@ -245,11 +261,11 @@
       <div class="container" >
         <div class="row align-items-center">
           <div class="col-md-4 me-auto">
-            <h2 class="mb-4">Hardware Diagram</h2>
+            <h2 class="mb-4">Hardware Model</h2>
             <p class="mb-4">This our Hardware diagram of our project.
               These are the hardware componets we planned to use:
               <ul>
-                <li><a href="https://docs.ai-thinker.com/_media/esp32/docs/nodemcu-32s_product_specification.pdf">NodeMCU32</a></li>
+                <li><a href="https://randomnerdtutorials.com/esp32-pinout-reference-gpios/">NodeMCU32</a></li>
                 <li><a href="https://cdn-learn.adafruit.com/downloads/pdf/pir-passive-infrared-proximity-motion-sensor.pdf">PIR sensor</a></li>
                 <li><a href="https://datasheet.octopart.com/MAX4822ETP%2B-Maxim-datasheet-8430178.pdf">Relay switch</a></li>
                 <li><a href="https://www.robotics.org.za/6970622932567">AC Dimmer</a></li>
@@ -260,7 +276,7 @@
             </p>
           </div>
           <div class="col-md-6" data-aos="fade-left">
-            <img src="assets/img/undraw_svg_2.svg" alt="Image" class="img-fluid">
+            <img src="images/hardwarediagram.PNG" alt="Image" class="img-fluid">
           </div>
         </div>
       </div>
@@ -271,7 +287,7 @@
       <div class="container" >
         <div class="row align-items-center">
           <div class="col-md-4 me-auto">
-            <h2 class="mb-4">Software Solution</h2>
+            <h2 class="mb-4">Software Model</h2>
             <p class="mb-4">
               <Ul>
                 <li><a href="">Flutter</a></li>
@@ -285,7 +301,7 @@
             
           </div>
           <div class="col-md-6" data-aos="fade-left">
-            <img src="assets/img/undraw_svg_2.svg" alt="Image" class="img-fluid">
+            <img src="images/software.PNG" alt="Image" class="img-fluid">
           </div>
         </div>
       </div>
@@ -339,8 +355,9 @@
                       <img src="images/team/WhatsApp Image 2021-07-31 at 7.35.02 PM.jpeg" alt="Image" height="300" width="225" class="pic" >
                       <br><br>
                       <h5><a href=""><img src="images/logos/GitHub-Mark.png" alt="github"  height="45" width="45"></a>
-                        <a href=""><img src="images/logos/linkedin-logo-png-1853.png" alt="Linkdin"  height="35" width="35"></a>
-                        <b>Arshad MRM</b>   
+                        <a href="www.linkedin.com/in/muhammed-arshad-127537159">
+                          <img src="images/logos/linkedin-logo-png-1853.png" alt="Linkdin"  height="35" width="35"></a>
+                        <b>Arshad MRM  &nbsp; E/17/015</b>   
                         <a href=""><img src="images/logos/icons8-website-96.png" alt="web"  height="35" width="35"></a>
                       </h5>
                 </div>
@@ -352,7 +369,7 @@
                      <h5>
                       <a href=""><img src="images/logos/GitHub-Mark.png" alt="github" height="45" width="45"></a>
                       <a href=""><img src="images/logos/linkedin-logo-png-1853.png" alt="Linkdin"  height="35" width="35"></a>
-                       <b>Varnaraj N</b>      
+                       <b>Varnaraj N  &nbsp; E/17/358</b>      
                        <a href=""><img src="images/logos/icons8-website-96.png" alt="web"  height="35" width="35"></a>                 
                       </h5>
                       </div>
@@ -364,7 +381,7 @@
                         <h5>
                           <a href=""><img src="images/logos/GitHub-Mark.png" alt="github" height="45" width="45"></a>
                         <a href=""><img src="images/logos/linkedin-logo-png-1853.png" alt="Linkdin"  height="35" width="35"></a>
-                          <b>Nishankar S</b>   
+                          <b>Nishankar S  &nbsp; E/17/230</b>   
                           <a href=""><img src="images/logos/icons8-website-96.png" alt="web"  height="35" width="35"></a>                   
                         </h5>
                         </div>              
@@ -387,7 +404,8 @@
                       <img src="images/team/isuruNawinne.png" alt="Image" height="300" width="255"  class="mentimg">
                       <br><br>
                       <h5>
-                        <a href=""><img src="images/logos/linkedin-logo-png-1853.png" alt="Linkdin"  height="35" width="35"></a>
+                        <a href="https://www.linkedin.com/in/isuru-nawinne-73302833/?originalSubdomain=lk">
+                          <img src="images/logos/linkedin-logo-png-1853.png" alt="Linkdin"  height="35" width="35"></a>
                         <b>Dr. Isuru Nawinne</b>   
                         <a href="http://www.ce.pdn.ac.lk/academic-staff/isuru-nawinne/">
                           <img src="images/logos/icons8-website-96.png" alt="web"  height="35" width="35"></a>
@@ -396,10 +414,11 @@
 
                 <!-- Dr. Mahanama Wickramasinghe -->
                 <div style="text-align: center;">       
-                      <img src="images/team/mahanama.jpg" alt="Image"  height="300" width="255" class="mentimg">
+                      <img src="images/team/mahanama.jpg" alt="Image"  height="300" width="255" ="mentimg">
                       <br><br>
                      <h5>
-                      <a href=""><img src="images/logos/linkedin-logo-png-1853.png" alt="Linkdin"  height="35" width="35" ></a>
+                      <a href="https://www.linkedin.com/in/mahanama/">
+                        <img src="images/logos/linkedin-logo-png-1853.png" alt="Linkdin"  height="35" width="35" ></a>
                        <b>Dr. Mahanama Wickramasinghe</b>      
                        <a href="http://www.ce.pdn.ac.lk/2021/05/02/dr-mahanama-wickramasinghe/">
                          <img src="images/logos/icons8-website-96.png" alt="web"  height="35" width="35"></a>                 
