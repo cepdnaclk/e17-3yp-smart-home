@@ -32,12 +32,7 @@ h1, h2, h3, h4, h5, h6, .font-heading {
   color: #000;
 }
 
-.mentimg{
-display:inline-block;
-margin-left:auto;
-margin-right:auto;
 
-}
 
 .container {
   z-index: 2;
@@ -171,50 +166,7 @@ section {
   color: #b1b1b1;
 }
 
-/* Step */
-.step {
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.1);
-  background: #fff;
-  padding: 40px;
-}
 
-.step .number {
-  background: linear-gradient(-45deg, #1391a5, #274685);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  font-weight: 700;
-  letter-spacing: .2rem;
-  margin-bottom: 10px;
-  display: block;
-}
-
-.step p:last-child {
-  margin-bottom: 0px;
-}
-
-/* Review */
-.review h3 {
-  font-size: 20px;
-}
-
-.review p {
-  line-height: 1.8;
-  font-style: italic;
-  color: #333333;
-}
-
-.review .stars span {
-  color: #FF8803;
-}
-
-.review .stars .muted {
-  color: #ccc;
-}
-
-.review .review-user img {
-  width: 70px;
-  margin: 0 auto;
-}
 
 /* Testimonial Carousel */
 .testimonials-slider .swiper-pagination {
@@ -493,6 +445,7 @@ section {
 
 .navbar-mobile .dropdown ul a:hover, .navbar-mobile .dropdown ul .active:hover, .navbar-mobile .dropdown ul li:hover > a {
   color: #2d71a1;
+  
 }
 
 .navbar-mobile .dropdown > .dropdown-active {
@@ -684,3 +637,76 @@ section {
 
 
 /* TimeLine */
+
+
+
+/*---------------------------Team------------------------------
+--------------------------------------------------------------- 
+ */
+
+
+
+ #mentimg{
+  
+    display:inline-block;
+    margin-right: auto;
+    margin-bottom: auto;
+    height: 300px;
+    width: auto;
+ }
+
+ @media screen and (min-width: 992px) {
+ 
+    
+    .team{
+      display: flex; justify-content: space-around;   align-items: center;
+     }
+
+  
+}
+
+@media screen and (max-width: 992px) {
+
+  #mentimg{
+  
+    display:inline-block;
+    margin-right: auto;
+    margin-bottom: auto;
+    height: auto;
+    width: 320px;
+ }
+
+}
+
+ 
+@media screen and (max-width: 992px) {
+ .member{
+  text-align: center;
+  font-size: 15px;
+  color: #000;
+  padding-bottom: 50px;
+  padding-top: 0px;
+  padding-left: 0px;
+  padding-right: 0px;
+ }
+}
+
+.member{
+  text-align: center;
+  font-size: 22px;
+  color: #000;
+
+ }
+
+ #logo_s{
+   height: 35px;
+   width: auto;
+ }
+
+ @media screen and (max-width: 992px) {
+  #logo_s{
+    height: 28px;
+    width: auto;
+  }
+
+ }
