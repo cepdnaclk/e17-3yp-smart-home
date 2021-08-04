@@ -10,7 +10,7 @@
 3. [Hardware & Software Designs](#hardware-and-software-designs)
 4. [Timeline](#Timeline)
 5. [Estimated Budget](#Estimated-Budget)
-6. [Team Members](#team members)
+6. [Team Members](#team-members)
 7. [Supervisors](#supervisors)
 8. [Related Links](#related-links)
 
@@ -49,11 +49,11 @@ Controling Electric sockets and Switches through mobile app which GUI and user f
 
 ## Timeline
 
-![Timeline](docs/images/Timeline.png)
+![Timeline](docs/images/TimeLine.jpg)
 
 ## Estimated Budget
 
-![Budget](docs/images/Budget.png)
+![Budget](docs/images/Budget2.PNG)
 
 ## Team Members
 1. E/17/015 Arshad M.R.M.  [[Website](http://www.ce.pdn.ac.lk/e17-batch/), [Email](mailto:e17015@eng.pdn.ac.lk)]
