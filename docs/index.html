@@ -44,9 +44,15 @@
 <!-- Nav var section -->
       <nav id="navbar" class="navbar">
         <ul>
-          <li><a class="active " href="#introduction">Introduction</a></li>
+          <li><a href="#introduction">Introduction</a></li>
           <li><a href="#Solution">Solution Architecture</a></li>
-          <li><a href="#Hardware">Hardware model</a></li>
+          <li class="dropdown"><a href="#"><span>Hardware</span> <i class="bi bi-chevron-down"></i></a>
+            <ul>
+              <li><a href="#Hardware">Hardware model</a></li>
+              <li><a href="#Circuit">Circuit Diagram</a></li>
+            </ul>
+          </li>
+          
           <li><a href="#Software">Software model</a></li>
 
           <!-- Others -->
@@ -302,7 +308,7 @@
                 </li>
                 <li><a href="#pir_sensor">PIR sensor</a></li>
                 <li><a href="#relay">Relay switch</a></li>
-                <li><a href="https://www.robotics.org.za/6970622932567">AC Dimmer</a></li>
+                <li><a href= "#current_sensor">AC Dimmer</a></li>
                 <li><a href="https://www.sparkfun.com/datasheets/BreakoutBoards/0712.pdf">AC Current Sensor</a></li>
                 <li><a href="https://www.autobotic.com.my/ac-voltage-sensor-module-zmpt101b-single-phase">AC Voltage sensor </a></li>
                 <!-- <li><a href=>NodeMCU32</a></li> -->
@@ -315,6 +321,9 @@
         </div>
       </div>
     </section>
+
+
+
 
     <!-- NodeMCU -->
     <section class="section" id="nodemcu">
@@ -348,20 +357,22 @@
       </div>
     </section>
 
-<!-- Pir Sensor -->
+<!-- SlideShow -->
+ <!-- Slideshow container -->
+ <div class="slideshow-container">
+  <!-- Full-width images with number and caption text -->
+  <div class="mySlides  ">
+    <!-- Pir Sensor -->
 <section class="section" id="pir_sensor">
   <div class="container" >
     <div class="row align-items-center">
       <div class="col-md-4 me-auto">
         <h2 class="mb-4">PIR Sensor</h2>
         <p class="mb-4">Passive Infrared Sensor commanly known as Proximity motion sensor. PIR sensors are used to detect the movements. It functioning by absorbing the IR rays emits from the objects. Humans and animals emit the IR radiation other than that the hot objects also emits the IR rays so IR sensor detect the movements of the objects. Many variety of sensors in the market they vary with price, sensitivity and range. For this project we HC-SR501. Because it mid range wide, angle, good sensitivity and cheap
-
           <br><br>
           <a href="https://cdn-learn.adafruit.com/downloads/pdf/pir-passive-infrared-proximity-motion-sensor.pdf"> Referense Link</a><br>
           <a href="#Hardware">Hardware Model</a>
         </p>
-
-
       </div>
       <div class="col-md-6" data-aos="fade-left">
         <img src="images/Hardware/Passive-Infrared-PIR-Sensor-Pinout-Diagram.png" alt="Image" class="img-fluid">
@@ -369,7 +380,68 @@
     </div>
   </div>
 </section>
+  </div>
 
+  <div class="mySlides ">
+    
+    <!-- ACS 712 Current sensor -->
+<section class="section" id="current_sensor">
+  <div class="container" >
+    <div class="row align-items-center">
+      <div class="col-md-4 me-auto">
+        <h2 class="mb-4">Current Sensor</h2>
+        <p class="mb-4">ACS 712 Current sensor used to measure the current using the Hall-Effect princile.
+          Many current sensors are in the market but we selected this because of it's size and accuraccy.
+          it's so small but it can measure up to 30A and the energy wastage is negligible.
+          <br>
+          <ul>
+            <li>30 A module</li>
+            <li>5V Operating Voltage</li>
+            <li>Scale factor 100 mV per Amp</li>
+          <br><br>
+          <a href="https://www.robotics.org.za/6970622932567"> Referense Link</a><br>
+          <a href="#Hardware">Hardware Model</a>
+        </p>
+      </div>
+      <div class="col-md-6" data-aos="fade-left">
+        <img src="images/Hardware/acs712 Current Sensor.jpg" alt="Image" class="img-fluid">
+      </div>
+    </div>
+  </div>
+</section>
+    
+  </div>
+
+  <div class="mySlides ">
+    
+    <!-- ZMPT101b Voltage sensor -->
+<section class="section" id="voltage_sensor">
+  <div class="container" >
+    <div class="row align-items-center">
+      <div class="col-md-4 me-auto">
+        <h2 class="mb-4">Voltage Sensor</h2>
+        <p class="mb-4">ZMPT101b is a voltage sensor which accurate and small in size and best suited for the 
+          IoT developments.  
+          <br>
+          <ul>
+            <li>Measure up to 250 V</li>
+            <li>Operating Voltage: DC 5V-30V</li>
+            <li>Output Signal: Analog 0-5V</li>
+          <br><br>
+          <a href="https://www.robotics.org.za/6970622932567"> Referense Link</a><br>
+          <a href="#Hardware">Hardware Model</a>
+        </p>
+
+      </div>
+      <div class="col-md-6" data-aos="fade-left">
+        <img src="images/Hardware/AC-voltage-sensor.jpg" alt="Image" class="img-fluid">
+      </div>
+    </div>
+  </div>
+</section>
+  </div>
+
+<div class="mySlides ">
 <!-- Relay Switch -->
 <section class="section" id="relay">
   <div class="container" >
@@ -388,15 +460,100 @@
           <a href="https://datasheet.octopart.com/MAX4822ETP%2B-Maxim-datasheet-8430178.pdf"> Referense Link</a><br>
           <a href="#Hardware">Hardware Model</a>
         </p>
-
-
       </div>
       <div class="col-md-6" data-aos="fade-left">
-        <img src="images/Hardware/index.jpg" alt="Image" class="img-fluid">
+        <img src="images/Hardware/relay.jpg" alt="Image" class="img-fluid">
       </div>
     </div>
   </div>
 </section>
+</div>
+
+<div class="mySlides ">
+  
+<!-- AC Dimmer -->
+<section class="section" id="dimmer">
+  <div class="container" >
+    <div class="row align-items-center">
+      <div class="col-md-4 me-auto">
+        <h2 class="mb-4">AC Dimmer</h2>
+        <p class="mb-4">
+          The AC Dimmer is designed to control the alternating current voltage, 
+          which can transfer current up to 400V/8А. In most cases, Dimmer is used to 
+          turning the power ON/OFF for lamps or heating elements, it can also be used in
+          fans, pumps, air cleaners, e.t.c. Lately, Dimmer has become an often-used decision
+          for smart home systems. For example, when you need to smoothly change the light brightness.
+          <br>
+          <ul>
+            <li>Power : up to 400V/600V (8A~24A)</li>
+            <li>Operating Voltage 0 - 3.3 V</li>
+            <li>Current signal > 10mA</li>
+          <br><br>
+          <a href="https://www.robotics.org.za/6970622932567"> Referense Link</a><br>
+          <a href="#Hardware">Hardware Model</a>
+        </p>
+      </div>
+      <div class="col-md-6" data-aos="fade-left">
+        <img src="images/Hardware/AC Dimmer.jpg" alt="Image" class="img-fluid">
+      </div>
+    </div>
+  </div>
+</section>
+</div>
+    
+  <!-- Next and previous buttons -->
+  <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+  <a class="next" onclick="plusSlides(1)">&#10095;</a>
+</div>
+<br>
+
+<!-- The dots/circles -->
+<div style="text-align:center">
+  <span class="dot" onclick="currentSlide(1)"></span>
+  <span class="dot" onclick="currentSlide(2)"></span>
+  <span class="dot" onclick="currentSlide(3)"></span>
+  <span class="dot" onclick="currentSlide(4)"></span>
+  <span class="dot" onclick="currentSlide(5)"></span>
+</div> 
+<!-- SlideShow -->
+
+
+
+<!-- Circuit Diagrams -->
+
+<section class="section" id="P_Circuit">
+  <div class="container" >
+    <div class="row align-items-center">
+      <div class="col-md-4 me-auto">
+        <h2 class="mb-4">Circuit Diagram</h2>
+        <p class="mb-4">Circuit Diagram of the Smart Plug.
+          Here the led denotes the Load.
+        </p>
+      </div>
+      <div class="col-md-6" data-aos="fade-left">
+        <img src="images/Hardware/Smart-Plug_bb.jpg" alt="Image" class="img-fluid">
+      </div>
+    </div>
+  </div>
+</section>
+
+  <section class="section" id="B_Circuit">
+    <div class="container" >
+      <div class="row align-items-center">
+        <div class="col-md-4 me-auto">
+          <h2 class="mb-4">Circuit Diagram</h2>
+          <p class="mb-4">Circuit Diagram of the Smart Bulb.
+            Here the led denotes the Bulb.
+          </p>
+        </div>
+        <div class="col-md-6" data-aos="fade-left">
+          <img src="images/Hardware/smart bulb_bb.jpg" alt="Image" class="img-fluid">
+        </div>
+      </div>
+    </div>
+  </section>
+
+<!-- SlideShow -->
 
     <!-- Software solution-->
     <section class="section" id="Software">
