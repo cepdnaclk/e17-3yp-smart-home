@@ -49,7 +49,7 @@ Controling Electric sockets and Switches through mobile app which GUI and user f
 
 ## Timeline
 
-![Timeline](docs/images/TimeLine.jpg)
+![Timeline](docs/images/Timeline.PNG)
 
 ## Estimated Budget
 
