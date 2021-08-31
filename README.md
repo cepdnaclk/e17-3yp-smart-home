@@ -41,7 +41,13 @@ With the environmental conditions the curtains can react.
 
 ## Our Solution
 
-Controling Electric sockets and Switches through mobile app which GUI and user friendly.
+Our solution Architecture contains two types of devices, they are Smart-Bulbs & the Smart-Switchs. They both devices, sensors like motion sensor, AC current sensor, AC voltage sensor and the Rellay are directly connected with the Central Unit. Our mobile application and the central unit connectedto the cloud via internet. So they can communicate with them-self. The central unit will use the MQTT protocol to communicate with the server.
+
+The energy consumption monitoring, this is a feature embeded with all the switches to calculate the energy consumption and update it to the cloud. This is can be implemented using Two sensor AC Current sensor and AC voltage sensor.
+
+Motion Sensing, Motion sensing is another feature built-in with the bulbs, The motion sensors are connected to the central unit. When a motion detected or the central unit wil turn on the bulb and if no motion/human detected the CU will turn off the bulb.
+
+Mobile applications communicate with the central unit through the cloud or diretly using wifi router. The User settings, user data, and the reports will be stored in the cloud/server.
 
 
 ## Hardware & Software Designs
