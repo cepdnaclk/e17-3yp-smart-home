@@ -5,14 +5,15 @@
 # SMART HOME
 
 #### Table of Contents
-1. [Introduction](#introduction)
-2. [Our Solution](#our-solution )
-3. [Hardware & Software Designs](#hardware-and-software-designs)
-4. [Timeline](#Timeline)
-5. [Estimated Budget](#Estimated-Budget)
-6. [Team Members](#team-members)
-7. [Supervisors](#supervisors)
-8. [Related Links](#related-links)
+* [Introduction](#introduction)
+* [Our Solution](#our-solution )
+* [UI](https://github.com/cepdnaclk/e17-3yp-smart-home/tree/main/UI-Images)
+* [Scametic Diagram](https://github.com/cepdnaclk/e17-3yp-smart-home/tree/main/Scematic%20diagram)
+* [Timeline](#Timeline)
+* [Estimated Budget](#Estimated-Budget)
+* [Team Members](#team-members)
+* [Supervisors](#supervisors)
+* [Related Links](#related-links)
 
 ## Introduction
 
@@ -33,7 +34,7 @@ Be in control from anywhere with control right in the mobile app.
 
 Smart switches have some features as smart bulbs. They can also controllable by remote or voice command. We can see the power usage and the charge percentage of the mobile or any other device. They are far safer than traditional switches. 
 
-### Smart Curtain
+#### Smart Curtain
 
 Smart curtains more like the others they can be remotley controllable and it can semi automated.
 With the environmental conditions the curtains can react. 
@@ -41,10 +42,13 @@ With the environmental conditions the curtains can react.
 
 ## Our Solution
 
-Controling Electric sockets and Switches through mobile app which GUI and user friendly.
+Our solution Architecture contains two types of devices, they are Smart-Bulbs & the Smart-Switchs. They both devices, sensors like motion sensor, AC current sensor, AC voltage sensor and the Rellay are directly connected with the Central Unit. Our mobile application and the central unit connectedto the cloud via internet. So they can communicate with them-self. The central unit will use the MQTT protocol to communicate with the server.
 
+The energy consumption monitoring, this is a feature embeded with all the switches to calculate the energy consumption and update it to the cloud. This is can be implemented using Two sensor AC Current sensor and AC voltage sensor.
 
-## Hardware & Software Designs
+Motion Sensing, Motion sensing is another feature built-in with the bulbs, The motion sensors are connected to the central unit. When a motion detected or the central unit wil turn on the bulb and if no motion/human detected the CU will turn off the bulb.
+
+Mobile applications communicate with the central unit through the cloud or diretly using wifi router. The User settings, user data, and the reports will be stored in the cloud/server.
 
 
 ## Timeline
