@@ -5,13 +5,13 @@
 # SMART HOME
 
 #### Table of Contents
-1. [Introduction](#introduction)
-2. [Our Solution](#our-solution )
-3. [Hardware & Software Designs](#hardware-and-software-designs)
-4. [Timeline](#Timeline)
-5. [Estimated Budget](#Estimated-Budget)
-6. [Team Members](#team-members)
-7. [Supervisors](#supervisors)
+* [Introduction](#introduction)
+* [Our Solution](#our-solution )
+* [Hardware & Software Designs](#hardware-and-software-designs)
+* [Timeline](#Timeline)
+* [Estimated Budget](#Estimated-Budget)
+* [Team Members](#team-members)
+* [Supervisors](#supervisors)
 * [Related Links](#related-links)
 
 ## Introduction
