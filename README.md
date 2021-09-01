@@ -8,6 +8,7 @@
 * [Introduction](#introduction)
 * [Our Solution](#our-solution )
 * [UI](https://github.com/cepdnaclk/e17-3yp-smart-home/tree/main/UI-Images)
+* [Scametic Diagram](https://github.com/cepdnaclk/e17-3yp-smart-home/tree/main/Scematic%20diagram)
 * [Timeline](#Timeline)
 * [Estimated Budget](#Estimated-Budget)
 * [Team Members](#team-members)
