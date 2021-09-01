@@ -12,7 +12,7 @@
 5. [Estimated Budget](#Estimated-Budget)
 6. [Team Members](#team-members)
 7. [Supervisors](#supervisors)
-8. [Related Links](#related-links)
+* [Related Links](#related-links)
 
 ## Introduction
 
