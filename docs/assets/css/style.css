@@ -4,6 +4,11 @@ Arshad
 Varnaraj
 */
 
+.center {
+	display: block;
+	margin: auto;
+}
+
 /* -----------------------SlideShow------------------------- */
 * {
 	box-sizing: border-box;
