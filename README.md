@@ -7,7 +7,6 @@
 #### Table of Contents
 * [Introduction](#introduction)
 * [Our Solution](#our-solution )
-* [Hardware & Software Designs](#hardware-and-software-designs)
 * [Timeline](#Timeline)
 * [Estimated Budget](#Estimated-Budget)
 * [Team Members](#team-members)
@@ -48,9 +47,6 @@ The energy consumption monitoring, this is a feature embeded with all the switch
 Motion Sensing, Motion sensing is another feature built-in with the bulbs, The motion sensors are connected to the central unit. When a motion detected or the central unit wil turn on the bulb and if no motion/human detected the CU will turn off the bulb.
 
 Mobile applications communicate with the central unit through the cloud or diretly using wifi router. The User settings, user data, and the reports will be stored in the cloud/server.
-
-
-## Hardware & Software Designs
 
 
 ## Timeline
