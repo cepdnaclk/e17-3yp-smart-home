@@ -7,7 +7,7 @@
 #### Table of Contents
 * [Introduction](#introduction)
 * [Our Solution](#our-solution )
-* [UI](https://https://github.com/cepdnaclk/e17-3yp-smart-home/tree/main/UI-Images)
+* [UI](https://github.com/cepdnaclk/e17-3yp-smart-home/tree/main/UI-Images)
 * [Timeline](#Timeline)
 * [Estimated Budget](#Estimated-Budget)
 * [Team Members](#team-members)
