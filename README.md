@@ -34,11 +34,6 @@ Be in control from anywhere with control right in the mobile app.
 
 Smart switches have some features as smart bulbs. They can also controllable by remote or voice command. We can see the power usage and the charge percentage of the mobile or any other device. They are far safer than traditional switches. 
 
-#### Smart Curtain
-
-Smart curtains more like the others they can be remotley controllable and it can semi automated.
-With the environmental conditions the curtains can react. 
-
 
 ## Our Solution
 
