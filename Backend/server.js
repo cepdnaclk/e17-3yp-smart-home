@@ -1,19 +1,20 @@
+// const dotenv = require('dotenv');
 const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const mongodbConnect = require('./config/dbs');
 const passport = require('passport');
-// const bodyParser = require('body-parser');
-const router = require('./routes/getData');
+const bodyParser = require('body-parser');
+const route = require('./routes/UserRoute');
 //connect to database
 mongodbConnect();
 
 const app = express();
 
 app.use(cors());
-app.use(express.urlencoded({ extended: false }));
+// app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(router);
+app.use(route);
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
@@ -23,7 +24,7 @@ The :status token will be colored
 green for success codes,
 red for server error codes, 
 yellow for client error codes, 
-cyan for redirection codes, 
+
 and uncolored for information codes.
 */
 if (process.env.NODE_ENV === 'development') {

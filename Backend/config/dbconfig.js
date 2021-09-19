@@ -1,5 +1,6 @@
+require('dotenv').config();
+
 module.exports = {
-	secret: 'Cluster-Secrete',
-	database:
-		'mongodb+srv://Nishankar1:nishan16522@3yp-smarthome.cugbf.mongodb.net/digitalHut_Test1?retryWrites=true&w=majority',
+	secret: process.env.DB_ENCRYPT,
+	database: process.env.DB_URI,
 };
