@@ -3,27 +3,36 @@ const router = express.Router();
 const path = require('path');
 const userControl = require('../controllers/userControl');
 
-//Adding New User
-router.post('/api/user', userControl.addNew);
+//Adding New User Or SignUp=>{name, mail, password ,confirmPassword}
+router.post('/api/user/signup', userControl.addNew);
 
-//Authendicate the user And send the JWT token
-router.post('/api/authenticate', userControl.authendicate);
+//Validate the mail id by clicking the link in the mail
+router.get('/api/user/validate/:uniqueString', userControl.verifyMail);
 
-//Get the All user Info
-router.get('/api/user', userControl.handleGet);
+//Authendicate the user And send the JWT token =>{req->mail, password}=> res.authToken ->Header.autheriztion
+router.post('/api/user/login', userControl.authendicate);
 
-//Get one user info by id
-router.get('/api/user/:id', userControl.handleGetById);
+//Get the All user Info     => All users
+router.get('/api/user/alluser', userControl.verifyToken, userControl.handleGet);
 
-//Update user by id
-router.put('/api/user/:id', userControl.handleUpdate);
+//Get one user info by id   => info (mail name)
+router.get(
+	'/api/user/info/:id',
+	userControl.verifyToken,
+	userControl.handleGetById
+);
 
-//Get the user js
-// router.get('/api/users/:UserName', (req, res) => {
-// 	res.send('Hello world');
-// });
+//Update user Name by ID req->id
+router.put(
+	'/api/user/updatename/:id',
+	userControl.verifyToken,
+	userControl.handleNameUpdate
+);
+
+//Change Password
+// router.put('api/user/changePass/:id', userControl.handlePasswordUpdate);
 
 //Get UserInfo
-router.get('/api/getinfo', userControl.getInfo, () => {});
+// router.get('/api/getinfo', userControl.getInfo, () => {});
 
 module.exports = router;

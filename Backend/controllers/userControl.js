@@ -1,35 +1,72 @@
 var User = require('../models/users');
-var jwt = require('jwt-simple');
+let jwt = require('jsonwebtoken');
 var config = require('../config/dbconfig');
 const users = require('../models/users');
-const { use } = require('../routes/UserRoute');
+const activate = require('../Mail Activation/activate');
 
 var functions = {
 	//AddNew
-	addNew: function (req, res) {
-		if (!req.body.name || !req.body.password || !req.body.mail) {
-			res.json({ success: false, msg: 'Enter all fields' });
-		} else {
-			var newUser = User({
-				name: req.body.name,
-				password: req.body.password,
-				mail: req.body.mail,
-			});
-			//Saving The New User Details
-			newUser.save(function (err, newUser) {
-				if (err) {
-					res.json({ success: false, msg: 'Failed to save' });
-				} else {
-					let { name, mail } = newUser;
-					res.json({
-						success: true,
-						msg: 'Successfully saved',
-						user: { name, mail },
-					});
-				}
-			});
+	addNew: function (req, res, next) {
+		try {
+			if (
+				!req.body.name || //User Name
+				!req.body.password || //Password
+				!req.body.confpassword || //Confirm Password
+				!req.body.mail //User Mail
+			) {
+				return res //If not all the feilds are given
+					.status(404)
+					.json({ success: false, msg: 'Enter all fields' });
+			} //Both Password are same
+			else if (req.body.password === req.body.confpassword) {
+				User.findOne({ mail: req.body.mail }, (err, data) => {
+					// console.log(data);
+					if (!data) {
+						//Check The mail in the dB
+						var newUser = User({
+							name: req.body.name,
+							password: req.body.password,
+							mail: req.body.mail,
+						});
+						//Verify the mail by sending the mail to that account
+						activate(newUser); //Sending mail
+
+						//Saving The New User Details
+						newUser.save(function (err, newUser) {
+							if (err) {
+								return res.json({ success: false, msg: 'Failed to save' });
+							} else {
+								let { name, mail } = newUser;
+								res.json({
+									success: true,
+									msg: 'Successfully saved',
+									user: { name, mail },
+								});
+							}
+						});
+					} else {
+						//If the Mail already connected
+						return res.status(404).json({
+							success: false,
+							msg: 'Mail Already Conected with an account!',
+						});
+					}
+				});
+			} else {
+				//If the Password Doesn't Match
+				return res.status(404).json({
+					success: false,
+					msg: "The Password Doesn't match",
+				});
+			}
+		} catch (err) {
+			//If any error Found
+			if (err) {
+				return next(err);
+			}
 		}
 	},
+	verifyMail: function (req, res) {},
 	//Authendicate the user
 	authendicate: function (req, res) {
 		User.findOne(
@@ -47,14 +84,24 @@ var functions = {
 					//Else Compare the password and check whether it's correct
 					user.comparePassword(req.body.password, function (err, isMatch) {
 						if (isMatch && !err) {
-							//Creating Jwt token
-							var token = jwt.encode(user, config.secret);
-							// var payload = jwt.decode(token, config.secret);
-							res.json({ success: true, token: token });
+							//Creating Jwt token Expire in 2 hour
+							jwt.sign(
+								{ user },
+								config.secret,
+								{ expiresIn: '2h' },
+								(err, token) => {
+									if (err) {
+										return res.json({ success: false, msg: err });
+									} else {
+										// var payload = jwt.decode(token, config.secret);
+										return res.json({ success: true, token: token });
+									}
+								}
+							);
 						} else {
 							return res.status(403).send({
 								success: false,
-								msg: 'Authendication Failed, Wrong Password!',
+								msg: 'Authendication Failed!',
 							});
 						}
 					});
@@ -77,7 +124,7 @@ var functions = {
 			return res.json({ success: false, msg: 'No Headers' });
 		}
 	},
-	//Get the User By Id
+	//Get the all users
 	handleGet: async function (req, res, next) {
 		try {
 			const allUsers = await users.find().select('-password');
@@ -90,8 +137,12 @@ var functions = {
 	},
 	//Get One User by Id
 	handleGetById: async function (req, res, next) {
+		// console.log(req);
 		try {
 			const userById = await users.findById(req.params.id).select('-password');
+			if (!userById) {
+				return res.status(404).json({ success: false, msg: 'Id not found' });
+			}
 			return res.status(200).json({ user: userById });
 		} catch (err) {
 			if (err) {
@@ -99,24 +150,49 @@ var functions = {
 			}
 		}
 	},
-	//Update User Info
-	handleUpdate: async function (req, res, next) {
+	//Update User Name
+	handleNameUpdate: async function (req, res, next) {
+		// console.log(req.body);
 		try {
-			// let userById = await users.findById(req.params.id);
-			if (req.body.password) {
-				let userById = await users.findById(req.params.id);
-			} else {
-				let updatedUser = await users.findByIdAndUpdate(
-					req.params.id,
-					req.body
-				);
-				return res.status(200).json({ updatedUser: updatedUser });
-			}
+			let updatedUser = await users
+				.findByIdAndUpdate(req.params.id, req.body)
+				.select('-password');
+			return res.status(200).json({ success: true, msg: 'User Name Updated!' });
 			//Catch Error
 		} catch (err) {
 			if (err) {
 				return next(err);
 			}
+		}
+	},
+	verifyToken: async function (req, res, next) {
+		try {
+			const bearerHeader = req.headers['authorization'];
+			if (typeof bearerHeader !== 'undefined') {
+				const bearerToken = bearerHeader.split(' ')[1];
+				console.log(bearerToken);
+				jwt.verify(bearerToken, config.secret, (err, authData) => {
+					if (err) {
+						return res.status(403).json({ msg: 'Authorization failed!' });
+					} else {
+						req.name = authData.name;
+						req.mail = authData.mail;
+						req.password = authData.password;
+						next();
+					}
+				});
+			} else {
+				return res.status(403).json({ msg: 'Authorization Error!' });
+			}
+		} catch (err) {
+			return next(err);
+		}
+	},
+	changePassword: async function (req, res, next) {
+		try {
+			console.log('try');
+		} catch (err) {
+			return next(err);
 		}
 	},
 };

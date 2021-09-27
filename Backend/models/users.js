@@ -10,11 +10,18 @@ var userSchema = new schema({
 		type: String,
 		require: true,
 		unique: true,
+		lowercase: true,
 	},
 	password: {
 		type: String,
 		require: true,
 	},
+	active: {
+		type: Boolean,
+		default: false,
+	},
+	activeToken: String,
+	activeExpires: Date,
 });
 
 //Using bcrypt algorithm to encrypt the user password
