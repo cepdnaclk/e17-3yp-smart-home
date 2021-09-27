@@ -7,7 +7,7 @@ const userControl = require('../controllers/userControl');
 router.post('/api/user/signup', userControl.addNew);
 
 //Validate the mail id by clicking the link in the mail
-router.get('/api/user/validate/:uniqueString', userControl.verifyMail);
+router.get('/api/user/validate', userControl.verifyMail);
 
 //Authendicate the user And send the JWT token =>{req->mail, password}=> res.authToken ->Header.autheriztion
 router.post('/api/user/login', userControl.authendicate);

@@ -30,20 +30,9 @@ var functions = {
 						});
 						//Verify the mail by sending the mail to that account
 						activate(newUser); //Sending mail
-
-						//Saving The New User Details
-						newUser.save(function (err, newUser) {
-							if (err) {
-								return res.json({ success: false, msg: 'Failed to save' });
-							} else {
-								let { name, mail } = newUser;
-								res.json({
-									success: true,
-									msg: 'Successfully saved',
-									user: { name, mail },
-								});
-							}
-						});
+						return res
+							.status(200)
+							.json({ success: true, msg: 'Verification mail sent' });
 					} else {
 						//If the Mail already connected
 						return res.status(404).json({
@@ -66,7 +55,55 @@ var functions = {
 			}
 		}
 	},
-	verifyMail: function (req, res) {},
+	//Mail Verification
+	verifyMail: function (req, res, next) {
+		try {
+			const token = req.query.token;
+			console.log(token);
+			if (token) {
+				console.log(token);
+				jwt.verify(token, config.secret, (err, authData) => {
+					if (err) {
+						console.log(1);
+						return res.status(403).json({ msg: 'Authorization failed!' });
+					} else {
+						console.log(2);
+						var newUser = User({
+							name: authData.user.name,
+							password: authData.user.mail,
+							mail: authData.user.password,
+						});
+						//Saving The New User Details
+						console.log(authData);
+						console.log(newUser);
+						newUser.save(function (err, newUser) {
+							if (err) {
+								console.log(3);
+								return res.json({
+									success: false,
+									msg: 'Failed to save',
+									Error: err,
+								});
+							} else {
+								console.log(4);
+								let { name, mail } = newUser;
+								return res.json({
+									success: true,
+									msg: 'Successfully saved',
+									user: { name, mail },
+								});
+							}
+						});
+					}
+				});
+			} else {
+				return res.status(403).json({ msg: 'Authorization Error!' });
+			}
+		} catch (err) {
+			console.log('verify Mail', err);
+			return next(err);
+		}
+	},
 	//Authendicate the user
 	authendicate: function (req, res) {
 		User.findOne(
