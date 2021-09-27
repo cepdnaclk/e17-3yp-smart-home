@@ -70,8 +70,8 @@ var functions = {
 						console.log(2);
 						var newUser = User({
 							name: authData.user.name,
-							password: authData.user.mail,
-							mail: authData.user.password,
+							mail: authData.user.mail,
+							password: authData.user.password,
 						});
 						//Saving The New User Details
 						console.log(authData);
