@@ -5,3 +5,5 @@ const cdControl = require('../controllers/cdeviceControl');
 
 //Adding Home to a user
 router.post('api/home/addhome', cdControl.addhome);
+
+//
