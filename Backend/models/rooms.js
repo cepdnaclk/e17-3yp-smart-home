@@ -1,10 +1,23 @@
 var mongoose = require('mongoose');
 var schema = mongoose.Schema;
-// var bcrypt = require('bcrypt');
+let deviceSchema = require('./devices');
 
 var roomsSchema = new schema({
-	name: {
+	roomname: {
 		type: String,
-		require,
+		require: true,
+		unique: true,
+	},
+	roomType: {
+		type: String,
+		require: true,
+	},
+	// devices: [deviceSchema],
+
+	numberOfDevices: {
+		type: Number,
+		default: 0,
 	},
 });
+
+module.exports = mongoose.model('rooms', roomsSchema);

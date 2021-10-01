@@ -1,12 +1,8 @@
 var cdevice = require('../models/centralDevice');
-let jwt = require('jsonwebtoken');
-var config = require('../config/dbconfig');
 var nonActiveDevice = require('../models/nonActiveCDevice');
-const { findOne } = require('../models/centralDevice');
-const centralDevice = require('../models/centralDevice');
 
 var fuctions = {
-	addhome: async function (req, res) {
+	addCdevice: async function (req, res) {
 		try {
 			if (!req.body.name || !req.body.password || !req.body.cdeviceNumber) {
 				return res //If not all the feilds are given

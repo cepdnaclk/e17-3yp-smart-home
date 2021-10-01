@@ -6,6 +6,7 @@ const mongodbConnect = require('./config/dbs');
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const route = require('./routes/UserRoute');
+const homeRoutes = require('./routes/homeRoute');
 //connect to database
 mongodbConnect();
 
@@ -14,7 +15,8 @@ const app = express();
 app.use(cors());
 // app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
-app.use(route);
+app.use('/api/user', route);
+app.use('/api/home', homeRoutes);
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
