@@ -19,25 +19,30 @@ var functions = {
 					.json({ success: false, msg: 'Enter all fields' });
 			} //Both Password are same
 			else if (req.body.password === req.body.confpassword) {
-				User.findOne({ mail: req.body.mail }, (err, data) => {
+				User.findOne({ mail: req.body.mail.toLowerCase() }, (err, data) => {
 					// console.log(data);
-					if (!data) {
+					if (!data && !err) {
 						//Check The mail in the dB
 						var newUser = User({
 							name: req.body.name,
 							password: req.body.password,
-							mail: req.body.mail,
+							mail: req.body.mail.toLowerCase(),
 						});
 						//Verify the mail by sending the mail to that account
 						activate(newUser); //Sending mail
 						return res
 							.status(200)
 							.json({ success: true, msg: 'Verification mail sent' });
-					} else {
+					} else if (!err) {
 						//If the Mail already connected
 						return res.status(404).json({
 							success: false,
 							msg: 'Mail Already Conected with an account!',
+						});
+					} else {
+						return req.json({
+							success: false,
+							msg: err,
 						});
 					}
 				});
@@ -61,41 +66,49 @@ var functions = {
 			const token = req.query.token;
 			console.log(token);
 			if (token) {
-				console.log(token);
+				// console.log(token);
 				jwt.verify(token, config.secret, (err, authData) => {
 					if (err) {
 						console.log(1);
 						return res.status(403).json({ msg: 'Authorization failed!' });
 					} else {
-						console.log(2);
-						var newUser = User({
-							name: authData.user.name,
-							mail: authData.user.mail,
-							password: authData.user.password,
-						});
-						//Saving The New User Details
-						console.log(authData);
-						console.log(newUser);
-						newUser.save(function (err, newUser) {
-							if (err) {
-								console.log(3);
-								return res.json({
-									success: false,
-									msg: 'Failed to save',
-									Error: err,
+						// console.log(2);
+						console.log('Hello', authData.user.mail);
+						User.findOne({ mail: authData.user.mail }, (err, data) => {
+							if (!data && !err) {
+								// console.log(1111);
+								var newUser = User({
+									name: authData.user.name,
+									mail: authData.user.mail,
+									password: authData.user.password,
+								});
+								//Saving The New User Details
+								// console.log(authData);
+								// console.log(newUser);
+								newUser.save(function (err, newUser) {
+									if (err) {
+										console.log(3);
+										return res.json({
+											success: false,
+											msg: 'Failed to save',
+											Error: err,
+										});
+									} else {
+										console.log(4);
+										let { name, mail } = newUser;
+										return res.json({
+											success: true,
+											msg: 'Successfully saved',
+											user: { name, mail },
+										});
+									}
 								});
 							} else {
-								console.log(4);
-								let { name, mail } = newUser;
-								return res.json({
-									success: true,
-									msg: 'Successfully saved',
-									user: { name, mail },
-								});
+								return res.status(403).json({ msg: 'Already Verified!' });
 							}
 						});
-					}
-				});
+					} //else
+				}); //jwt-verify;
 			} else {
 				return res.status(403).json({ msg: 'Authorization Error!' });
 			}
@@ -104,7 +117,7 @@ var functions = {
 			return next(err);
 		}
 	},
-	//Authendicate the user
+	//Authendicate the user--->Login
 	authendicate: function (req, res) {
 		User.findOne(
 			{
@@ -164,7 +177,7 @@ var functions = {
 	//Get the all users
 	handleGet: async function (req, res, next) {
 		try {
-			const allUsers = await users.find().select('-password');
+			let allUsers = await users.find().select('-password');
 			return res.status(200).json({ allUsers: allUsers });
 		} catch (err) {
 			if (err) {
@@ -225,6 +238,8 @@ var functions = {
 			return next(err);
 		}
 	},
+
+	//Change Password
 	changePassword: async function (req, res, next) {
 		try {
 			console.log('try');
