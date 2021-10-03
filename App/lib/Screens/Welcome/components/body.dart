@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:sample/Screens/Login/login_screen.dart';
-import 'package:sample/Screens/Signup/signup_screen.dart';
-import 'package:sample/Screens/Welcome/components/background.dart';
-import 'package:sample/components/rounded_button.dart';
-import 'package:sample/constants.dart';
-//import 'package:flutter_svg/svg.dart';
+import 'package:untitled/Screens/Login/login_screen.dart';
+import 'package:untitled/Screens/Signup/signup_screen.dart';
+import 'package:untitled/Screens/Welcome/components/background.dart';
+import 'package:untitled/components/rounded_button.dart';
+import 'package:untitled/constants.dart';
 
 class Body extends StatelessWidget {
   @override
@@ -18,7 +17,7 @@ class Body extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              "WELCOME TO EDU",
+              "WELCOME TO DIGITAL HUT",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),
             SizedBox(height: size.height * 0.05),

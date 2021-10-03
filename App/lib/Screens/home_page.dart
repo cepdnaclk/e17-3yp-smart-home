@@ -1,10 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
+
 import 'package:flutter/material.dart';
-import 'package:sample/devices.dart';
+import 'package:untitled/devices.dart';
+import 'Settings/settings.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key ?key}) : super(key: key);
+  const HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -16,30 +18,35 @@ class _HomePageState extends State<HomePage> {
   bool showDelete = false;
   bool delete = false;
   var selectedInfo;
+  int roomId = 1;
 
   @override
   initState() {
     super.initState();
-    getData();
+    //getData();
     print(showDelete);
   }
 
-  User? loggedInUser = FirebaseAuth.instance.currentUser;
+  //User? loggedInUser = FirebaseAuth.instance.currentUser;
 
   List data = [];
-  getData() async {
-    await FirebaseFirestore.instance
-        .collection("Devices")
-        .doc(loggedInUser==null ? "abc" : loggedInUser!.uid)
-        .get()
-        .then((value) {
-      data = value['devices'];
-    }).catchError((e) {});
-    setState(() {});
-  }
 
+  // getData() async {
+  //   await FirebaseFirestore.instance
+  //       .collection("Devices")
+  //       .doc(loggedInUser == null ? "abc" : loggedInUser!.uid)
+  //       .get()
+  //       .then((value) {
+  //     data = value['devices'];
+  //   }).catchError((e) {});
+  //   setState(() {});
+  // }
+
+  //Initial cardTile show,
+  //& return all other widgets, main data[i] all will return
   addTile() {
     List<Widget> widgetList = [];
+
     widgetList.add(GestureDetector(
       onTap: () {
         showPopup = true;
@@ -50,15 +57,19 @@ class _HomePageState extends State<HomePage> {
         borderRadius: BorderRadius.circular(15),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.blue[200],
+            //color: Colors.blue[100],
+            color: const Color(0xFFF1E6FF),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Center(
-              child: Image.asset('assets/images/addroom.png', height: 100,)
-          ),
+              child: Image.asset(
+            'assets/images/addroom.png',
+            height: 100,
+          )),
         ),
       ),
     ));
+
     for (var info in data) {
       widgetList.add(GestureDetector(
         onTap: () {},
@@ -71,29 +82,34 @@ class _HomePageState extends State<HomePage> {
           elevation: 10,
           borderRadius: BorderRadius.circular(20),
           child: Stack(children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.blue[200],
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Center(
-                  child: Column(
-                    children: [
-                      Flexible(
-                        child: Container(
-                          padding: EdgeInsets.only(top: 10),
-                          height: 150,
-                          child: Image.asset(info['icon'] == null
-                              ? 'assets/images/pin.png'
-                              : 'assets/${info['icon']}'),
-                        ),
+            GestureDetector(
+              onTap: () {
+                print(info['roomId']);
+              },
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.blue,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Center(
+                    child: Column(
+                  children: [
+                    Flexible(
+                      child: Container(
+                        padding: const EdgeInsets.only(top: 10),
+                        height: 150,
+                        child: Image.asset(info['icon'] == null
+                            ? 'assets/images/pin.png'
+                            : 'assets/${info['icon']}'),
                       ),
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Text(info['roomName']),
-                      )
-                    ],
-                  )),
+                    ),
+                    Container(
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      child: Text(info['roomName']),
+                    ),
+                  ],
+                )),
+              ),
             ),
             Visibility(
               visible: showDelete,
@@ -106,7 +122,7 @@ class _HomePageState extends State<HomePage> {
                     selectedInfo = info;
                     setState(() {});
                   },
-                  child: CircleAvatar(
+                  child: const CircleAvatar(
                     backgroundColor: Colors.white,
                     child: Icon(
                       Icons.close,
@@ -125,25 +141,32 @@ class _HomePageState extends State<HomePage> {
   }
 
   saveRoom() async {
-    data.add(
-        ({'roomName': roomNameController.text.trim(), 'icon': selectedIcon}));
-    await FirebaseFirestore.instance
-        .collection("Devices")
-        .doc(loggedInUser==null ? "abc" : loggedInUser!.uid)
-        .set({'devices': data});
+    data.add(({
+      'roomName': roomNameController.text.trim(),
+      'icon': selectedIcon,
+      'roomId': roomId,
+    }));
+    print(roomId);
+    roomId++;
+    // await FirebaseFirestore.instance
+    //     .collection("Devices")
+    //     .doc(loggedInUser == null ? "abc" : loggedInUser!.uid)
+    //     .set({'devices': data});
   }
 
   List iconList = [
-    'images/fan.png',
-    'images/bulb.png',
-    'images/curtain.png',
-    'images/plug.png',
-    'images/smartbulb.png'
-
+    'images/kitchen.png',
+    'images/livingroom.png',
+    'images/bathroom.png',
+    'images/outdoor.png',
+    'images/bedroom.png'
   ];
-  String ? selectedIcon;
+
+  String? selectedIcon; //nullable
+
   DropdownButton dropDown(List dropList, String type) {
     List<DropdownMenuItem> dropdownList = [];
+
     for (String listItem in dropList) {
       var newItem = DropdownMenuItem(
         child: Column(children: [
@@ -157,7 +180,7 @@ class _HomePageState extends State<HomePage> {
               height: 50,
             ),
           ),
-          Divider(
+          const Divider(
             thickness: 1,
           )
         ]),
@@ -178,6 +201,25 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  //navigation bar select
+  int _selectedIndex = 0;
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+
+      if (_selectedIndex == 1) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return Settings();
+            },
+          ),
+        );
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -194,36 +236,49 @@ class _HomePageState extends State<HomePage> {
         return true;
       },
       child: Scaffold(
+        bottomNavigationBar: BottomNavigationBar(
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Home',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.settings),
+              label: 'Settings',
+            ),
+          ],
+          currentIndex: _selectedIndex,
+          unselectedItemColor: Colors.purple,
+          selectedItemColor: Colors.purple,
+          onTap: _onItemTapped,
+        ),
         body: Stack(
           children: [
-
+            //welcom to your Home
             Container(
-
               child: SafeArea(
                 child: Container(
-                  padding: EdgeInsets.only(top: 30, left: 20),
+                  padding: const EdgeInsets.only(top: 28.0, left: 20.0),
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-                  child: Text(
+                  child: const Text(
                     'Welcome To\nYour Home',
                     style: TextStyle(
                       fontFamily: 'Circular Std',
                       fontSize: 30,
-                      color: const Color(0xffffffff),
+                      color: Color(0xffffffff),
                       fontWeight: FontWeight.w700,
-
                     ),
-
                     textAlign: TextAlign.left,
                   ),
                 ),
               ),
-              color: Colors.blue[800],
-
+              color: const Color(0xFF6F35A5),
             ),
+
             Column(children: [
-              SizedBox(
-                height: 150,
+              const SizedBox(
+                height: 130,
               ),
               Expanded(
                 child: Material(
@@ -236,17 +291,18 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Column(children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 20,
                         ),
+                        //Rooms
                         Row(
-
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-
                             Container(
-                              padding: EdgeInsets.only(
-                                left: 30, top: 20,),
+                              padding: const EdgeInsets.only(
+                                left: 30,
+                                top: 20,
+                              ),
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 'Rooms',
@@ -256,11 +312,11 @@ class _HomePageState extends State<HomePage> {
                                     color: Colors.blue[800]),
                               ),
                             ),
-                            Spacer(),
+                            const Spacer(),
                             Visibility(
                               visible: showDelete,
                               child: Container(
-                                padding: EdgeInsets.only(
+                                padding: const EdgeInsets.only(
                                   right: 20,
                                 ),
                                 child: GestureDetector(
@@ -274,16 +330,14 @@ class _HomePageState extends State<HomePage> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                           color: roomNameController.text
-                                              .trim()
-                                              .length ==
-                                              0
+                                                      .trim().isEmpty
                                               ? Colors.blueGrey
                                               : Colors.blue,
                                           borderRadius:
-                                          BorderRadius.circular(10)),
-                                      padding: EdgeInsets.symmetric(
+                                              BorderRadius.circular(10)),
+                                      padding: const EdgeInsets.symmetric(
                                           horizontal: 20, vertical: 10),
-                                      child: Text(
+                                      child: const Text(
                                         'Cancel',
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 15),
@@ -295,10 +349,11 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         ),
+                        //Add Tile
                         Flexible(
                           child: GridView.count(
                             shrinkWrap: true,
-                            padding: EdgeInsets.all(20),
+                            padding: const EdgeInsets.all(20),
                             mainAxisSpacing: 15,
                             crossAxisSpacing: 15,
                             crossAxisCount: 2,
@@ -309,6 +364,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ]),
+            //show pop up and save the room or cancel
             Visibility(
               visible: showPopup,
               child: GestureDetector(
@@ -326,8 +382,8 @@ class _HomePageState extends State<HomePage> {
                       borderRadius: BorderRadius.circular(15),
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.8,
-                        height: MediaQuery.of(context).size.height * 0.5,
-                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        height: MediaQuery.of(context).size.height * 0.6,
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
                         ),
@@ -336,8 +392,8 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Container(
                                 alignment: Alignment.center,
-                                padding: EdgeInsets.symmetric(vertical: 30),
-                                child: Text(
+                                padding: const EdgeInsets.symmetric(vertical: 30),
+                                child: const Text(
                                   'Add Room',
                                   style: TextStyle(
                                       fontSize: 20,
@@ -345,8 +401,8 @@ class _HomePageState extends State<HomePage> {
                                       color: Colors.black),
                                 )),
                             Container(
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child: Text('Enter your room Name :',
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: const Text('Enter your room Name :',
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
@@ -362,20 +418,20 @@ class _HomePageState extends State<HomePage> {
                                 controller: roomNameController,
                                 textAlign: TextAlign.center,
                                 keyboardType: TextInputType.emailAddress,
-                                style: TextStyle(color: Colors.black),
+                                style: const TextStyle(color: Colors.black),
                                 decoration: kTextFieldDecoration.copyWith(
                                   hintText: 'Enter Your Room Name',
-                                  hintStyle: TextStyle(color: Colors.black54),
+                                  hintStyle: const TextStyle(color: Colors.black54),
                                 ),
                               ),
                             ),
                             Row(
                               children: [
                                 Container(
-                                    padding: EdgeInsets.symmetric(vertical: 50),
-                                    child: Text('select Icon : ',
+                                    padding: const EdgeInsets.symmetric(vertical: 50),
+                                    child: const Text('select Icon : ',
                                         style: TextStyle(
-                                            fontSize: 16,
+                                            fontSize: 17,
                                             fontWeight: FontWeight.w500,
                                             color: Colors.black))),
                                 dropDown(iconList, 'icon'),
@@ -384,39 +440,36 @@ class _HomePageState extends State<HomePage> {
                             Container(
                               child: Center(
                                   child: GestureDetector(
-                                    onTap: () {
-                                      if (roomNameController.text.trim().length !=
-                                          0) {
-                                        saveRoom();
-                                        showPopup = false;
-                                        selectedIcon = null;
-                                        roomNameController.clear();
-                                        setState(() {});
-                                      }
-                                    },
-                                    child: Material(
-                                      borderRadius: BorderRadius.circular(10),
-                                      elevation: 7,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: roomNameController.text
-                                                .trim()
-                                                .length ==
-                                                0
-                                                ? Colors.blueGrey
-                                                : Colors.blue,
-                                            borderRadius:
+                                onTap: () {
+                                  if (roomNameController.text.trim().isNotEmpty) {
+                                    saveRoom(); //save the room in the main list
+                                    showPopup = false;
+                                    selectedIcon = null;
+                                    roomNameController.clear();
+                                    setState(() {});
+                                  }
+                                },
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(10),
+                                  elevation: 7,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: roomNameController.text
+                                                    .trim().isEmpty
+                                            ? Colors.blueGrey
+                                            : Colors.blue,
+                                        borderRadius:
                                             BorderRadius.circular(10)),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 50, vertical: 17),
-                                        child: Text(
-                                          'Save',
-                                          style: TextStyle(
-                                              color: Colors.white, fontSize: 17),
-                                        ),
-                                      ),
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 50, vertical: 17),
+                                    child: const Text(
+                                      'Save',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 17),
                                     ),
-                                  )),
+                                  ),
+                                ),
+                              )),
                             )
                           ],
                         ),
@@ -426,6 +479,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
             ),
+            //show popup and delete the room or cancel
             Visibility(
               visible: delete,
               child: deleteAlert(selectedInfo),
@@ -451,7 +505,7 @@ class _HomePageState extends State<HomePage> {
             child: Container(
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.height * 0.5,
-              padding: EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -460,8 +514,8 @@ class _HomePageState extends State<HomePage> {
                 children: [
                   Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(vertical: 30),
-                      child: Text(
+                      padding: const EdgeInsets.symmetric(vertical: 30),
+                      child: const Text(
                         'Delete',
                         style: TextStyle(
                             fontSize: 20,
@@ -469,17 +523,17 @@ class _HomePageState extends State<HomePage> {
                             color: Colors.black),
                       )),
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Text('Do You Want delete this room entry?',
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: const Text('Do You Want delete this room entry?',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
                             color: Colors.black)),
                   ),
-                  Spacer(),
+                  const Spacer(),
                   Row(
                     children: [
-                      Spacer(),
+                      const Spacer(),
                       GestureDetector(
                         onTap: () {
                           data.remove(info);
@@ -487,9 +541,9 @@ class _HomePageState extends State<HomePage> {
                           setState(() {});
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 25),
-                          child: Text(
+                          child: const Text(
                             'Ok',
                             style: TextStyle(color: Colors.black, fontSize: 15),
                           ),
@@ -501,9 +555,9 @@ class _HomePageState extends State<HomePage> {
                           setState(() {});
                         },
                         child: Container(
-                          padding: EdgeInsets.symmetric(
+                          padding: const EdgeInsets.symmetric(
                               horizontal: 20, vertical: 25),
-                          child: Text(
+                          child: const Text(
                             'Cancel',
                             style: TextStyle(color: Colors.black, fontSize: 15),
                           ),

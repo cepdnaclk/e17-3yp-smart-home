@@ -1,12 +1,24 @@
-import 'package:firebase_core/firebase_core.dart';
+//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:sample/Screens/Welcome/welcome_screen.dart';
-import 'package:sample/Screens/home_page.dart';
+import 'package:untitled/Screens/Welcome/welcome_screen.dart';
 
-void main() async{
-  WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+import 'package:untitled/Screens/home_page.dart';
+import 'package:untitled/Screens/Signup/signup_screen.dart';
+import 'package:untitled/Screens/Login/login_screen.dart';
+
+import 'package:untitled/Screens/profile_adding/ProfileAdding.dart';
+import 'package:untitled/Screens/verification/verification_screen.dart';
+import 'package:untitled/devices.dart';
+import 'package:untitled/Screens/TypeOfDevices/white_light.dart';
+import 'package:untitled/Screens/TypeOfDevices/rgb_light.dart';
+import 'package:untitled/Screens/TypeOfDevices/smart_plug.dart';
+
+import 'package:untitled/Screens/device_check.dart';
+import 'Screens/Settings/settings.dart';
+import 'Screens/add_central_device/central_device.dart';
+
+void main() {
   runApp(MyApp());
 }
 
@@ -16,24 +28,26 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Digital Hut',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: WelcomeScreen(),
+      //home: WelcomeScreen(),
+      //home: SignUpScreen(),
+      home: LoginScreen(),
+
+      //home: HomePage(),
+      //home: Sample(), //add device , room
+      //home: WhiteLight(),
+      //home: RGB_light(),
+      //home: SmartPlug(),
+      //home: ProfileAddingScreen(email: 'abcdefg@gmail.com', userName: 'arshad'),
+      //home: VerificationScreen(),
+
+      //home: CentralDevice(),
+      //home: Settings(),
+
+      //home: DeviceCheck(),
     );
   }
 }
-
-
-
-
