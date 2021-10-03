@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sample/Screens/profile_adding/components/body.dart';
+import 'package:untitled/Screens/profile_adding/components/body.dart';
 
 class ProfileAddingScreen extends StatelessWidget {
   final email;
@@ -8,7 +8,7 @@ class ProfileAddingScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Body(email: email, userName: userName ),
+      body: Body(email: email, userName: userName),
     );
   }
 }

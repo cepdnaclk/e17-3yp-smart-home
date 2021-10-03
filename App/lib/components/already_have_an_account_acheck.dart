@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:sample/constants.dart';
+import 'package:untitled/constants.dart';
 
 class AlreadyHaveAnAccountCheck extends StatelessWidget {
   final bool login;
   final Function press;
+
+  //constructer
   const AlreadyHaveAnAccountCheck({
     Key? key,
     this.login = true,
@@ -20,12 +22,11 @@ class AlreadyHaveAnAccountCheck extends StatelessWidget {
           style: TextStyle(color: kPrimaryColor),
         ),
         GestureDetector(
-          onTap: (){
-    press();
-    },
-    child: Text(
-    login ?
-     "Sign Up" : "Sign In",
+          onTap: () {
+            press();
+          },
+          child: Text(
+            login ? "Sign Up" : "Sign In",
             style: TextStyle(
               color: kPrimaryColor,
               fontWeight: FontWeight.bold,

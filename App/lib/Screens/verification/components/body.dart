@@ -1,10 +1,10 @@
 import 'dart:async';
-import 'package:firebase_auth/firebase_auth.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:sample/Screens/Signup/components/background.dart';
-import 'package:sample/Screens/profile_adding/ProfileAdding.dart';
-import 'package:sample/constants.dart';
+import 'package:untitled/Screens/Signup/components/background.dart';
+import 'package:untitled/Screens/profile_adding/ProfileAdding.dart';
+import 'package:untitled/constants.dart';
 
 class Body extends StatefulWidget {
   final email;
@@ -15,36 +15,34 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
+  //final FirebaseAuth _auth = FirebaseAuth.instance;
   Timer? timer;
 
   @override
   void initState() {
     super.initState();
-    timer = Timer.periodic(Duration(seconds: 2), (timer) async {
-      User? loggedInUser = FirebaseAuth.instance.currentUser;
-      await loggedInUser!.reload();
-      print('hiii');
-      print(loggedInUser.emailVerified);
-      if (loggedInUser.emailVerified) {
-        print('verified');
-        timer.cancel();
-        Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileAddingScreen(email: widget.email, userName: widget.userName,)));
-      }
-    });
+    // timer = Timer.periodic(Duration(seconds: 2), (timer) async {
+    //   User? loggedInUser = FirebaseAuth.instance.currentUser;
+    //   await loggedInUser!.reload();
+    //   print('hiii');
+    //   print(loggedInUser.emailVerified);
+    //   if (loggedInUser.emailVerified) {
+    //     print('verified');
+    //     timer.cancel();
+    //     Navigator.push(context, MaterialPageRoute(builder: (context) => ProfileAddingScreen(email: widget.email, userName: widget.userName,)));
+    //   }
+    // });
   }
 
   @override
-  void dispose() async {
-    User? loggedInUser = _auth.currentUser;
-    await loggedInUser!.reload();
-    print(loggedInUser.emailVerified);
-    loggedInUser.emailVerified ? null : loggedInUser.delete();
-    timer!.isActive ? timer!.cancel() : null;
-    super.dispose();
-  }
-
-
+  // void dispose() async {
+  //   User? loggedInUser = _auth.currentUser;
+  //   await loggedInUser!.reload();
+  //   print(loggedInUser.emailVerified);
+  //   loggedInUser.emailVerified ? null : loggedInUser.delete();
+  //   timer!.isActive ? timer!.cancel() : null;
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {

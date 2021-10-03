@@ -1,11 +1,13 @@
-
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 
+//import 'package:cloud_firestore/cloud_firestore.dart';
+//import 'package:firebase_auth/firebase_auth.dart';
+
+//Add device
+
 class Sample extends StatefulWidget {
-  const Sample({Key ?key}) : super(key: key);
+  const Sample({Key? key}) : super(key: key);
 
   @override
   _SampleState createState() => _SampleState();
@@ -16,31 +18,49 @@ class _SampleState extends State<Sample> {
   bool showPopup = false;
   bool showDelete = false;
   bool delete = false;
+
+  String? selectedIcon;
+  String? selectedDevice;
+  String? selectedPort;
+
   var selectedInfo;
+  //var dataNo;
 
   @override
   initState() {
     super.initState();
-    getData();
+    //getData();
     print(showDelete);
   }
 
-  User? loggedInUser = FirebaseAuth.instance.currentUser;
+  //User? loggedInUser = FirebaseAuth.instance.currentUser;
 
   List data = [];
-  getData() async {
-    await FirebaseFirestore.instance
-        .collection("Devices")
-        .doc(loggedInUser==null ? "abc" : loggedInUser!.uid)
-        .get()
-        .then((value) {
-      data = value['devices'];
-    }).catchError((e) {});
-    setState(() {});
+
+  List allData = [];
+
+  retunAlist(int n) {
+    List newList = [];
+    allData.add(newList);
+    return allData;
   }
 
+  // getData() async {
+  //   await FirebaseFirestore.instance
+  //       .collection("Devices")
+  //       .doc(loggedInUser == null ? "abc" : loggedInUser!.uid)
+  //       .get()
+  //       .then((value) {
+  //     data = value['devices'];
+  //   }).catchError((e) {});
+  //   setState(() {});
+  // }
+
+  //Initial cardTile add,
+  //& return all other widgets, main data[i] all will return
   addTile() {
     List<Widget> widgetList = [];
+
     widgetList.add(GestureDetector(
       onTap: () {
         showPopup = true;
@@ -51,12 +71,14 @@ class _SampleState extends State<Sample> {
         borderRadius: BorderRadius.circular(15),
         child: Container(
           decoration: BoxDecoration(
-            color: Colors.blue[200],
+            color: Color(0xFFF1E6FF),
             borderRadius: BorderRadius.circular(15),
           ),
           child: Center(
-              child: Image.asset('assets/images/addroom.png', height: 100,)
-          ),
+              child: Image.asset(
+            'assets/images/adddevice.png',
+            height: 100,
+          )),
         ),
       ),
     ));
@@ -79,22 +101,22 @@ class _SampleState extends State<Sample> {
               ),
               child: Center(
                   child: Column(
-                    children: [
-                      Flexible(
-                        child: Container(
-                          padding: EdgeInsets.only(top: 10),
-                          height: 150,
-                          child: Image.asset(info['icon'] == null
-                              ? 'assets/images/pin.png'
-                              : 'assets/${info['icon']}'),
-                        ),
-                      ),
-                      Container(
-                        padding: EdgeInsets.symmetric(vertical: 10),
-                        child: Text(info['roomName']),
-                      )
-                    ],
-                  )),
+                children: [
+                  Flexible(
+                    child: Container(
+                      padding: EdgeInsets.only(top: 10),
+                      height: 150,
+                      child: Image.asset(info['icon'] == null
+                          ? 'assets/images/pin.png'
+                          : 'assets/${info['icon']}'),
+                    ),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(vertical: 10),
+                    child: Text(info['deviceName']),
+                  )
+                ],
+              )),
             ),
             Visibility(
               visible: showDelete,
@@ -126,23 +148,50 @@ class _SampleState extends State<Sample> {
   }
 
   saveRoom() async {
-    data.add(
-        ({'roomName': roomNameController.text.trim(), 'icon': selectedIcon}));
-    await FirebaseFirestore.instance
-        .collection("Devices")
-        .doc(loggedInUser==null ? "abc" : loggedInUser!.uid)
-        .set({'devices': data});
+    data.add({
+      'deviceName': roomNameController.text.trim(),
+      'icon': selectedIcon,
+      'type': selectedDevice,
+      'port': selectedPort
+    });
+    // await FirebaseFirestore.instance
+    //     .collection("Devices")
+    //     .doc(loggedInUser == null ? "abc" : loggedInUser!.uid)
+    //     .set({'devices': data});
   }
 
   List iconList = [
-    'images/kitchen.png',
-    'images/livingroom.png',
-    'images/bathroom.png',
-    'images/outdoor.png',
-    'images/bedroom.png'
-
+    'images/fan.png',
+    'images/bulb.png',
+    'images/curtain.png',
+    'images/plug.png',
+    'images/smartbulb.png'
   ];
-  String ? selectedIcon;
+
+  List deviceType = [
+    'Smart Plug',
+    'White Light',
+    'RGB Light',
+  ];
+
+  List portNo = [
+    '1',
+    '2',
+    '3',
+    '4',
+    '5',
+    '6',
+    '7',
+    '8',
+    '9',
+    '10',
+    '11',
+    '12',
+    '13',
+    '14',
+    '15'
+  ];
+
   DropdownButton dropDown(List dropList, String type) {
     List<DropdownMenuItem> dropdownList = [];
     for (String listItem in dropList) {
@@ -179,6 +228,76 @@ class _SampleState extends State<Sample> {
     );
   }
 
+  DropdownButton dropDownDevice(List dropList, String type) {
+    List<DropdownMenuItem> dropdownList = [];
+    for (String listItem in dropList) {
+      var newItem = DropdownMenuItem(
+        child: Column(children: [
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            height: 30,
+            width: 115,
+            child: Center(child: Text('$listItem')),
+          ),
+          Divider(
+            thickness: 1,
+          )
+        ]),
+        value: listItem,
+      );
+      dropdownList.add(newItem);
+    }
+    return DropdownButton(
+      dropdownColor: Colors.white,
+      iconEnabledColor: Colors.grey,
+      value: selectedDevice,
+      items: dropdownList,
+      onChanged: (value) {
+        selectedDevice = value;
+        print(selectedDevice);
+        setState(() {});
+      },
+    );
+  }
+
+  DropdownButton dropDownPort(List dropList, String type) {
+    List<DropdownMenuItem> dropdownList = [];
+    for (String listItem in dropList) {
+      var newItem = DropdownMenuItem(
+        child: Column(children: [
+          Container(
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            height: 30,
+            width: 115,
+            child: Center(child: Text('$listItem')),
+            // child: Image.asset(
+            //   'assets/$listItem',
+            //   width: 50,
+            //   scale: 0.5,
+            //   height: 50,
+            // ),
+          ),
+          Divider(
+            thickness: 1,
+          )
+        ]),
+        value: listItem,
+      );
+      dropdownList.add(newItem);
+    }
+    return DropdownButton(
+      dropdownColor: Colors.white,
+      iconEnabledColor: Colors.grey,
+      value: selectedPort,
+      items: dropdownList,
+      onChanged: (value) {
+        selectedPort = value;
+        print(selectedPort);
+        setState(() {});
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -187,6 +306,8 @@ class _SampleState extends State<Sample> {
         if (showPopup == true) {
           showPopup = false;
           selectedIcon = null;
+          selectedDevice = null;
+          selectedPort = null;
           roomNameController.clear();
           setState(() {});
         } else {
@@ -197,26 +318,28 @@ class _SampleState extends State<Sample> {
       child: Scaffold(
         body: Stack(
           children: [
-
+            //welcome
             Container(
-
               child: SafeArea(
-                child: Text(
-                  'Welcome To\nYour Home',
-                  style: TextStyle(
-                    fontFamily: 'Circular Std',
-                    fontSize: 30,
-                    color: const Color(0xffffffff),
-                    fontWeight: FontWeight.w700,
-
+                child: Container(
+                  padding: EdgeInsets.only(top: 30, left: 20),
+                  width: MediaQuery.of(context).size.width,
+                  height: MediaQuery.of(context).size.height,
+                  child: Text(
+                    'Welcome To\nYour Room',
+                    style: TextStyle(
+                      fontFamily: 'Circular Std',
+                      fontSize: 30,
+                      color: const Color(0xffffffff),
+                      fontWeight: FontWeight.w700,
+                    ),
+                    textAlign: TextAlign.left,
                   ),
-
-                  textAlign: TextAlign.left,
                 ),
               ),
-              color: Colors.blue[800],
-
+              color: Color(0xFF6F35A5),
             ),
+            //devices
             Column(children: [
               SizedBox(
                 height: 150,
@@ -236,16 +359,14 @@ class _SampleState extends State<Sample> {
                           height: 20,
                         ),
                         Row(
-
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-
                             Container(
                               padding: EdgeInsets.only(
                                   left: 30, top: 20, bottom: 20),
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                'Rooms',
+                                'Devices',
                                 style: TextStyle(
                                     fontSize: 30,
                                     fontWeight: FontWeight.w700,
@@ -270,13 +391,13 @@ class _SampleState extends State<Sample> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                           color: roomNameController.text
-                                              .trim()
-                                              .length ==
-                                              0
+                                                      .trim()
+                                                      .length ==
+                                                  0
                                               ? Colors.blueGrey
                                               : Colors.blue,
                                           borderRadius:
-                                          BorderRadius.circular(10)),
+                                              BorderRadius.circular(10)),
                                       padding: EdgeInsets.symmetric(
                                           horizontal: 20, vertical: 10),
                                       child: Text(
@@ -312,6 +433,8 @@ class _SampleState extends State<Sample> {
                   showPopup = false;
                   selectedIcon = null;
                   roomNameController.clear();
+                  selectedDevice = null;
+                  selectedPort = null;
                   setState(() {});
                 },
                 child: Container(
@@ -322,7 +445,7 @@ class _SampleState extends State<Sample> {
                       borderRadius: BorderRadius.circular(15),
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.8,
-                        height: MediaQuery.of(context).size.height * 0.5,
+                        height: MediaQuery.of(context).size.height * 0.7,
                         padding: EdgeInsets.symmetric(horizontal: 30),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
@@ -332,7 +455,7 @@ class _SampleState extends State<Sample> {
                           children: [
                             Container(
                                 alignment: Alignment.center,
-                                padding: EdgeInsets.symmetric(vertical: 30),
+                                padding: EdgeInsets.fromLTRB(0, 25, 0, 10),
                                 child: Text(
                                   'Add Device',
                                   style: TextStyle(
@@ -341,6 +464,7 @@ class _SampleState extends State<Sample> {
                                       color: Colors.black),
                                 )),
                             Container(
+                              alignment: Alignment.center,
                               padding: EdgeInsets.symmetric(vertical: 10),
                               child: Text('Enter your Device Name :',
                                   style: TextStyle(
@@ -368,7 +492,7 @@ class _SampleState extends State<Sample> {
                             Row(
                               children: [
                                 Container(
-                                    padding: EdgeInsets.symmetric(vertical: 50),
+                                    padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
                                     child: Text('select Icon : ',
                                         style: TextStyle(
                                             fontSize: 16,
@@ -377,42 +501,70 @@ class _SampleState extends State<Sample> {
                                 dropDown(iconList, 'icon'),
                               ],
                             ),
+                            Row(
+                              children: [
+                                Container(
+                                    //padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    child: Text('Device Type: ',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black))),
+
+                                dropDownDevice(deviceType, 'device')
+                                //dropDown(deviceType, 'icon'),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                Container(
+                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    child: Text('Port No: ',
+                                        style: TextStyle(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.w500,
+                                            color: Colors.black))),
+
+                                dropDownPort(portNo, 'selectedPort')
+                                //dropDown(deviceType, 'icon'),
+                              ],
+                            ),
                             Container(
                               child: Center(
                                   child: GestureDetector(
-                                    onTap: () {
-                                      if (roomNameController.text.trim().length !=
-                                          0) {
-                                        saveRoom();
-                                        showPopup = false;
-                                        selectedIcon = null;
-                                        roomNameController.clear();
-                                        setState(() {});
-                                      }
-                                    },
-                                    child: Material(
-                                      borderRadius: BorderRadius.circular(10),
-                                      elevation: 7,
-                                      child: Container(
-                                        decoration: BoxDecoration(
-                                            color: roomNameController.text
-                                                .trim()
-                                                .length ==
+                                onTap: () {
+                                  if (roomNameController.text.trim().length !=
+                                      0) {
+                                    saveRoom();
+                                    showPopup = false;
+                                    selectedIcon = null;
+                                    roomNameController.clear();
+                                    setState(() {});
+                                  }
+                                },
+                                child: Material(
+                                  borderRadius: BorderRadius.circular(10),
+                                  elevation: 7,
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                        color: roomNameController.text
+                                                    .trim()
+                                                    .length ==
                                                 0
-                                                ? Colors.blueGrey
-                                                : Colors.blue,
-                                            borderRadius:
+                                            ? Colors.blueGrey
+                                            : Colors.blue,
+                                        borderRadius:
                                             BorderRadius.circular(10)),
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 50, vertical: 17),
-                                        child: Text(
-                                          'Save',
-                                          style: TextStyle(
-                                              color: Colors.white, fontSize: 17),
-                                        ),
-                                      ),
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 50, vertical: 17),
+                                    child: Text(
+                                      'Save',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 17),
                                     ),
-                                  )),
+                                  ),
+                                ),
+                              )),
                             )
                           ],
                         ),
@@ -424,7 +576,7 @@ class _SampleState extends State<Sample> {
             ),
             Visibility(
               visible: delete,
-              child: deleteAlert(selectedInfo),
+              child: deleteAlert(selectedInfo, data),
             )
           ],
         ),
@@ -432,7 +584,7 @@ class _SampleState extends State<Sample> {
     );
   }
 
-  deleteAlert(info) {
+  deleteAlert(info, List n) {
     return GestureDetector(
       onTap: () {
         delete = false;
@@ -446,7 +598,7 @@ class _SampleState extends State<Sample> {
             borderRadius: BorderRadius.circular(15),
             child: Container(
               width: MediaQuery.of(context).size.width * 0.8,
-              height: MediaQuery.of(context).size.height * 0.5,
+              height: MediaQuery.of(context).size.height * 0.4,
               padding: EdgeInsets.symmetric(horizontal: 30),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
