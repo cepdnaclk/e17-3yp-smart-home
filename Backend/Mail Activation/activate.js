@@ -73,10 +73,10 @@ const sendMail = async (user) => {
 		});
 	};
 	const newtoken = await createAccessToken(user);
-	console.log('newtoken', newtoken);
+	// console.log('newtoken', newtoken);
 
 	const createMail = async (token_1) => {
-		console.log('create Mail', token_1);
+		// console.log('create Mail', token_1);
 		const mailOptions = {
 			from: email,
 			to: clientMail,

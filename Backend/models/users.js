@@ -1,10 +1,25 @@
 var mongoose = require('mongoose');
 var schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
+
+
+let home = new schema({
+	homeid :{
+		type: String,
+		require: true,
+		
+	},
+	homename: {
+		type: String,
+		require: true,
+	}
+})
+
 var userSchema = new schema({
 	name: {
 		type: String,
 		require: true,
+		unique: true,
 	},
 	mail: {
 		type: String,
@@ -20,10 +35,11 @@ var userSchema = new schema({
 		type: Boolean,
 		default: false,
 	},
-	activeToken: String,
-	activeExpires: Date,
+	homes: [home],
+
 });
 
+// console.log(typeof(userSchema))
 //Using bcrypt algorithm to encrypt the user password
 userSchema.pre('save', function (next) {
 	var user = this;

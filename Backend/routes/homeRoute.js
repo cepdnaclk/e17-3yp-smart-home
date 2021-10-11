@@ -5,6 +5,8 @@ const userControl = require('../controllers/userControl');
 const homeControl = require('../controllers/homeControl');
 
 //Adding Home
+//Home-Name required
+//Address optional
 router.post('/api/home/addhome', userControl.verifyToken, homeControl.addhome);
 
 //Delete Home

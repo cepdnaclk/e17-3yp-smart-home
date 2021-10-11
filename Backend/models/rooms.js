@@ -12,7 +12,7 @@ var roomsSchema = new schema({
 		type: String,
 		require: true,
 	},
-	// devices: [deviceSchema],
+	devices: [deviceSchema],
 
 	numberOfDevices: {
 		type: Number,

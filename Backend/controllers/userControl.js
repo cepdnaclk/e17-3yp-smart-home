@@ -7,6 +7,7 @@ const activate = require('../Mail Activation/activate');
 var functions = {
 	//AddNew
 	addNew: function (req, res, next) {
+		// console.log('addnew');
 		try {
 			if (
 				!req.body.name || //User Name
@@ -64,16 +65,16 @@ var functions = {
 	verifyMail: function (req, res, next) {
 		try {
 			const token = req.query.token;
-			console.log(token);
+			// console.log(token);
 			if (token) {
 				// console.log(token);
 				jwt.verify(token, config.secret, (err, authData) => {
 					if (err) {
-						console.log(1);
+						// console.log(1);
 						return res.status(403).json({ msg: 'Authorization failed!' });
 					} else {
 						// console.log(2);
-						console.log('Hello', authData.user.mail);
+						// console.log('Hello', authData.user.mail);
 						User.findOne({ mail: authData.user.mail }, (err, data) => {
 							if (!data && !err) {
 								// console.log(1111);
@@ -87,14 +88,14 @@ var functions = {
 								// console.log(newUser);
 								newUser.save(function (err, newUser) {
 									if (err) {
-										console.log(3);
+										// console.log(3);
 										return res.json({
 											success: false,
 											msg: 'Failed to save',
 											Error: err,
 										});
 									} else {
-										console.log(4);
+										// console.log(4);
 										let { name, mail } = newUser;
 										return res.json({
 											success: true,
@@ -144,7 +145,7 @@ var functions = {
 										return res.json({ success: false, msg: err });
 									} else {
 										// var payload = jwt.decode(token, config.secret);
-										return res.json({ success: true, token: token });
+										return res.json({ success: true, username: user, token: token});
 									}
 								}
 							);
@@ -166,8 +167,8 @@ var functions = {
 			// req.headers.authorization.split(' ')[0] === 'Bearer'
 		) {
 			var token = req.headers.authorization; //.split(' ')[1];
-			console.log(typeof token);
-			console.log(token === newToken);
+			// console.log(typeof token);
+			// console.log(token === newToken);
 			var decodedToken = jwt.decode(token, config.secret);
 			return res.json({ success: true, msg: 'Hello ' + decodedToken });
 		} else {
@@ -220,7 +221,7 @@ var functions = {
 			const bearerHeader = req.headers['authorization'];
 			if (typeof bearerHeader !== 'undefined') {
 				const bearerToken = bearerHeader.split(' ')[1];
-				console.log(bearerToken);
+				// console.log(bearerToken);
 				jwt.verify(bearerToken, config.secret, (err, authData) => {
 					if (err) {
 						return res.status(403).json({ msg: 'Authorization failed!' });

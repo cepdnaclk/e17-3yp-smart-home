@@ -3,8 +3,14 @@ const router = express.Router();
 const path = require('path');
 const userControl = require('../controllers/userControl');
 
-//Adding New User Or SignUp=>{name, mail, password ,confirmPassword}
-router.post('/api/user/signup', userControl.addNew);
+// router.get('/',(req,res)=>{
+// 	console.log("Testing 1 Root")
+// })
+
+//Adding New User Or SignUp=>{name, mail, password ,confirmPassword}--> Send mail
+router.post('/api/user/signup', userControl.addNew,()=>{
+	console.log("testing")
+});
 
 //Validate the mail id by clicking the link in the mail
 router.get('/api/user/validate', userControl.verifyMail);

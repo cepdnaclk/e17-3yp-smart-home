@@ -15,8 +15,8 @@ const app = express();
 app.use(cors());
 // app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
-app.use('/api/user', route);
-app.use('/api/home', homeRoutes);
+app.use( route);
+app.use(homeRoutes);
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
@@ -32,6 +32,7 @@ and uncolored for information codes.
 if (process.env.NODE_ENV === 'development') {
 	app.use(morgan('dev'));
 }
+console.log("server");
 
 //Port Declaring
 const PORT = process.env.PORT || 5005;

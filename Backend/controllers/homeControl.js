@@ -1,33 +1,50 @@
+const { admin } = require('googleapis/build/src/apis/admin');
 let home = require('../models/homes');
+let user = require('../models/users');
 
 let functions = {
 	addhome: async function (req, res) {
 		try {
-			if (!req.body.name) {
+			if (req.body.homename && req.body.username) {	//If username and home name were not given 
+				
+				await user.findOne({name:req.body.username},(err, data)=>{	//
+					if(!err && data){
+						let newadminid = data._id;
+					}else{
+						return res.json({
+							succcess:false, 
+							msg: err
+						})
+					}
+				})
 				let newHome = home({
 					homename: req.body.homename,
+					adminid: newadminid
 				});
+				if(req.body.address){			//If address were given --> Address optional
+					newHome.address = req.body.address;
+				}
 				newHome.save(function (err, newHome) {
-					if (err) {
+					if (err) {				//If any error occur while saving
 						console.log('addhome-save', err);
 						return res.json({
 							success: false,
 							msg: err,
 						});
-					} else {
+					} else {				//If no error
 						res.json({
 							success: true,
-							msg: 'Successfully saved!',
+							msg: 'Home Successfully saved!',
 						});
 					}
 				});
-			} else {
+			} else {		//If the Name was not given 
 				return res.status(404).json({
 					succcess: false,
 					msg: 'Entre the name',
 				});
 			}
-		} catch (err) {
+		} catch (err) {		///Error catch
 			console.log(err);
 			return res.status(404).json({
 				succcess: false,
