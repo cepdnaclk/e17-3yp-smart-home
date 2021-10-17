@@ -28,12 +28,18 @@ router.get(
 	userControl.handleGetById
 );
 
+
+router.post('/api/user/uploadimg', userControl.verifyToken, userControl.AddProfile)
+
 //Update user Name by ID req->id
 router.put(
 	'/api/user/updatename/:id',
 	userControl.verifyToken,
 	userControl.handleNameUpdate
 );
+
+//Alluser connected to a house
+router.get('/api/user/getalluserbyhome', userControl.verifyToken, userControl.allUserofAhouse )
 
 //Change Password
 // router.put('api/user/changePass/:id', userControl.handlePasswordUpdate);
