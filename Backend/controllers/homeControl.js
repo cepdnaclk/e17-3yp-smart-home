@@ -1,43 +1,45 @@
 const { admin } = require('googleapis/build/src/apis/admin');
 let home = require('../models/homes');
+const { findOne, findByIdAndUpdate } = require('../models/users');
 let user = require('../models/users');
 
 let functions = {
 	addhome: async function (req, res) {
 		try {
-			if (req.body.homename && req.body.username) {	//If username and home name were not given 
+			if (req.body.homename && req.body.userid) {	//If username and home name were not given 
 				
-				await user.findOne({name:req.body.username},(err, data)=>{	//
-					if(!err && data){
-						let newadminid = data._id;
-					}else{
-						return res.json({
-							succcess:false, 
-							msg: err
-						})
-					}
+				data=await home.findOne({homename: req.body.homename})
+				if(data){
+					return res.status(409).json({success: false,
+					msg:"Name already used"
 				})
-				let newHome = home({
-					homename: req.body.homename,
-					adminid: newadminid
-				});
-				if(req.body.address){			//If address were given --> Address optional
-					newHome.address = req.body.address;
-				}
-				newHome.save(function (err, newHome) {
-					if (err) {				//If any error occur while saving
-						console.log('addhome-save', err);
-						return res.json({
-							success: false,
-							msg: err,
-						});
-					} else {				//If no error
-						res.json({
-							success: true,
-							msg: 'Home Successfully saved!',
-						});
+				}else{
+					let newHome = home({
+						homename: req.body.homename,
+						adminid: req.body.userid,
+						// memberids: req.body.userid
+						
+					});
+					if(req.body.address){			//If address were given --> Address optional
+						newHome.address = req.body.address;
 					}
-				});
+					newHome.save(function (err, newHome) {
+						if (err) {				//If any error occur while saving
+							console.log('addhome-save', err);
+							return res.status(500).json({
+								success: false,
+								msg: err,
+								line:30
+							});
+						} else {				//If no error
+							
+							return res.json({
+								success: true,
+								msg: 'Home Successfully saved!',
+							});
+						}
+					});
+				}
 			} else {		//If the Name was not given 
 				return res.status(404).json({
 					succcess: false,
@@ -45,10 +47,11 @@ let functions = {
 				});
 			}
 		} catch (err) {		///Error catch
-			console.log(err);
-			return res.status(404).json({
+			// console.log(err);
+			return res.json({
 				succcess: false,
 				msg: err,
+				line:55
 			});
 		}
 	},

@@ -15,6 +15,10 @@ var cdSchema = new schema({
 		require: true,
 		unique: true,
 	},
+	homeid : {
+		type: String,
+		require: true,
+	}
 });
 
 //Using bcrypt algorithm to encrypt the cdevice password

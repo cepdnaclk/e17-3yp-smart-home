@@ -3,6 +3,21 @@ let jwt = require('jsonwebtoken');
 var config = require('../config/dbconfig');
 const users = require('../models/users');
 const activate = require('../Mail Activation/activate');
+const multer = require('multer')
+const multers3 = require('multer-s3')
+const aws = require('aws-sdk');
+let homes = require('../models/homes');
+
+
+
+
+const s3 = new aws.S3({
+	accessKeyId: process.env.aws_access_key_id,
+	secretAccessKey: process.env.aws_secret_access_key,
+	region: process.env.AWS_REGION
+})
+
+
 
 var functions = {
 	//AddNew
@@ -75,10 +90,10 @@ var functions = {
 					} else {
 						// console.log(2);
 						// console.log('Hello', authData.user.mail);
-						User.findOne({ mail: authData.user.mail }, (err, data) => {
+						users.findOne({ mail: authData.user.mail }, (err, data) => {
 							if (!data && !err) {
 								// console.log(1111);
-								var newUser = User({
+								var newUser = users({
 									name: authData.user.name,
 									mail: authData.user.mail,
 									password: authData.user.password,
@@ -92,7 +107,7 @@ var functions = {
 										return res.json({
 											success: false,
 											msg: 'Failed to save',
-											Error: err,
+											Error: err.message,
 										});
 									} else {
 										// console.log(4);
@@ -119,7 +134,7 @@ var functions = {
 		}
 	},
 	//Authendicate the user--->Login
-	authendicate: function (req, res) {
+	authendicate: function (req, res,next) {
 		User.findOne(
 			{
 				mail: req.body.mail,
@@ -144,8 +159,10 @@ var functions = {
 									if (err) {
 										return res.json({ success: false, msg: err });
 									} else {
+										
 										// var payload = jwt.decode(token, config.secret);
-										return res.json({ success: true, username: user, token: token});
+										return res.json({ success: true, userid: user._id,username: user.name,homes:user.homes,numberOfhomes:user.homes.length, token: token});
+										
 									}
 								}
 							);
@@ -160,21 +177,40 @@ var functions = {
 			}
 		);
 	},
-	getInfo: function (req, res) {
-		// console.log(req.headers.authorization);
-		if (
-			req.headers.authorization //&&
-			// req.headers.authorization.split(' ')[0] === 'Bearer'
-		) {
-			var token = req.headers.authorization; //.split(' ')[1];
-			// console.log(typeof token);
-			// console.log(token === newToken);
-			var decodedToken = jwt.decode(token, config.secret);
-			return res.json({ success: true, msg: 'Hello ' + decodedToken });
-		} else {
-			return res.json({ success: false, msg: 'No Headers' });
+
+	allUserofAhouse: async function (req, res, next) {
+		try{
+			if(req.body.homeid){
+			// let members = await homes.findById(req.body.homeid).select('memberids')
+			// return res.json({
+			// 	members:members,
+			// })
+
+			homes.findById(req.body.homeid).populate('adminid','memberids').exec(function (err, home){
+				if (err) return res.json({error:err.message});
+
+				return res.status(200).json({ 
+						username : home.adminid.name, 
+						success:true
+					})
+			})
+			}else{
+				return res.status(403).json({
+					success:false,
+					msg: "failed"
+				})
+			}
+		}catch(err){
+			return res.status(403).send({
+				success: false,
+				msg: err.message,
+			});
 		}
 	},
+
+	//Invite user
+
+
 	//Get the all users
 	handleGet: async function (req, res, next) {
 		try {
@@ -218,13 +254,14 @@ var functions = {
 	},
 	verifyToken: async function (req, res, next) {
 		try {
+			console.log("reached verify token")
 			const bearerHeader = req.headers['authorization'];
 			if (typeof bearerHeader !== 'undefined') {
 				const bearerToken = bearerHeader.split(' ')[1];
 				// console.log(bearerToken);
 				jwt.verify(bearerToken, config.secret, (err, authData) => {
 					if (err) {
-						return res.status(403).json({ msg: 'Authorization failed!' });
+						return res.status(403).json({ msg: 'Authorization failed!', error: err });
 					} else {
 						req.name = authData.name;
 						req.mail = authData.mail;
@@ -233,7 +270,7 @@ var functions = {
 					}
 				});
 			} else {
-				return res.status(403).json({ msg: 'Authorization Error!' });
+				return res.status(403).json({ msg: 'Authorization Error!',error:'undefiend token' });
 			}
 		} catch (err) {
 			return next(err);
@@ -248,5 +285,55 @@ var functions = {
 			return next(err);
 		}
 	},
+
+
+	AddProfile: async function (req, res, next){
+		try{
+			const upload = (imageName)=>
+				multer({
+					storage: multers3({
+					s3:s3,
+					bucket: 'digitalhutprofilepicture',
+					metadata: function(req, file, cb){
+						cb(null, {fieldName: file.fieldname});
+					},
+					key: function(req, file, cb){
+						if (file.mimetype === "image/jpeg")   {
+						cb(null, imageName+'jpeg');
+						console.log("jpeg")
+				}else if (file.mimetype === "image/png"){
+					cb(null, imageName+'png');
+					console.log("png")
+
+				}
+				else{
+					cb(new Error("Invalid file type, only JPEG and PNG is allowed!"), false);
+				}
+			}
+			}),
+			})
+			const uploadSingle = upload(req.username).single('image-upload');
+			uploadSingle(req, res, err=>{
+				if(err) return res.status(400).json({
+					success: false,
+					message: err.message
+				})
+				console.log(req.file)
+				return res.status(200).json({
+					data:req.file
+				})
+			})
+			
+		}catch(err){
+			return res.status(400).json({
+				success: false,
+				msg: err.message,
+				
+			})
+		}
+	}
 };
+
+
+
 module.exports = functions;
