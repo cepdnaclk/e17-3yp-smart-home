@@ -7,6 +7,8 @@ const passport = require('passport');
 const bodyParser = require('body-parser');
 const route = require('./routes/UserRoute');
 const homeRoutes = require('./routes/homeRoute');
+const roomRoutes = require('./routes/roomRoute')
+// const deviceRoute = require('./routes/deviceRoute')
 //connect to database
 mongodbConnect();
 
@@ -17,6 +19,8 @@ app.use(cors());
 app.use(express.json());
 app.use( route);
 app.use(homeRoutes);
+app.use(roomRoutes);
+// app.use(deviceRoute);
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
@@ -32,7 +36,7 @@ and uncolored for information codes.
 if (process.env.NODE_ENV === 'development') {
 	app.use(morgan('dev'));
 }
-console.log("server");
+// console.log("server");
 
 //Port Declaring
 const PORT = process.env.PORT || 5005;

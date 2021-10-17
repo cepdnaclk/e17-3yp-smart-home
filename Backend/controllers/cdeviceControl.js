@@ -1,7 +1,7 @@
 var cdevice = require('../models/centralDevice');
 var nonActiveDevice = require('../models/nonActiveCDevice');
 
-var fuctions = {
+var functions = {
 	addCdevice: async function (req, res) {
 		try {
 			if (!req.body.name || !req.body.password || !req.body.cdeviceNumber) {
@@ -29,9 +29,9 @@ var fuctions = {
 												//if the passwords are matched
 												if (!err && isMatch) {
 													var newcDevice = cdevice({
-														name = req.body.name,
-														password = req.body.password,
-														cdeviceNumber = req.body.cdeviceNumber
+														name : req.body.name,
+														password : req.body.password,
+														cdeviceNumber : req.body.cdeviceNumber
 													})
 													newcDevice.save(function(err,newcDevice){
 														if(err){
@@ -44,7 +44,7 @@ var fuctions = {
 																success: true,
 																msg: "Successfully saved",
 																name: req.body.name,
-																cdeviceNumber = req.body.cdeviceNumber
+																cdeviceNumber : req.body.cdeviceNumber
 															})
 														}
 													})
@@ -78,7 +78,7 @@ var fuctions = {
 		} catch (err) {
 			return res.json({
 				success: false,
-				msg: 'Error on add Home try catch',
+				msg: 'Error on add cdevice try catch',
 				error: err,
 			});
 		}

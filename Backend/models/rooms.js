@@ -8,11 +8,19 @@ var roomsSchema = new schema({
 		require: true,
 		unique: true,
 	},
+	homeid: {
+		type:schema.Types.ObjectId,
+		ref: 'homes',
+		require: true
+	},
 	roomType: {
 		type: String,
 		require: true,
 	},
-	devices: [deviceSchema],
+	devices: [{
+		type: schema.Types.ObjectId,
+		ref : 'devices'
+	}],	//
 
 	numberOfDevices: {
 		type: Number,

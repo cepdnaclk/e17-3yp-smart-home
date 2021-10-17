@@ -2,11 +2,12 @@ var mongoose = require('mongoose');
 var schema = mongoose.Schema;
 
 let deviceSchema = new schema({
-	name: {
+	devicename: {
 		type: String,
 		require: true,
+		unique:true,
 	},
-	type: {
+	deviceType: {
 		type: String,
 		require: true,
 	},
@@ -17,6 +18,25 @@ let deviceSchema = new schema({
 		type: Number,
 		default: 0,
 	},
+	cdeviceid:{
+		type: String,
+		require: true,
+	},
+	port: {
+		type: Number,
+		require: true
+	},
+	homeid: {
+		type:schema.Types.ObjectId,
+		ref: 'homes',
+		require: true
+	},
+	roomid: {
+		type: schema.Types.ObjectId,
+		ref: 'rooms'
+	},
+
+
 });
 
 module.exports = mongoose.model('devices', deviceSchema);

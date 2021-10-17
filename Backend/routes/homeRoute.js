@@ -11,6 +11,8 @@ router.post('/api/home/addhome', userControl.verifyToken, homeControl.addhome);
 
 //Delete Home
 
+//Get home byid
+
 //invite Users
 
 //Get all rooms

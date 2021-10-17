@@ -31,11 +31,14 @@ var userSchema = new schema({
 		type: String,
 		require: true,
 	},
-	active: {
-		type: Boolean,
-		default: false,
-	},
-	homes: [home],
+	homes: [{
+		type: schema.Types.ObjectId,
+		ref : 'homes'
+}],
+	profilepic: {
+		type: String,
+		// unique: true
+	}
 
 });
 
