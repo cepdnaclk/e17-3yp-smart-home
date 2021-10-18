@@ -73,4 +73,4 @@ userSchema.methods.comparePassword = function (candidatePassword, cb) {
 };
 
 //Creating Model With name of "Users"
-module.exports = mongoose.model('Users', userSchema);
+module.exports = mongoose.model('users', userSchema);

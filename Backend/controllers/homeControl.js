@@ -1,6 +1,5 @@
-const { admin } = require('googleapis/build/src/apis/admin');
+
 let home = require('../models/homes');
-const { findOne, findByIdAndUpdate } = require('../models/users');
 let user = require('../models/users');
 
 let functions = {
@@ -32,7 +31,15 @@ let functions = {
 								line:30
 							});
 						} else {				//If no error
-							
+							home.findById(newHome._id, (err,data)=>{
+								if(err) {
+									return res.status(400).json({succcess:false, msg: err.message})
+								}
+								else{
+								data.memberids.push(req.body.userid)
+								data.save()
+								}
+							})
 							return res.json({
 								success: true,
 								msg: 'Home Successfully saved!',
@@ -56,13 +63,13 @@ let functions = {
 		}
 	},
 
-	showAllHome: async function (req, res) {
+	showAllHomeByuserId: async function (req, res) {
 		try {
-			let allHome = await home.find();
-			res.status(200).json({
-				success: true,
-				homes: allHome,
-			});
+			user.findById(req.body.userid).populate('homes').exec( function(err, user1){
+				if(err) return res.status(400).json({success: false, msg: err.message})
+				return res.json({ success: true, homes: user1.homes.homename})
+			})
+			
 		} catch (err) {
 			console.log(err);
 			return res.status(404).json({

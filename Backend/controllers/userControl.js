@@ -186,9 +186,10 @@ var functions = {
 			// 	members:members,
 			// })
 
-			homes.findById(req.body.homeid).populate('adminid','memberids').exec(function (err, home){
+			homes.findById(req.body.homeid).populate('adminid').exec(function (err, home){
 				if (err) return res.json({error:err.message});
-
+				if(!home) return res.json({success: false, msg: " Home id wrong!"})
+				// console.log(home.adminid)
 				return res.status(200).json({ 
 						username : home.adminid.name, 
 						success:true
@@ -209,6 +210,21 @@ var functions = {
 	},
 
 	//Invite user
+
+
+
+	//Delete User
+	deleteuserByID : async function(req, res, next){
+		try{
+			users.findByIdAndRemove(req.body.userid)
+
+		}catch(err){
+			return res.status(403).send({
+				success: false,
+				msg: err.message,
+			});
+		}
+	},
 
 
 	//Get the all users
