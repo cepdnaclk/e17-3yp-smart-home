@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 var schema = mongoose.Schema;
-let users = require('./users')
+
 // var roomSchema = require('./rooms');
 
 
