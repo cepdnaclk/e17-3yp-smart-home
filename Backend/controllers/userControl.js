@@ -217,6 +217,10 @@ var functions = {
 	deleteuserByID : async function(req, res, next){
 		try{
 			users.findByIdAndRemove(req.body.userid)
+			return res.json({
+				success: true,
+				msg: "deleted"
+			})
 
 		}catch(err){
 			return res.status(403).send({
@@ -258,7 +262,7 @@ var functions = {
 		// console.log(req.body);
 		try {
 			let updatedUser = await users
-				.findByIdAndUpdate(req.params.id, req.body)
+				.findByIdAndUpdate(req.params.id, {name: req.body.name})
 				.select('-password');
 			return res.status(200).json({ success: true, msg: 'User Name Updated!' });
 			//Catch Error
@@ -296,9 +300,13 @@ var functions = {
 	//Change Password
 	changePassword: async function (req, res, next) {
 		try {
-			console.log('try');
+			newPassword = req.body.newpassword;
+			users.findByIdAndUpdate()
 		} catch (err) {
-			return next(err);
+			return res.status(500).json({
+				success: false,
+				msg: err.message
+			})
 		}
 	},
 
