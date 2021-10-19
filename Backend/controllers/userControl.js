@@ -96,7 +96,7 @@ var functions = {
 								var newUser = users({
 									name: authData.user.name,
 									mail: authData.user.mail,
-									password: authData.user.password,
+									password: authData.user.password
 								});
 								//Saving The New User Details
 								// console.log(authData);
@@ -202,14 +202,45 @@ var functions = {
 				})
 			}
 		}catch(err){
-			return res.status(403).send({
+			return res.status(403).json({
 				success: false,
 				msg: err.message,
 			});
 		}
 	},
 
-	//Invite user
+	//Invite user 1- Account not account
+	//Invite Only Admin
+	//UserId, Homeid, newuser mail
+	InviteUser : function(req, res){
+		try{
+			homes.findById(req.body.homeid, (err, home1)=>{
+				if(home1.adminid== req.body.userid){
+					let newusername = req.body.newusername
+					users.findOne({name: newusername}, (err, newuser)=>{
+						if(err) return res.status(500).json({
+							success: false,
+							msg: err.message
+						})
+
+						newuser.mail
+					})
+
+				} else{
+					return res.status(400).json({
+						success: false,
+						msg: "Only admin can Invite another user"
+					})
+				}
+			})
+			
+		}catch(err){
+			return res.status(403).json({
+				syccess: false,
+				msg: err. message
+			})
+		}
+	},
 
 
 
@@ -301,7 +332,19 @@ var functions = {
 	changePassword: async function (req, res, next) {
 		try {
 			newPassword = req.body.newpassword;
-			users.findByIdAndUpdate()
+			let user1 = await users.findById(req.body.userid)
+			user1.comparePassword(newPassword, function (err, isMatch) {
+				if (isMatch && !err) {
+				return res.json({success: false, msg: "U need to specify a differnet Password"})
+				}
+			user1.password = newPassword
+			user1.save()
+				
+			return res.json({
+				success: true,
+				msg: "Password Change"
+			})
+		})
 		} catch (err) {
 			return res.status(500).json({
 				success: false,

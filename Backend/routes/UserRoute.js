@@ -42,7 +42,7 @@ router.put(
 router.get('/api/user/getalluserbyhome', userControl.verifyToken, userControl.allUserofAhouse )
 
 //Change Password
-// router.put('api/user/changePass/:id', userControl.handlePasswordUpdate);
+router.put('/api/user/changePass', userControl.verifyToken, userControl.changePassword);
 
 //Get UserInfo
 // router.get('/api/getinfo', userControl.getInfo, () => {});
