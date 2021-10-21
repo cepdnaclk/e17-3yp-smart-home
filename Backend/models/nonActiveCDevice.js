@@ -13,7 +13,7 @@ var nonActiveDevice = new schema({
 	},
 });
 
-userSchema.pre('save', function (next) {
+nonActiveDevice.pre('save', function (next) {
 	var user = this;
 	if (this.isModified('password') || this.isNew) {
 		bcrypt.genSalt(10, function (err, salt) {

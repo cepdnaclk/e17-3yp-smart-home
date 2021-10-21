@@ -4,8 +4,12 @@ let jwt = require('jsonwebtoken');
 const User = require('../models/users');
 var config = require('../config/dbconfig');
 const OAuth2 = google.auth.OAuth2;
+const users = require('../models/users')
+const homes = require('../models/homes')
 
-let invite = async()=>{
+//Functions
+let functions = {
+	invite : async function (user){
 
 const email = process.env.Email;
 	const clientId = process.env.CLIENT_ID;
@@ -46,10 +50,36 @@ const email = process.env.Email;
         to: clientMail,
         subject: 'Verify the Email',
         generateTextFromHTML: true,
-        html: '<h2 style="color:green">digitalHuT</h2>Click <a href= " http://localhost:5001/api/user/validate?"><button type="button">Verify!</button></a>',
+        
     };
     await transporter.sendMail(mailOptions, (error, response) => {
         error ? console.log(error) : console.log(response);
         transporter.close();
     });
+
+},
+
+	accept: function(req, res){
+		try{
+			users.findOne({name: req.body.username}, (err, doc)=>{
+				doc.update({$push:{homes: req.body.homeid}})
+				homes.findByIdAndUpdate(req.body.homeid, {$push:{ memberids: doc._id }},
+					{new: true, useFindAndModify:false})
+			})
+
+			return res.json({
+				success: true,
+				msg: "Success Fully accepted"
+			})
+			
+
+		}catch(err){
+			return res.json({
+                success: false,
+                msg: err.message
+            })
+		}
+	}
+
 }
+module.exports = functions
