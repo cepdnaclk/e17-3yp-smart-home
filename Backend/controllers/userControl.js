@@ -133,6 +133,8 @@ var functions = {
 			return next(err);
 		}
 	},
+
+	
 	//Authendicate the user--->Login
 	authendicate: function (req, res,next) {
 		User.findOne(
@@ -176,7 +178,10 @@ var functions = {
 				}
 			}
 		);
+
 	},
+
+
 
 	allUserofAhouse: async function (req, res, next) {
 		try{
