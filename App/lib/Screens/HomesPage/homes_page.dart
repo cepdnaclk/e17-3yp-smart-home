@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'components/body.dart';
 
-
 class HomesPage extends StatelessWidget {
+  final int noOfRooms;
+  HomesPage({required this.noOfRooms});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Body(),
+      body: Body(noOfRooms: noOfRooms),
     );
   }
 }
