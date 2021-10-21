@@ -51,24 +51,6 @@ let functions = {
 			});
 		}
 	},
-
-	getAlldevices: async function (req, res) {
-		try {
-			rooms.findById(req.body.roomid).populate('devices').exec( function(err, room1){
-				if(err) return res.status(400).json({success: false, msg: err.message})
-				if(!room1) return res.status(400).json({success: false, msg:"roomid is wrong"})
-				return res.json({ success: true, devices: room1.devices})
-			})
-			
-		} catch (err) {
-			console.log('show all devices', err);
-			return res.status(404).json({
-				succcess: false,
-				msg: err.message,
-			});
-		}
-	},
-
 };
 
 module.exports = functions
