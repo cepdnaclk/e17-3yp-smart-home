@@ -44,6 +44,7 @@ let functions ={
                 msg: err
             })
         }
-    }
+    },
+    
 }
 module.exports = functions
