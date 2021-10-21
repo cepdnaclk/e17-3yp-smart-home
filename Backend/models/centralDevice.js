@@ -10,13 +10,14 @@ var cdSchema = new schema({
 		type: String,
 		require: true,
 	},
-	cdeviceNumber: {
+	cdeviceId: {
 		type: String,
 		require: true,
 		unique: true,
 	},
 	homeid : {
-		type: String,
+		type: schema.Types.ObjectId,
+		ref: 'homes',
 		require: true,
 	}
 });
@@ -51,4 +52,4 @@ cdSchema.methods.comparePassword = function (candidatePassword, cb) {
 };
 
 //Creating Model With name of "Users"
-module.exports = mongoose.model('central-Devices', cdSchema);
+module.exports = mongoose.model('centralDevices', cdSchema);

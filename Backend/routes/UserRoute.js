@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const path = require('path');
 const userControl = require('../controllers/userControl');
+const inviteUser = require('../Mail Activation/inviteUser')
 
 // router.get('/',(req,res)=>{
 // 	console.log("Testing 1 Root")
@@ -42,7 +43,13 @@ router.put(
 router.get('/api/user/getalluserbyhome', userControl.verifyToken, userControl.allUserofAhouse )
 
 //Change Password
-// router.put('api/user/changePass/:id', userControl.handlePasswordUpdate);
+router.put('/api/user/changePass', userControl.verifyToken, userControl.changePassword);
+
+//Invite user accepted
+router.put('/api/user/inviteuser/accept',userControl.verifyToken,inviteUser.accept)
+
+//Cancel request
+router.put('/api/user/inviteuser/cancel',userControl.verifyToken,inviteUser.cancel)
 
 //Get UserInfo
 // router.get('/api/getinfo', userControl.getInfo, () => {});
