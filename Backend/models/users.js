@@ -3,7 +3,17 @@ var schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 
 
-
+let home = new schema({
+	homeid :{
+		type: String,
+		require: true,
+		
+	},
+	homename: {
+		type: String,
+		require: true,
+	}
+})
 
 var userSchema = new schema({
 	name: {
@@ -25,7 +35,10 @@ var userSchema = new schema({
 		type: schema.Types.ObjectId,
 		ref : 'homes'
 }],
-	
+	profilepic: {
+		type: String,
+		// unique: true
+	}
 
 });
 

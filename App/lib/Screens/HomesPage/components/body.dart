@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/Screens/Settings/settings.dart';
@@ -7,14 +9,17 @@ import '../../../constants.dart';
 import '../../home_page.dart';
 import 'background.dart';
 
+//Homes Main Page
 class Body extends StatefulWidget {
-  const Body({Key? key}) : super(key: key);
+  Body({required this.noOfRooms});
+  final noOfRooms;
 
   @override
   _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
+  //initial page
   Widget page = Container(
       width: double.infinity,
       height: double.infinity,
@@ -25,6 +30,7 @@ class _BodyState extends State<Body> {
         ],
       ));
 
+  //variable
   int _selectedIndex = 0;
 
   //nav bar
@@ -56,27 +62,55 @@ class _BodyState extends State<Body> {
     });
   }
 
+  //home list
+  List homeList = [
+    {'name': 'Arshad home1', 'age': '12'},
+    {'name': 'Arshad home2', 'age': '13'},
+    {'name': 'Arshad home3', 'age': '14'},
+    {'name': 'Arshad home4', 'age': '15'},
+    {'name': 'Arshad home5', 'age': '16'},
+  ];
+
   //get home
-  void getHome() async {  
+  void getHome() async {
     //print("1\n");
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString('token');
-    //print("Stored from sharedPreferense");
-    //print(token);
+    String? userid = prefs.getString('userid');
+    print(token);
+    print(userid);
+
+    final queryParameters = {
+  'userid': '$userid'
+};
 
     final response = await http.get(
-      Uri.parse('http://192.168.187.195:5005/api/user/alluser'),
+      Uri.parse('http://192.168.187.195:5001/api/user/alluser'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         "Authorization": "Bearer $token"
       },
+      body: jsonEncode(<String, String>{
+          'userid': '$userid'
+          //'userid': '616dae8edad0e97516bf053c'
+        }
+      
     );
     print(response.statusCode);
+    print(widget.noOfRooms);
+
+    int nOhm = 1;
 
     if (response.statusCode == 403) {
       setState(() {
         //print("set");
-        page = HomesMainPage();
+        //print(NoOfRooms);
+
+        if (nOhm == 0) {
+          page = startpage();
+        } else {
+          page = HomesMainPage();
+        }
       });
     }
   }
@@ -224,19 +258,11 @@ class _BodyState extends State<Body> {
                     homeName: homeList[index]['name'],
                   );
                 }),
-          )
+          ),
         ],
       ),
     ));
   }
-
-  List homeList = [
-    {'name': 'Arshad home1', 'age': '12'},
-    {'name': 'Arshad home2', 'age': '13'},
-    {'name': 'Arshad home3', 'age': '14'},
-    {'name': 'Arshad home4', 'age': '15'},
-    {'name': 'Arshad home5', 'age': '16'},
-  ];
 
   @override
   Widget build(BuildContext context) {

@@ -19,8 +19,7 @@ let deviceSchema = new schema({
 		default: 0,
 	},
 	cdeviceid:{
-		type: schema.Types.ObjectId,
-		ref: 'centralDevices',
+		type: String,
 		require: true,
 	},
 	port: {
