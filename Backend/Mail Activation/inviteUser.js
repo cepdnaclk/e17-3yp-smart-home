@@ -79,6 +79,19 @@ const email = process.env.Email;
                 msg: err.message
             })
 		}
+	},
+	cancel: function(req, res){
+		try{
+			return res.json({
+				success : true,
+				msg: "canceled"
+			})
+		}catch{
+			return res.json({
+                success: false,
+                msg: err.message
+            })
+		}
 	}
 
 }
