@@ -13,7 +13,8 @@ var cdSchema = new schema({
 		unique: true,
 	},
 	homeid : {
-		type: String,
+		type: schema.Types.ObjectId,
+		ref: 'rooms',
 		require: true,
 	}
 });

@@ -4,7 +4,7 @@ var nonActiveDevice = require('../models/nonActiveCDevice');
 var functions = {
 	addCdevice: async function (req, res) {
 		try {
-			if ( !req.body.password || !req.body.cdeviceNumber) {
+			if ( !req.body.password || !req.body.cdeviceNumber || !req.body.homeid) {
 				return res //If not all the feilds are given
 					.status(404)
 					.json({ success: false, msg: 'Enter all fields' });
@@ -31,7 +31,8 @@ var functions = {
 													var newcDevice = cdevice({
 														
 														password : req.body.password,
-														cdeviceNumber : req.body.cdeviceNumber
+														cdeviceNumber : req.body.cdeviceNumber,
+														homeid: req.body.homeid
 													})
 													newcDevice.save(function(err,newcDevice){
 														if(err){
