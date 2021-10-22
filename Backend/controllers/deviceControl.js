@@ -30,7 +30,7 @@ let functions ={
                                 return res.json({
                                     success: true,
                                     device: devicedoc,
-                                    msg: "Rooom successfully added"
+                                    msg: "device successfully added"
                                 })
                 }   )
             }

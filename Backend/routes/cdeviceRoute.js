@@ -8,6 +8,6 @@ const userControl = require('../controllers/userControl');
 router.post('/api/cdevice/addCdevice', userControl.verifyToken, cdControl.addCdevice);
 
 //getting all the Cdevices connected to a home
-router.get('/api/cdevice/getallByid', userControl.verifyToken, cdControl.getAllbyId )
+router.post('/api/cdevice/getallByid', userControl.verifyToken, cdControl.getAllbyId )
 
 module.exports = router
