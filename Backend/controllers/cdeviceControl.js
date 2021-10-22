@@ -1,6 +1,7 @@
 var cdevice = require('../models/centralDevice');
 var nonActiveDevice = require('../models/nonActiveCDevice');
 var bcrypt = require('bcrypt');
+const homes = require('../models/homes')
 
 var functions = {
 	addCdevice: async function (req, res) {
@@ -87,6 +88,9 @@ var functions = {
 	},
 	getAllbyId:async function(req, res){
 		try{
+			homes.findById(req.body.homeid, (err, data)=>{
+				if(err) return res.json({success: false,msg:"The home id is not found"})
+			})
 			let cdevices = await cdevice.find({homeid: req.body.homeid})
 			return res.json({
 				success: true,
