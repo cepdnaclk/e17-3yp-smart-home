@@ -85,9 +85,9 @@ var functions = {
 			});
 		}
 	},
-	getAllbyId: function(req, res){
+	getAllbyId:async function(req, res){
 		try{
-			let cdevices = cdevice.find({homeid: req.body.homeid})
+			let cdevices = await cdevice.find({homeid: req.body.homeid})
 			return res.json({
 				success: true,
 				msg:"successfull",
