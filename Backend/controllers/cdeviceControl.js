@@ -1,5 +1,6 @@
 var cdevice = require('../models/centralDevice');
 var nonActiveDevice = require('../models/nonActiveCDevice');
+var bcrypt = require('bcrypt');
 
 var functions = {
 	addCdevice: async function (req, res) {
@@ -41,10 +42,11 @@ var functions = {
 																msg: err,})
 														}
 														else{
+															nonActiveDevice.findOneAndRemove({cdeviceNumber: req.body.cdeviceNumber})
 															return res.status(200).json({
 																success: true,
 																msg: "Successfully saved",
-																cdeviceNumber : req.body.cdeviceNumber
+																cdeviceNumber : newcDevice.cdeviceNumber
 															})
 														}
 													})
