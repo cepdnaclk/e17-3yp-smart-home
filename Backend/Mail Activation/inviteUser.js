@@ -11,7 +11,18 @@ const homes = require('../models/homes')
 let functions = {
 	invite : async function (user){
 
-		
+		try{
+			users.findOne({name: req.body.username}, (err, data)=>{
+				if(err) return res.status(500).json({success:false, msg:err.message})
+				if(data) return res.status(200).json({success:true, userid: data._id, msg:"User exist"})
+				return res.status(201).json({success:false, msg:"user name does not exist,"})
+			})
+		}catch(err){
+			return res.json({
+                success: false,
+                msg: err.message
+            })
+		}
 
 },
 
