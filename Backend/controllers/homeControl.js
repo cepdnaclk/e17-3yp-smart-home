@@ -22,6 +22,10 @@ let functions = {
 					if(req.body.address){			//If address were given --> Address optional
 						newHome.address = req.body.address;
 					}
+					user.findByIdAndUpdate(req.body.userid, { $push: { devices: devicedoc._id }},
+						{ new: true, useFindAndModify: false },()=>{
+							console.log("reached the update")
+						}  );
 					newHome.save(function (err, newHome) {
 						if (err) {				//If any error occur while saving
 							console.log('addhome-save', err);
