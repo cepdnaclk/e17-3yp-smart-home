@@ -9,7 +9,7 @@ const homes = require('../models/homes')
 
 //Functions
 let functions = {
-	invite : async function (user){
+	invite : async function (req,res){
 
 		try{
 			users.findOne({name: req.body.username}, (err, data)=>{
