@@ -12,7 +12,7 @@ router.post('/api/home/addhome', userControl.verifyToken, homeControl.addhome);
 //Delete Home
 
 //Get homes byid
-router.get('/api/home/allhomes/byuserId', userControl.verifyToken, homeControl.showAllHomeByuserId)
+router.post('/api/home/allhomes/byuserId', userControl.verifyToken, homeControl.showAllHomeByuserId)
 
 //invite Users
 
