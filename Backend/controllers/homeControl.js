@@ -22,11 +22,9 @@ let functions = {
 					if(req.body.address){			//If address were given --> Address optional
 						newHome.address = req.body.address;
 					}
-					user.findByIdAndUpdate(req.body.userid, { $push: { devices: devicedoc._id }},
-						{ new: true, useFindAndModify: false },()=>{
-							console.log("reached the update")
-						}  );
-					newHome.save(function (err, newHome) {
+					
+
+					await newHome.save(function (err, newHome) {
 						if (err) {				//If any error occur while saving
 							console.log('addhome-save', err);
 							return res.status(500).json({
@@ -35,11 +33,17 @@ let functions = {
 								line:30
 							});
 						} else {				//If no error
+							user.findByIdAndUpdate(req.body.userid, { $push: { homes: newHome._id }},
+								{ new: true, useFindAndModify: false }, ()=>{
+									console.log('Updated')
+								} );
+							
 							home.findById(newHome._id, (err,data)=>{
 								if(err) {
 									return res.status(400).json({succcess:false, msg: err.message})
 								}
 								else{
+									
 								data.memberids.push(req.body.userid)
 								data.save()
 								}
