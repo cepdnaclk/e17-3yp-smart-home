@@ -91,7 +91,7 @@ var functions = {
 			homes.findById(req.body.homeid, (err, data)=>{
 				if(err) return res.json({success: false,msg:"The home id is not found"})
 			})
-			let cdevices = await cdevice.find({homeid: req.body.homeid})
+			let cdevices = await cdevice.find({homeid: req.body.homeid}).select('-password')
 			return res.json({
 				success: true,
 				msg:"successfull",
