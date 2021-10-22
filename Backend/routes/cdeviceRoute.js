@@ -9,3 +9,5 @@ router.post('/api/cdevice/addCdevice', userControl.verifyToken, cdControl.addCde
 
 //getting all the rooms
 router.get;
+
+module.exports = router
