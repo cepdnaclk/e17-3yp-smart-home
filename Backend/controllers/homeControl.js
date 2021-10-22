@@ -67,7 +67,7 @@ let functions = {
 		try {
 			user.findById(req.body.userid).populate('homes').exec( function(err, user1){
 				if(err) return res.status(400).json({success: false, msg: err.message})
-				return res.json({ success: true, homes: user1.homes.homename})
+				return res.json({ success: true, homes: user1.homes.homename, numberOfhomes: user1.homes.homename.length})
 			})
 			
 		} catch (err) {
