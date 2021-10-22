@@ -2,10 +2,7 @@ var mongoose = require('mongoose');
 var schema = mongoose.Schema;
 var bcrypt = require('bcrypt');
 var cdSchema = new schema({
-	name: {
-		type: String,
-		require: true,
-	},
+
 	password: {
 		type: String,
 		require: true,
