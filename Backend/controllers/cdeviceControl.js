@@ -85,6 +85,23 @@ var functions = {
 			});
 		}
 	},
+	getAllbyId: function(req, res){
+		try{
+			let cdevices = cdevice.find({homeid: req.body.homeid})
+			return res.json({
+				success: true,
+				msg:"successfull",
+				cdevices: cdevices
+			})
+
+		}catch(err){
+			return res.json({
+				success: false,
+				msg: 'Error on add cdevice try catch',
+				error: err.message,
+			});
+		}
+	}
 };
 
 module.exports = functions;

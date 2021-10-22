@@ -29,7 +29,7 @@ let functions ={
 								}  );
                                 return res.json({
                                     success: true,
-                                    room: roomdoc,
+                                    device: devicedoc,
                                     msg: "Rooom successfully added"
                                 })
                 }   )
