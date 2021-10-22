@@ -95,6 +95,7 @@ let functions = {
 				res.status(200).json({
 					success: true,
 					rooms: home1.rooms,
+					numberOfrooms: home1.rooms.length
 				});
 			})
 			
