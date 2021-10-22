@@ -8,7 +8,9 @@ const bodyParser = require('body-parser');
 const route = require('./routes/UserRoute');
 const homeRoutes = require('./routes/homeRoute');
 const roomRoutes = require('./routes/roomRoute')
-// const deviceRoute = require('./routes/deviceRoute')
+const deviceRoute = require('./routes/deviceRoute')
+const cdevice = require('./routes/cdeviceRoute')
+const nonActive = require('./routes/NonActiveCdeviceRoute')
 //connect to database
 mongodbConnect();
 
@@ -20,7 +22,9 @@ app.use(express.json());
 app.use( route);
 app.use(homeRoutes);
 app.use(roomRoutes);
-// app.use(deviceRoute);
+app.use(deviceRoute);
+app.use(cdevice);
+app.use(nonActive);
 app.use(passport.initialize());
 require('./config/passport')(passport);
 
