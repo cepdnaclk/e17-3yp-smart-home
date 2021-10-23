@@ -5,6 +5,9 @@ const userControl = require('../controllers/userControl')
 const deviceControl = require('../controllers/deviceControl')
 
 //Adding a new room
-router.post('/api/home/rooms/devices/adddevice', userControl.verifyToken, deviceControl.addDevice);
+router.post('/api/devices/adddevice', userControl.verifyToken, deviceControl.addDevice);
+
+//Get all devices
+router.post('/api/devices/getallDevices', userControl.verifyToken, deviceControl.getAllDevices )
 
 module.exports = router

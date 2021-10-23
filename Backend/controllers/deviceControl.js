@@ -45,6 +45,19 @@ let functions ={
             })
         }
     },
+    getAllDevices:async function(req, res){
+        try{
+            let alldevices = await devices.find({roomid: req.body.roomid})
+            return res.status(200).json({success: true, devices: alldevices})
+        }catch(err){
+            
+            return res.json({
+                success: false,
+                msg: err
+            })
+        }
+        
+    }
     
 }
 module.exports = functions
