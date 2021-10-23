@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/Screens/HomesPage/homes_page.dart';
 import 'package:untitled/Screens/Settings/settings.dart';
 import 'package:untitled/components/rounded_button.dart';
 import 'package:untitled/components/rounded_input_field.dart';
 import 'package:untitled/constants.dart';
 import '../../../background.dart';
-import '../../home_page.dart';
 import 'package:http/http.dart' as http;
 
 //Add a Home body
@@ -35,7 +35,7 @@ class _BodyState extends State<Body> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return const HomePage();
+              return HomesPage();
             },
           ),
           (route) => false,
@@ -64,7 +64,6 @@ class _BodyState extends State<Body> {
       String? userid = prefs.getString('userid');
       print(token);
       print(userid);
-//616dae8edad0e97516bf053c
       final response = await http.post(
         Uri.parse('http://192.168.187.195:5001/api/home/addhome'),
         headers: <String, String>{
@@ -96,15 +95,23 @@ class _BodyState extends State<Body> {
 
       if (response.statusCode == 200) {
         print("sussessful");
-        // Navigator.push(
-        //   context,
-        // MaterialPageRoute(
-        //   builder: (context) {
-        //     return ();
-        //   },
-        // ),
-        // );
-        //return Album.fromJson(jsonDecode(response.body));
+        Fluttertoast.showToast(
+            msg: "Your home saved successfully.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+
+        Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return HomesPage();
+            },
+          ),
+          (route) => false,
+        );
       } else {
         // If the server did not return a 200 CREATED response,
         // then throw an exception.

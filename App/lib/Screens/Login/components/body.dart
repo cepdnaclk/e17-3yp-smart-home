@@ -1,7 +1,4 @@
-//import 'package:firebase_auth/firebase_auth.dart';
-
 import 'dart:convert';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -66,12 +63,12 @@ class _BodyState extends State<Body> {
 
         //print("200");
 
-        Map<String, dynamic> responce = json.decode(response.body);
+        Map<String, dynamic> resp = json.decode(response.body);
         //print(output["token"]);
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
-        prefs.setString('token', responce["token"]);
-        prefs.setString('userid', responce["userid"]);
+        prefs.setString('token', resp["token"]);
+        prefs.setString('userid', resp["userid"]);
 
         // SharedPreferences prefs1 = await SharedPreferences.getInstance();
         String? tokenValue = prefs.getString('token');
@@ -87,17 +84,13 @@ class _BodyState extends State<Body> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return HomesPage(
-                noOfRooms: noOfHomes!.toInt(),
-              );
+              return HomesPage();
             },
           ),
           (route) => false,
         );
-        //return Album.fromJson(jsonDecode(response.body));
       } else {
-        //print("throw");
-        throw Exception('Failed to create album.');
+        throw Exception('Failed to create.');
       }
     } on Exception catch (e) {
       print(e);

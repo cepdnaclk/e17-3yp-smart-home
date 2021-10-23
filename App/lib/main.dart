@@ -15,6 +15,11 @@ import 'package:untitled/Screens/TypeOfDevices/rgb_light.dart';
 import 'package:untitled/Screens/TypeOfDevices/smart_plug.dart';
 
 import 'package:untitled/Screens/device_check.dart';
+import 'Screens/Add_a_home/addHome.dart';
+import 'Screens/HomesPage/homes_page.dart';
+import 'Screens/Notification/notification.dart';
+import 'Screens/Settings In/central devices/central_devices.dart';
+import 'Screens/Settings In/central devices/connected central dev/connected_cen_devs.dart';
 import 'Screens/Settings/settings.dart';
 import 'Screens/add_central_device/central_device.dart';
 
@@ -32,11 +37,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      //home: WelcomeScreen(),
+      home: WelcomeScreen(),
       //home: SignUpScreen(),
-      home: LoginScreen(),
+      //home: LoginScreen(),
+
+      //home: HomesPage(),
+      //home: AddHome(),
 
       //home: HomePage(),
+
       //home: Sample(), //add device , room
       //home: WhiteLight(),
       //home: RGB_light(),
@@ -44,10 +53,14 @@ class MyApp extends StatelessWidget {
       //home: ProfileAddingScreen(email: 'abcdefg@gmail.com', userName: 'arshad'),
       //home: VerificationScreen(),
 
-      //home: CentralDevice(),
-      //home: Settings(),
-
       //home: DeviceCheck(),
+
+      //home: Settings(),
+      //home: CentralDevicePage(),  //settings->CentralDevices
+      //home: CentralDevice(),      //settings->CentralDevices->Add Central Device
+      //home: Connected_CentDev(),
+
+      //home: Notifications(),
     );
   }
 }

@@ -2,15 +2,17 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:untitled/Screens/HomesPage/homes_page.dart';
 import 'package:untitled/Screens/Settings/settings.dart';
 import 'package:untitled/components/rounded_button.dart';
 import 'package:untitled/components/rounded_input_field.dart';
 import 'package:untitled/components/rounded_password_field.dart';
 import 'package:untitled/constants.dart';
-import '../../home_page.dart';
 import 'background.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+
+//Add Centerlised Device
 
 class Body extends StatefulWidget {
   const Body({
@@ -36,7 +38,7 @@ class _BodyState extends State<Body> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return const HomePage();
+              return HomesPage();
             },
           ),
           (route) => false,
@@ -65,12 +67,11 @@ class _BodyState extends State<Body> {
       String? token = await storage.read(key: "token");
       print(token);
 
-
       final response = await http.post(
         Uri.parse('http://192.168.187.195:5005/api/user/'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          "Authorization" : "Bearer $token"
+          "Authorization": "Bearer $token"
         },
         body: jsonEncode(<String, String>{
           'password': password,
@@ -147,18 +148,12 @@ class _BodyState extends State<Body> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              SizedBox(height: size.height * 0.08),
               const Text(
                 "Add Centerlised Device",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 22.0,
-                ),
-              ),
-              SizedBox(height: size.height * 0.03),
-              Image(
-                height: size.height * 0.35,
-                image: const AssetImage(
-                  "assets/images/centelised.jpg",
                 ),
               ),
               SizedBox(height: size.height * 0.03),
@@ -196,7 +191,6 @@ class _BodyState extends State<Body> {
                   }
                 },
               ),
-              SizedBox(height: size.height * 0.03),
             ],
           ),
         ),

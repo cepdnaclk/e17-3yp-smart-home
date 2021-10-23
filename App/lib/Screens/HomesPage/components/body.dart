@@ -1,19 +1,19 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/Screens/Add_a_home/addHome.dart';
 import 'package:untitled/Screens/Settings/settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:untitled/components/listcard.dart';
 import '../../../constants.dart';
 import '../../home_page.dart';
+import '../homes_page.dart';
 import 'background.dart';
 
 //Homes Main Page
 class Body extends StatefulWidget {
-  Body({required this.noOfRooms});
-  final noOfRooms;
-
   @override
   _BodyState createState() => _BodyState();
 }
@@ -43,7 +43,7 @@ class _BodyState extends State<Body> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return HomePage();
+              return HomesPage();
             },
           ),
           (route) => false,
@@ -63,55 +63,81 @@ class _BodyState extends State<Body> {
   }
 
   //home list
-  List homeList = [
-    {'name': 'Arshad home1', 'age': '12'},
-    {'name': 'Arshad home2', 'age': '13'},
-    {'name': 'Arshad home3', 'age': '14'},
-    {'name': 'Arshad home4', 'age': '15'},
-    {'name': 'Arshad home5', 'age': '16'},
-  ];
+  late List homeList;
 
   //get home
   void getHome() async {
-    //print("1\n");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
-    String? userid = prefs.getString('userid');
-    print(token);
-    print(userid);
+    try {
+      //print("1\n");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      String? userid = prefs.getString('userid');
+      print(token);
+      print(userid);
 
-    final queryParameters = {
-  'userid': '$userid'
-};
+      //final queryParameters = {'userid': '$userid'};
 
-    final response = await http.get(
-      Uri.parse('http://192.168.187.195:5001/api/user/alluser'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer $token"
-      },
-      body: jsonEncode(<String, String>{
-          'userid': '$userid'
-          //'userid': '616dae8edad0e97516bf053c'
-        }
-      
-    );
-    print(response.statusCode);
-    print(widget.noOfRooms);
+      final response = await http.post(
+          Uri.parse('http://192.168.187.195:5001/api/home/allhomes/byuserId'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            "Authorization": "Bearer $token"
+            // "Authorization":
+            //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiXSwiX192IjowfSwiaWF0IjoxNjM0ODg4MDU1LCJleHAiOjE2MzQ4OTUyNTV9.n_K5Lak9tU2xc7IRKr6XdclItslruQGHt561v-c9ZrU"
+          },
+          body: jsonEncode(
+            <String, String>{
+              'userid': '$userid'
+              //'userid': '617244d0b8c067469d455abe'
+            },
+          ));
 
-    int nOhm = 1;
+      print(response.statusCode);
+      print(response.body);
+      //print(widget.noOfRooms);
 
-    if (response.statusCode == 403) {
-      setState(() {
-        //print("set");
-        //print(NoOfRooms);
+      int NoOfHomes;
 
-        if (nOhm == 0) {
-          page = startpage();
-        } else {
-          page = HomesMainPage();
-        }
-      });
+      if (response.statusCode == 200) {
+        Map<String, dynamic> resp = json.decode(response.body);
+
+        //print(resp["numberOfhomes"]);
+        homeList = resp["homes"];
+        NoOfHomes = resp["numberOfhomes"];
+
+        //print(NoOfHomes);
+
+        setState(() {
+          //print("set");
+          //print(_NoOfHomes);
+
+          if (NoOfHomes == 0) {
+            page = startpage();
+          } else {
+            page = HomesMainPage(homeList);
+          }
+        });
+      } else if (response.statusCode == 403) {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      }
+    } on Exception catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -132,7 +158,14 @@ class _BodyState extends State<Body> {
                   ),
                   GestureDetector(
                     onTap: () {
-                      print("1");
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AddHome();
+                          },
+                        ),
+                      );
                     },
                     child: const CircleAvatar(
                       backgroundColor: kPrimaryColor,
@@ -179,12 +212,24 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                   SizedBox(height: size.height * 0.03),
-                  const Text(
-                    "Get started",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 18.0,
-                      color: Colors.blueAccent,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) {
+                            return AddHome();
+                          },
+                        ),
+                      );
+                    },
+                    child: const Text(
+                      "Get started",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w500,
+                        fontSize: 18.0,
+                        color: Colors.blueAccent,
+                      ),
                     ),
                   ),
                   SizedBox(height: size.height * 0.17),
@@ -198,7 +243,7 @@ class _BodyState extends State<Body> {
   }
 
   //Homes main page
-  Widget HomesMainPage() {
+  Widget HomesMainPage(homeList) {
     Size size = MediaQuery.of(context).size;
     return Background(
         child: SafeArea(
@@ -212,7 +257,14 @@ class _BodyState extends State<Body> {
               ),
               GestureDetector(
                 onTap: () {
-                  print("1");
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return AddHome();
+                      },
+                    ),
+                  );
                 },
                 child: const CircleAvatar(
                   backgroundColor: kPrimaryColor,
@@ -245,17 +297,24 @@ class _BodyState extends State<Body> {
           ),
           SizedBox(height: size.height * 0.01),
           Image(
-            height: size.height * 0.33,
+            height: size.height * 0.20,
             image: const AssetImage(
-              "assets/images/home.jpg",
+              "assets/images/house.jpg",
             ),
+          ),
+          SizedBox(
+            height: size.height * 0.01,
+          ),
+          const Divider(
+            thickness: 1,
           ),
           Expanded(
             child: ListView.builder(
                 itemCount: homeList.length,
                 itemBuilder: (BuildContext context, int index) {
                   return ListCard(
-                    homeName: homeList[index]['name'],
+                    homeName: homeList[index]['homename'],
+                    homeId: homeList[index]['_id'],
                   );
                 }),
           ),

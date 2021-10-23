@@ -1,54 +1,132 @@
-//import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
-
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:untitled/Screens/HomesPage/homes_page.dart';
 import 'package:untitled/devices.dart';
 import 'Settings/settings.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final String homeId;
+  const HomePage({Key? key, required this.homeId}) : super(key: key);
 
   @override
-  _HomePageState createState() => _HomePageState();
+  _HomePageState createState() => _HomePageState(this.homeId);
 }
 
 class _HomePageState extends State<HomePage> {
+  String homeId;
+  _HomePageState(this.homeId);
   TextEditingController roomNameController = TextEditingController();
   bool showPopup = false;
   bool showDelete = false;
   bool delete = false;
   var selectedInfo;
-  int roomId = 1;
 
   @override
   initState() {
     super.initState();
-    //getData();
+    getData();
     print(showDelete);
   }
 
-  //User? loggedInUser = FirebaseAuth.instance.currentUser;
+  //initial page
+  Widget page = Container(
+      width: double.infinity,
+      height: double.infinity,
+      child: Stack(
+        alignment: Alignment.center,
+        children: const <Widget>[
+          CircularProgressIndicator(),
+        ],
+      ));
 
+  //Rooms List
   List data = [];
 
-  // getData() async {
-  //   await FirebaseFirestore.instance
-  //       .collection("Devices")
-  //       .doc(loggedInUser == null ? "abc" : loggedInUser!.uid)
-  //       .get()
-  //       .then((value) {
-  //     data = value['devices'];
-  //   }).catchError((e) {});
-  //   setState(() {});
-  // }
+  //get Data
+  void getData() async {
+    try {
+      //print("1\n");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      print(token);
+
+      //final queryParameters = {'userid': '$userid'};
+
+      final response = await http.post(
+          Uri.parse('http://192.168.187.195:5001/api/home/allrooms'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            "Authorization": "Bearer $token"
+            // "Authorization":
+            //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiLCI2MTcyNmM2MDEzZDBkZTFjNDUyNTE1NzUiLCI2MTcyNzI4ZjEzZDBkZTFjNDUyNTE1ODgiXSwiX192IjowfSwiaWF0IjoxNjM0OTE1MzQzLCJleHAiOjE2MzQ5MjI1NDN9.L9XenAuK9qjmsgFWuP-AQzll5EgAaT4YjEAPkYfKbqQ"
+          },
+          body: jsonEncode(
+            <String, String>{
+              //homeId
+              '_id': homeId,
+              //'_id': '617253c61ff94c782ab8d274'
+            },
+          ));
+
+      print(response.statusCode);
+      print(response.body);
+      //print(widget.noOfRooms);
+
+      int NoOfRooms;
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> resp = json.decode(response.body);
+
+        //print(resp["numberOfhomes"]);
+        data = resp["rooms"];
+        NoOfRooms = resp["numberOfrooms"];
+
+        //print(NoOfRooms);
+
+        setState(() {
+          //print("set");
+          //print(NoOfRooms);
+
+          // if (NoOfRooms == 0) {
+          //   page = startpage();
+          // } else {
+          //   page = HomesMainPage(homeList);
+          // }
+        });
+      } else if (response.statusCode == 403) {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      }
+    } on Exception catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+  }
 
   //Initial cardTile show,
-  //& return all other widgets, main data[i] all will return
+  //& return all other widgets, main data[] all will return
   addTile() {
     List<Widget> widgetList = [];
 
     widgetList.add(GestureDetector(
-      onTap: () {
+      onTap: () async {
         showPopup = true;
         setState(() {});
       },
@@ -98,14 +176,16 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         padding: const EdgeInsets.only(top: 10),
                         height: 150,
-                        child: Image.asset(info['icon'] == null
-                            ? 'assets/images/pin.png'
-                            : 'assets/${info['icon']}'),
+                        child: Image.asset(
+                          info['roomType'] == null
+                              ? 'assets/images/pin.png'
+                              : 'assets/${info['roomType']}',
+                        ), //icon
                       ),
                     ),
                     Container(
                       padding: const EdgeInsets.symmetric(vertical: 10),
-                      child: Text(info['roomName']),
+                      child: Text(info['roomname']), //icon
                     ),
                   ],
                 )),
@@ -141,17 +221,85 @@ class _HomePageState extends State<HomePage> {
   }
 
   saveRoom() async {
-    data.add(({
-      'roomName': roomNameController.text.trim(),
-      'icon': selectedIcon,
-      'roomId': roomId,
-    }));
-    print(roomId);
-    roomId++;
-    // await FirebaseFirestore.instance
-    //     .collection("Devices")
-    //     .doc(loggedInUser == null ? "abc" : loggedInUser!.uid)
-    //     .set({'devices': data});
+    // data.add(({
+    //   'roomName': roomNameController.text.trim(),
+    //   'icon': selectedIcon,
+    // }));
+
+    try {
+      //print("1\n");
+
+      String roomName = roomNameController.text.trim().toString();
+      String roomType = selectedIcon.toString();
+
+      // print(roomNameController.text.trim().toString());
+      // print(selectedIcon.toString());
+      print(roomName);
+      print(roomType);
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      //print(token);
+
+      final response = await http.post(
+          Uri.parse('http://192.168.187.195:5001/api/home/rooms/addroom'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            "Authorization": "Bearer $token"
+            // "Authorization":
+            //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiLCI2MTcyNmM2MDEzZDBkZTFjNDUyNTE1NzUiLCI2MTcyNzI4ZjEzZDBkZTFjNDUyNTE1ODgiXSwiX192IjowfSwiaWF0IjoxNjM0OTExMTM0LCJleHAiOjE2MzQ5MTgzMzR9.t-uS6-wPu5xeXtU_vbiNc4XPp1gD-HcA9FdLtwYmV2g"
+          },
+          body: jsonEncode(
+            <String, String>{
+              'roomname': roomName,
+              'roomType': roomType,
+              'homeid': homeId, //print(widget.noOfRooms)
+              // 'homeid': '617253c61ff94c782ab8d274'
+            },
+          ));
+      //
+      print(response.statusCode);
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+            msg: "Your Room Successfully added to your home.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+
+        getData();
+        setState(() {
+          // if (NoOfRooms == 0) {
+          //   page = startpage();
+          // } else {
+          //   page = HomesMainPage(homeList);
+          // }
+        });
+      } else if (response.statusCode == 403) {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      }
+    } on Exception catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
+    }
   }
 
   List iconList = [
@@ -216,10 +364,20 @@ class _HomePageState extends State<HomePage> {
             },
           ),
         );
+      } else if (_selectedIndex == 0) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return HomesPage();
+            },
+          ),
+        );
       }
     });
   }
 
+//widget overide
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -228,6 +386,7 @@ class _HomePageState extends State<HomePage> {
         if (showPopup == true) {
           showPopup = false;
           selectedIcon = null;
+          //selectedIcon = '';
           roomNameController.clear();
           setState(() {});
         } else {
@@ -274,6 +433,7 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               color: const Color(0xFF6F35A5),
+              //color: Colors.indigo
             ),
 
             Column(children: [
@@ -330,7 +490,8 @@ class _HomePageState extends State<HomePage> {
                                     child: Container(
                                       decoration: BoxDecoration(
                                           color: roomNameController.text
-                                                      .trim().isEmpty
+                                                  .trim()
+                                                  .isEmpty
                                               ? Colors.blueGrey
                                               : Colors.blue,
                                           borderRadius:
@@ -371,6 +532,7 @@ class _HomePageState extends State<HomePage> {
                 onTap: () {
                   showPopup = false;
                   selectedIcon = null;
+                  //selectedIcon = '';
                   roomNameController.clear();
                   setState(() {});
                 },
@@ -392,7 +554,8 @@ class _HomePageState extends State<HomePage> {
                           children: [
                             Container(
                                 alignment: Alignment.center,
-                                padding: const EdgeInsets.symmetric(vertical: 30),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 30),
                                 child: const Text(
                                   'Add Room',
                                   style: TextStyle(
@@ -421,14 +584,16 @@ class _HomePageState extends State<HomePage> {
                                 style: const TextStyle(color: Colors.black),
                                 decoration: kTextFieldDecoration.copyWith(
                                   hintText: 'Enter Your Room Name',
-                                  hintStyle: const TextStyle(color: Colors.black54),
+                                  hintStyle:
+                                      const TextStyle(color: Colors.black54),
                                 ),
                               ),
                             ),
                             Row(
                               children: [
                                 Container(
-                                    padding: const EdgeInsets.symmetric(vertical: 50),
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 50),
                                     child: const Text('select Icon : ',
                                         style: TextStyle(
                                             fontSize: 17,
@@ -441,10 +606,13 @@ class _HomePageState extends State<HomePage> {
                               child: Center(
                                   child: GestureDetector(
                                 onTap: () {
-                                  if (roomNameController.text.trim().isNotEmpty) {
+                                  if (roomNameController.text
+                                      .trim()
+                                      .isNotEmpty) {
                                     saveRoom(); //save the room in the main list
                                     showPopup = false;
                                     selectedIcon = null;
+                                    //selectedIcon = '';
                                     roomNameController.clear();
                                     setState(() {});
                                   }
@@ -455,7 +623,8 @@ class _HomePageState extends State<HomePage> {
                                   child: Container(
                                     decoration: BoxDecoration(
                                         color: roomNameController.text
-                                                    .trim().isEmpty
+                                                .trim()
+                                                .isEmpty
                                             ? Colors.blueGrey
                                             : Colors.blue,
                                         borderRadius:

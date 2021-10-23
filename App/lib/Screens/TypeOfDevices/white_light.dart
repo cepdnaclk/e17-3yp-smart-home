@@ -13,8 +13,8 @@ class _WhiteLightState extends State<WhiteLight> {
   bool _lightIsOn = false;
   bool _scheduleIsOn = false;
 
-  TimeOfDay _time = TimeOfDay(hour: 7, minute: 15);
-  TimeOfDay _endTime = TimeOfDay(hour: 7, minute: 15);
+  TimeOfDay _time = TimeOfDay(hour: 7, minute: 00);
+  TimeOfDay _endTime = TimeOfDay(hour: 8, minute: 00);
 
   void _selectTime() async {
     final TimeOfDay? newTime = await showTimePicker(
@@ -42,7 +42,7 @@ class _WhiteLightState extends State<WhiteLight> {
     }
   }
 
-  RangeValues _currentRangeValues = const RangeValues(40, 80);
+  RangeValues _currentRangeValues = RangeValues(40, 80);
   double _rating = 0;
 
   @override
@@ -51,24 +51,24 @@ class _WhiteLightState extends State<WhiteLight> {
       appBar: AppBar(
         title: Center(
             child: Text(
-          '$_roomName',
-          style: TextStyle(fontWeight: FontWeight.w500),
+          _roomName,
+          style: const TextStyle(fontWeight: FontWeight.w500),
         )),
         backgroundColor: Colors.purple,
       ),
       body: Stack(
         children: [
           Container(
-            color: Color(0xFF6F35A5),
+            color: const Color(0xFF6F35A5),
             child: Container(
-              padding: EdgeInsets.only(top: 10, left: 20),
+              padding: const EdgeInsets.only(top: 10, left: 20),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: Container(
-                padding: EdgeInsets.only(top: 20, left: 20),
+                padding: const EdgeInsets.only(top: 20, left: 20),
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
-                child: Text(
+                child: const Text(
                   'Front Light',
                   style: TextStyle(
                     fontFamily: 'Circular Std',
@@ -83,7 +83,7 @@ class _WhiteLightState extends State<WhiteLight> {
           ),
           Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 80,
               ),
               Expanded(
@@ -128,9 +128,9 @@ class _WhiteLightState extends State<WhiteLight> {
                             ),
                           ),
                           Container(
-                            padding: EdgeInsets.symmetric(vertical: 10),
-                            margin: EdgeInsets.fromLTRB(0, 0, 190, 0),
-                            child: Text(
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            margin: const EdgeInsets.fromLTRB(0, 0, 190, 0),
+                            child: const Text(
                               'Brightness',
                               style: TextStyle(
                                 fontFamily: 'Circular Std',
@@ -157,14 +157,14 @@ class _WhiteLightState extends State<WhiteLight> {
                               max: 100,
                             ),
                           ),
-                          Divider(
+                          const Divider(
                             color: Colors.black,
                             height: 25,
                           ),
                           Container(
                             //padding: EdgeInsets.fromLTRB(38, 5, 38, 20),
-                            margin: EdgeInsets.fromLTRB(0, 5, 0, 5),
-                            child: Text(
+                            margin: const EdgeInsets.fromLTRB(0, 5, 0, 5),
+                            child: const Text(
                               'Schedule',
                               style: TextStyle(
                                 fontFamily: 'Circular Std',
@@ -189,38 +189,39 @@ class _WhiteLightState extends State<WhiteLight> {
                               padding: const EdgeInsets.all(8),
                               // Change button text when light changes state.
                               child: Container(
-                                  padding: EdgeInsets.symmetric(horizontal: 10),
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
                                   child: Text(_scheduleIsOn ? 'ON' : 'OFF')),
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Color(0xFFF1E6FF), // background
+                              primary: const Color(0xFFF1E6FF), // background
                               onPrimary: Colors.black, // foreground
                             ),
                             onPressed: _selectTime,
-                            child: Text('SELECT START TIME'),
+                            child: const Text('SELECT START TIME'),
                           ),
                           Text(
                             'Schedule Starts : ${_time.format(context)}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              primary: Color(0xFFF1E6FF), // background
+                              primary: const Color(0xFFF1E6FF), // background
                               onPrimary: Colors.black, // foreground
                             ),
                             onPressed: _selectEndTime,
-                            child: Text('SELECT END TIME'),
+                            child: const Text('SELECT END TIME'),
                           ),
                           Text(
                             'Schedule Ends: ${_endTime.format(context)}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w900,
                             ),

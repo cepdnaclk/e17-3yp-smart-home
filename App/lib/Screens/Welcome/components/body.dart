@@ -16,7 +16,7 @@ class Body extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               "WELCOME TO DIGITAL HUT",
               style: TextStyle(fontWeight: FontWeight.bold),
             ),

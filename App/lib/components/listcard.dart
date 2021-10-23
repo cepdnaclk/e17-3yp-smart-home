@@ -1,15 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:untitled/Screens/home_page.dart';
 
 class ListCard extends StatelessWidget {
-  const ListCard({Key? key, required this.homeName, String}) : super(key: key);
+  const ListCard({Key? key, required this.homeName, required this.homeId})
+      : super(key: key);
   final String homeName;
+  final String homeId;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        //Navigator.push(context, route)
         print(homeName);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return HomePage(
+                homeId: homeId,
+                
+              );
+            },
+          ),
+        );
       },
       child: Column(
         children: [

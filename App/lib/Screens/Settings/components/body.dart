@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:untitled/Screens/add_central_device/central_device.dart';
-
-import '../../home_page.dart';
+import 'package:untitled/Screens/HomesPage/homes_page.dart';
+import 'package:untitled/Screens/Login/login_screen.dart';
+import 'package:untitled/Screens/Notification/notification.dart';
+import 'package:untitled/Screens/Settings%20In/central%20devices/central_devices.dart';
+import 'package:untitled/Screens/Settings%20In/central%20devices/connected%20central%20dev/connected_cen_devs.dart';
 import 'background.dart';
+
+//settings body
 
 class Body extends StatefulWidget {
   const Body({Key? key}) : super(key: key);
@@ -14,8 +18,9 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   int _selectedIndex = 0;
 
+  //nav bar
   void _onItemTapped(int index) {
-    setState(() {
+    setState(() async {
       _selectedIndex = index;
 
       if (_selectedIndex == 0) {
@@ -23,7 +28,7 @@ class _BodyState extends State<Body> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return HomePage();
+              return HomesPage();
             },
           ),
           (route) => false,
@@ -57,6 +62,7 @@ class _BodyState extends State<Body> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              SizedBox(height: size.height * 0.01),
               const Text(
                 "Settings",
                 style: TextStyle(
@@ -64,14 +70,14 @@ class _BodyState extends State<Body> {
                   fontSize: 28.0,
                 ),
               ),
-              SizedBox(height: size.height * 0.03),
+              SizedBox(height: size.height * 0.01),
               Image(
                 height: size.height * 0.25,
                 image: const AssetImage(
                   "assets/images/settings.png",
                 ),
               ),
-              SizedBox(height: size.height * 0.03),
+              SizedBox(height: size.height * 0.01),
               Column(
                 children: <Widget>[
                   ListTile(
@@ -93,7 +99,14 @@ class _BodyState extends State<Body> {
                     leading: const Icon(Icons.people),
                     title: GestureDetector(
                       onTap: () {
-                        print("2");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return Connected_CentDev();
+                            },
+                          ),
+                        );
                       },
                       child: const Text(
                         'Connected Users',
@@ -112,13 +125,13 @@ class _BodyState extends State<Body> {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return CentralDevice();
+                              return CentralDevicePage();
                             },
                           ),
                         );
                       },
                       child: const Text(
-                        'Add Central Device',
+                        'Central Devices',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
@@ -127,13 +140,66 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                   ListTile(
-                    leading: const Icon(Icons.password),
+                    leading: const Icon(Icons.notifications),
                     title: GestureDetector(
                       onTap: () {
-                        print("4");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return Notifications();
+                            },
+                          ),
+                        );
                       },
                       child: const Text(
-                        'Change Password',
+                        'Notifications',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.info),
+                    title: GestureDetector(
+                      onTap: () {
+                        print("5");
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return HomesPage();
+                            },
+                          ),
+                        );
+                      },
+                      child: const Text(
+                        'About this App',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ),
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.logout),
+                    title: GestureDetector(
+                      onTap: () {
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) {
+                              return LoginScreen();
+                            },
+                          ),
+                          (route) => false,
+                        );
+                      },
+                      child: const Text(
+                        'Log Out',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w500,
