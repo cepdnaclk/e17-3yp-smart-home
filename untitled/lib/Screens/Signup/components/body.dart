@@ -32,7 +32,7 @@ class _BodyState extends State<Body> {
     try {
       //print("1\n");
       final response = await http.post(
-        Uri.parse('http://192.168.187.195:5001/api/user/signup'),
+        Uri.parse('http://192.168.8.100:5001/api/user/signup'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
