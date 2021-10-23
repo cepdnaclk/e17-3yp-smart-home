@@ -15,7 +15,7 @@ let functions = {
 		try{
 			users.findOne({name: req.body.username}, (err, data)=>{
 				if(err) return res.status(500).json({success:false, msg:err.message})
-				if(data) return res.status(200).json({success:true, userid: data._id, msg:"User exist"})
+				if(data) return res.status(200).json({success:true, userid: data._id,username:data.name, msg:"User exist"})
 				return res.status(201).json({success:false, msg:"user name does not exist,"})
 			})
 		}catch(err){

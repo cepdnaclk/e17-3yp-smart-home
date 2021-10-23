@@ -58,10 +58,6 @@ let deviceSchema = new schema({
 		type: Date
 		
 	}
-
-
-
-
 });
 
 module.exports = mongoose.model('devices', deviceSchema);
