@@ -1,8 +1,4 @@
-//import 'package:firebase_auth/firebase_auth.dart';
-
 import 'dart:convert';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_svg/svg.dart';
@@ -25,64 +21,18 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  //final FirebaseAuth _auth = FirebaseAuth.instance;
   String? username;
   String? email;
   String? password;
   String? check_password;
   String? errorMessage = '';
 
-  // signUp(email, password) async {
-  //   try {
-  //     print(email);
-  //     var user = await FirebaseAuth.instance
-  //         .createUserWithEmailAndPassword(
-  //         email: email,
-  //         password: password);
-  //     User? loggedInUser = FirebaseAuth.instance.currentUser;
-/*
-  signUp(String name, String password, String mail, String confpassword) async {
-    try {
-      print(mail);
-      Dio dio = new Dio();
-
-      var user = await dio.post('http://localhost:5005/api/user/signup',
-          data: {
-            "name": name,
-            "password": password,
-            "confpassword": confpassword,
-            "mail": mail
-          },
-          options: Options(contentType: Headers.formUrlEncodedContentType));
-    } on DioError catch (e) {
-      Fluttertoast.showToast(
-          msg: e.response?.data['msg'],
-          //msg: "Dio Error",
-          toastLength: Toast.LENGTH_SHORT,
-          gravity: ToastGravity.BOTTOM,
-          fontSize: 16.0,
-          backgroundColor: Colors.red,
-          textColor: Colors.white);
-    } on Exception catch (e) {
-      print(e);
-      errorMessage = e.toString().split(']')[1];
-      setState(() {});
-    } catch (e) {
-      print(e);
-    }
-  }
-*/
-  // Navigator.push(
-  //     context,
-  //     MaterialPageRoute(
-  //         builder: (context) => VerificationScreen(email: email, userName: '',)));
-
   //http
   signUp(String name, String password, String mail, String confpassword) async {
     try {
       //print("1\n");
       final response = await http.post(
-        Uri.parse('http://192.168.187.195:5005/api/user/signup'),
+        Uri.parse('http://192.168.187.195:5001/api/user/signup'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -125,8 +75,6 @@ class _BodyState extends State<Body> {
         );
         //return Album.fromJson(jsonDecode(response.body));
       } else {
-        // If the server did not return a 201 CREATED response,
-        // then throw an exception.
         print("throw");
         throw Exception('Failed to create album.');
       }
@@ -147,11 +95,12 @@ class _BodyState extends State<Body> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Text(
-                "SIGNUP",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
               SizedBox(height: size.height * 0.03),
+              const Text(
+                "SIGNUP",
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
+              ),
+              SizedBox(height: size.height * 0.01),
               SvgPicture.asset(
                 "assets/icons/signup.svg",
                 height: size.height * 0.30,
