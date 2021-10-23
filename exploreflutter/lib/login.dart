@@ -58,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
-        title: Text('Simple Login Validator'),
+        title: const Text('Simple Login Validator'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -67,14 +67,14 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email'),
                 validator: (val) => !EmailValidator.validate(val!, true)
                     ? 'Please provide a valid email.'
                     : null,
                 onSaved: (val) => _email = val,
               ),
               TextFormField(
-                decoration: InputDecoration(labelText: 'Password'),
+                decoration: const InputDecoration(labelText: 'Password'),
                 validator: (val) =>
                 val!.length < 4 ? 'Your password is too Password too short..' : null,
                 onSaved: (val) => _password = val,
@@ -83,7 +83,7 @@ class _LoginPageState extends State<LoginPage> {
               // ignore: deprecated_member_use
               RaisedButton(
                 onPressed: _submitCommand,
-                child: Text('Login'),
+                child: const Text('Login'),
               ),
             ],
           ),
