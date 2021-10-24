@@ -27,7 +27,7 @@ class FieldValidator {
       return "Enter valid Email & Password";
     } else if (!(validatePassword(password) == null)) {
       return "Enter a Valid Password";
-    } else if (!(validateEmail(email) == "Email is valid")) {
+    } else if (!(validateEmail(email) == null)) {
       return "Enter valid Email";
     }
     return null;
