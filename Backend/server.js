@@ -3,6 +3,7 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const mongodbConnect = require('./config/dbs');
+const rateLimit = require("express-rate-limit");
 const passport = require('passport');
 const bodyParser = require('body-parser');
 const route = require('./routes/UserRoute');
@@ -15,6 +16,15 @@ const nonActive = require('./routes/NonActiveCdeviceRoute')
 mongodbConnect();
 
 const app = express();
+app.use(
+	rateLimit({
+	  windowMs: 12 * 60 * 60 * 1000, // 12 hour duration in milliseconds
+	max: 1000,
+	message: "You exceeded 100 requests in 12 hour limit!",
+	headers: true,
+	})
+);
+
 
 app.use(cors());
 // app.use(bodyParser.urlencoded({ extended: false }));

@@ -56,7 +56,7 @@ const sendMail = async (user) => {
 			to: clientMail,
 			subject: 'Verify the Email',
 			generateTextFromHTML: true,
-			html: `<h2 style="color:green">digitalHuT<h2>Click <a href= " http://localhost:5001/api/user/validate?token=${token_1}"><button type="button">Verify!</button></a>`,
+			html: `<h2 style="color:green">digitalHuT<h2>Click <a href= " http://54.174.154.229:5001/api/user/validate?token=${token_1}"><button type="button">Verify!</button></a>`,
 		};
 		await transporter.sendMail(mailOptions, (error, response) => {
 			error ? console.log(error) : console.log(response);
