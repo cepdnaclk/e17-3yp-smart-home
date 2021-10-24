@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  email_validator: ^2.0.1
   flutter:
     sdk: flutter
   dio:
@@ -40,7 +41,6 @@ dependencies:
   http: ^0.13.3
   shared_preferences: ^2.0.8
   flutter_secure_storage: ^4.2.1
-  validators: ^3.0.0
 
 dev_dependencies:
   flutter_test:
@@ -52,7 +52,6 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^1.0.0
-  test: ^1.17.10
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

@@ -35,7 +35,7 @@ class _BodyState extends State<Body> {
     try {
       print("1\n");
       final response = await http.post(
-        Uri.parse('http://192.168.8.100:5001/api/user/login'), //4n
+        Uri.parse('http://192.168.187.195:5001/api/user/login'), //4n
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -73,9 +73,9 @@ class _BodyState extends State<Body> {
         // SharedPreferences prefs1 = await SharedPreferences.getInstance();
         String? tokenValue = prefs.getString('token');
         String? userid = prefs.getString('userid');
-        // int? noOfHomes = prefs.getInt('numberOfhomes');
+        int? noOfHomes = prefs.getInt('numberOfhomes');
 
-      //  int? counter = prefs.getInt('numberOfhomes');
+        int? counter = prefs.getInt('numberOfhomes');
 
         print(tokenValue);
         print(userid);
