@@ -86,28 +86,28 @@ class _BodyState extends State<Body> {
               SizedBox(height: size.height * 0.03),
               Column(
                 children: <Widget>[
-                  ListTile(
-                    leading: const Icon(Icons.device_hub),
-                    title: GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return CentralDevice();
-                            },
-                          ),
-                        );
-                      },
-                      child: const Text(
-                        'Add Device',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                  ),
+                  // ListTile(
+                  //   leading: const Icon(Icons.device_hub),
+                  //   title: GestureDetector(
+                  //     onTap: () {
+                  //       Navigator.push(
+                  //         context,
+                  //         MaterialPageRoute(
+                  //           builder: (context) {
+                  //             return CentralDevice();
+                  //           },
+                  //         ),
+                  //       );
+                  //     },
+                  //     child: const Text(
+                  //       'Add Device',
+                  //       style: TextStyle(
+                  //         fontSize: 18,
+                  //         fontWeight: FontWeight.w500,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   ListTile(
                     leading: const Icon(Icons.connected_tv),
                     title: GestureDetector(

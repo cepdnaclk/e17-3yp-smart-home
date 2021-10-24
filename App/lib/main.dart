@@ -1,12 +1,10 @@
-//import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:untitled/Screens/Welcome/welcome_screen.dart';
-
 import 'package:untitled/Screens/home_page.dart';
 import 'package:untitled/Screens/Signup/signup_screen.dart';
 import 'package:untitled/Screens/Login/login_screen.dart';
-
+import 'package:untitled/Screens/inviteUser/inviteUser.dart';
 import 'package:untitled/Screens/profile_adding/ProfileAdding.dart';
 import 'package:untitled/Screens/verification/verification_screen.dart';
 import 'package:untitled/devices.dart';
@@ -37,16 +35,19 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: WelcomeScreen(),
+      //home: WelcomeScreen(),
       //home: SignUpScreen(),
-      //home: LoginScreen(),
+      home: LoginScreen(),
 
       //home: HomesPage(),
       //home: AddHome(),
 
       //home: HomePage(),
 
-      //home: Sample(), //add device , room
+      // home: Sample(
+      //   homeId: '617253c61ff94c782ab8d274',
+      //   roomId: '6172791713d0de1c452515a1',
+      // ), //add device , room
       //home: WhiteLight(),
       //home: RGB_light(),
       //home: SmartPlug(),
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
       //home: Connected_CentDev(),
 
       //home: Notifications(),
+      //home: InviteUser('617253c61ff94c782ab8d274'),   //617253c61ff94c782ab8d274
     );
   }
 }

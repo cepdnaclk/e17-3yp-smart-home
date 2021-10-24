@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -8,7 +7,6 @@ import 'package:untitled/Screens/Settings/settings.dart';
 import 'package:http/http.dart' as http;
 import 'package:untitled/components/listcard.dart';
 import '../../../constants.dart';
-import '../../home_page.dart';
 import '../homes_page.dart';
 import 'background.dart';
 
@@ -72,6 +70,7 @@ class _BodyState extends State<Body> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
       String? userid = prefs.getString('userid');
+      print("homes Token...");
       print(token);
       print(userid);
 
@@ -79,6 +78,7 @@ class _BodyState extends State<Body> {
 
       final response = await http.post(
           Uri.parse('http://192.168.187.195:5001/api/home/allhomes/byuserId'),
+          //Uri.parse('http://54.172.161.228:5001/api/home/allhomes/byuserId'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "Authorization": "Bearer $token"

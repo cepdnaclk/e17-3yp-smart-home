@@ -36,6 +36,7 @@ class _BodyState extends State<Body> {
       print("1\n");
       final response = await http.post(
         Uri.parse('http://192.168.187.195:5001/api/user/login'), //4n
+        //Uri.parse('http://54.172.161.228:5001/api/user/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -47,6 +48,7 @@ class _BodyState extends State<Body> {
 
       print(response.statusCode);
       print(response.body);
+      print("Login");
 
       if (response.statusCode == 403) {
         Fluttertoast.showToast(
@@ -73,9 +75,6 @@ class _BodyState extends State<Body> {
         // SharedPreferences prefs1 = await SharedPreferences.getInstance();
         String? tokenValue = prefs.getString('token');
         String? userid = prefs.getString('userid');
-        int? noOfHomes = prefs.getInt('numberOfhomes');
-
-        int? counter = prefs.getInt('numberOfhomes');
 
         print(tokenValue);
         print(userid);
@@ -102,91 +101,93 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Background(
-      child: SingleChildScrollView(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              "LOGIN",
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
+    return Scaffold(
+      body: Background(
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              const Text(
+                "LOGIN",
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
               ),
-            ),
-            SizedBox(height: size.height * 0.03),
-            SvgPicture.asset(
-              "assets/icons/login.svg",
-              height: size.height * 0.35,
-            ),
-            SizedBox(height: size.height * 0.03),
-            RoundedInputField(
-              hintText: "Your Email",
-              onChanged: (value) {
-                email = value;
-                setState(() {});
-              },
-            ),
-            RoundedPasswordField(
-              onChanged: (value) {
-                password = value;
-                setState(() {});
-              },
-              hintText: 'Password',
-            ),
-            GestureDetector(
-              onTap: () {
-                print("1");
-              },
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 4),
-                child: RichText(
-                    text: TextSpan(
-                  text: "Forgot Your Password ?",
-                  style: const TextStyle(
-                    color: kPrimaryColor,
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                  ),
-                  recognizer: TapGestureRecognizer(),
-                )),
+              SizedBox(height: size.height * 0.03),
+              SvgPicture.asset(
+                "assets/icons/login.svg",
+                height: size.height * 0.35,
               ),
-            ),
-            RoundedButton(
-              color: email != null && password != null && password!.length > 5
-                  ? kPrimaryColor
-                  : Colors.grey,
-              text: "LOGIN",
-              press: () {
-                if (email == null || password == null) {
-                  Fluttertoast.showToast(
-                      msg: "Enter all fields",
-                      toastLength: Toast.LENGTH_SHORT,
-                      gravity: ToastGravity.BOTTOM,
-                      fontSize: 16.0,
-                      backgroundColor: Colors.red,
-                      textColor: Colors.white);
-                } else if (email != null &&
-                    password != null &&
-                    password!.length > 5) {
-                  logIn(password!, email!);
-                }
-              },
-            ),
-            SizedBox(height: size.height * 0.03),
-            AlreadyHaveAnAccountCheck(
-              press: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) {
-                      return SignUpScreen();
-                    },
-                  ),
-                );
-              },
-            ),
-          ],
+              SizedBox(height: size.height * 0.03),
+              RoundedInputField(
+                hintText: "Your Email",
+                onChanged: (value) {
+                  email = value;
+                  setState(() {});
+                },
+              ),
+              RoundedPasswordField(
+                onChanged: (value) {
+                  password = value;
+                  setState(() {});
+                },
+                hintText: 'Password',
+              ),
+              GestureDetector(
+                onTap: () {
+                  print("1");
+                },
+                child: Container(
+                  padding: const EdgeInsets.symmetric(vertical: 4),
+                  child: RichText(
+                      text: TextSpan(
+                    text: "Forgot Your Password ?",
+                    style: const TextStyle(
+                      color: kPrimaryColor,
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                    ),
+                    recognizer: TapGestureRecognizer(),
+                  )),
+                ),
+              ),
+              RoundedButton(
+                color: email != null && password != null && password!.length > 5
+                    ? kPrimaryColor
+                    : Colors.grey,
+                text: "LOGIN",
+                press: () {
+                  if (email == null || password == null) {
+                    Fluttertoast.showToast(
+                        msg: "Enter all fields!",
+                        toastLength: Toast.LENGTH_SHORT,
+                        gravity: ToastGravity.BOTTOM,
+                        fontSize: 16.0,
+                        backgroundColor: Colors.red,
+                        textColor: Colors.white);
+                  } else if (email != null &&
+                      password != null &&
+                      password!.length > 5) {
+                    logIn(password!, email!);
+                  }
+                },
+              ),
+              SizedBox(height: size.height * 0.03),
+              AlreadyHaveAnAccountCheck(
+                press: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) {
+                        return SignUpScreen();
+                      },
+                    ),
+                  );
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );

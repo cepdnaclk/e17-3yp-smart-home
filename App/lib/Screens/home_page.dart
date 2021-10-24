@@ -7,6 +7,9 @@ import 'package:untitled/devices.dart';
 import 'Settings/settings.dart';
 import 'package:http/http.dart' as http;
 
+import 'add_central_device/central_device.dart';
+import 'inviteUser/inviteUser.dart';
+
 class HomePage extends StatefulWidget {
   final String homeId;
   const HomePage({Key? key, required this.homeId}) : super(key: key);
@@ -18,10 +21,13 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   String homeId;
   _HomePageState(this.homeId);
+
   TextEditingController roomNameController = TextEditingController();
   bool showPopup = false;
   bool showDelete = false;
   bool delete = false;
+  String? tokensend;
+  String? userid;
   var selectedInfo;
 
   @override
@@ -48,10 +54,14 @@ class _HomePageState extends State<HomePage> {
   //get Data
   void getData() async {
     try {
-      //print("1\n");
+      print("1\n");
+      print(homeId);
+
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
+      userid = prefs.getString('userid');
       print(token);
+      tokensend = token.toString();
 
       //final queryParameters = {'userid': '$userid'};
 
@@ -114,6 +124,7 @@ class _HomePageState extends State<HomePage> {
             textColor: Colors.white);
       }
     } on Exception catch (e) {
+      print("exep");
       print(e);
     } catch (e) {
       print(e);
@@ -162,7 +173,18 @@ class _HomePageState extends State<HomePage> {
           child: Stack(children: [
             GestureDetector(
               onTap: () {
-                print(info['roomId']);
+                //print(info['roomId']);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) {
+                      return Sample(
+                        homeId: info['homeid'],
+                        roomId: info['_id'],
+                      );
+                    },
+                  ),
+                );
               },
               child: Container(
                 decoration: BoxDecoration(
@@ -239,6 +261,7 @@ class _HomePageState extends State<HomePage> {
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
+      prefs.setString('token', token.toString());
       //print(token);
 
       final response = await http.post(
@@ -417,18 +440,81 @@ class _HomePageState extends State<HomePage> {
             Container(
               child: SafeArea(
                 child: Container(
-                  padding: const EdgeInsets.only(top: 28.0, left: 20.0),
+                  padding: const EdgeInsets.only(top: 10.0),
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
-                  child: const Text(
-                    'Welcome To\nYour Home',
-                    style: TextStyle(
-                      fontFamily: 'Circular Std',
-                      fontSize: 30,
-                      color: Color(0xffffffff),
-                      fontWeight: FontWeight.w700,
-                    ),
-                    textAlign: TextAlign.left,
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Welcome To\nYour Home',
+                        style: TextStyle(
+                          fontFamily: 'Circular Std',
+                          fontSize: 30,
+                          color: Color(0xffffffff),
+                          fontWeight: FontWeight.w700,
+                        ),
+                        textAlign: TextAlign.left,
+                      ),
+                      Row(
+                        children: [
+                          SizedBox(
+                            width: 90,
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: FlatButton(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 20),
+                              color: Colors.amber,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return CentralDevice(
+                                          homeId, tokensend.toString());
+                                    },
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                "Add C Dev",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(15),
+                            child: FlatButton(
+                              padding: const EdgeInsets.symmetric(
+                                  vertical: 15, horizontal: 20),
+                              color: Colors.amber,
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) {
+                                      return InviteUser(homeId);
+                                    },
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                "Invite User",
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -438,7 +524,7 @@ class _HomePageState extends State<HomePage> {
 
             Column(children: [
               const SizedBox(
-                height: 130,
+                height: 160,
               ),
               Expanded(
                 child: Material(
@@ -451,9 +537,6 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Column(children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
                         //Rooms
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
