@@ -154,7 +154,7 @@ var functions = {
 							jwt.sign(
 								{ user },
 								config.secret,
-								{ expiresIn: '2h' },
+								{ expiresIn: '22h' },
 								(err, token) => {
 									if (err) {
 										return res.json({ success: false, msg: err });
