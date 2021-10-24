@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/Screens/HomesPage/homes_page.dart';
 import 'package:untitled/Screens/Settings/settings.dart';
+import 'package:untitled/Screens/home_page.dart';
 import 'package:untitled/components/rounded_button.dart';
 import 'package:untitled/components/rounded_input_field.dart';
 import 'package:untitled/components/rounded_password_field.dart';
@@ -12,18 +14,22 @@ import 'background.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
-//Add Centerlised Device
+//Add Centerlised Device body
 
 class Body extends StatefulWidget {
-  const Body({
-    Key? key,
-  }) : super(key: key);
+  final String homeId;
+  final String token;
+  const Body({Key? key, required this.homeId, required this.token})
+      : super(key: key);
 
   @override
-  _BodyState createState() => _BodyState();
+  _BodyState createState() => _BodyState(this.homeId, this.token);
 }
 
 class _BodyState extends State<Body> {
+  String homeId;
+  String token;
+  _BodyState(this.homeId, this.token);
   String? deviceId;
   String? password;
 
@@ -63,19 +69,21 @@ class _BodyState extends State<Body> {
       //print("1\n");
 
       FlutterSecureStorage storage = const FlutterSecureStorage();
-      print("token from stored");
-      String? token = await storage.read(key: "token");
+      print("token from stored (Add Centralised Device)");
+      //String? token0 = await storage.read(key: "token");
+      //print(token0);
       print(token);
 
       final response = await http.post(
-        Uri.parse('http://192.168.187.195:5005/api/user/'),
+        Uri.parse('http://192.168.187.195:5001/api/cdevice/addCdevice'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": "Bearer $token"
         },
         body: jsonEncode(<String, String>{
           'password': password,
-          'deviceId': deviceId,
+          'cdeviceNumber': deviceId,
+          'homeid': homeId
         }),
       );
 
@@ -90,6 +98,14 @@ class _BodyState extends State<Body> {
             fontSize: 16.0,
             backgroundColor: Colors.red,
             textColor: Colors.white);
+      } else if (response.statusCode == 400) {
+        Fluttertoast.showToast(
+            msg: "Given ID is wrong",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
       }
 
       if (response.statusCode == 200) {
@@ -97,7 +113,9 @@ class _BodyState extends State<Body> {
           context,
           MaterialPageRoute(
             builder: (context) {
-              return Settings();
+              return HomePage(
+                homeId: homeId,
+              );
             },
           ),
           (route) => false,
@@ -108,13 +126,13 @@ class _BodyState extends State<Body> {
         // then throw an exception.
         print("throw");
         Fluttertoast.showToast(
-            msg: "Entered email or password Incorrect!",
+            msg: "Given Password is wrong.",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             fontSize: 16.0,
             backgroundColor: Colors.red,
             textColor: Colors.white);
-        throw Exception('Failed to create album.');
+        throw Exception('Autherization failed. Login again.');
       }
     } on Exception catch (e) {
       print(e);
@@ -196,5 +214,10 @@ class _BodyState extends State<Body> {
         ),
       ),
     );
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 }

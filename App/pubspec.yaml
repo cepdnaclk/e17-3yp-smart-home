@@ -27,6 +27,7 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  email_validator: ^2.0.1
   flutter:
     sdk: flutter
   dio:

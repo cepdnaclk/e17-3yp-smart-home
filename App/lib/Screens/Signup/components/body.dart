@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
-
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:untitled/Screens/Login/login_screen.dart';
@@ -16,6 +15,8 @@ import 'package:untitled/constants.dart';
 import 'package:http/http.dart' as http;
 
 class Body extends StatefulWidget {
+  //final String token;
+
   @override
   _BodyState createState() => _BodyState();
 }
@@ -33,6 +34,7 @@ class _BodyState extends State<Body> {
       //print("1\n");
       final response = await http.post(
         Uri.parse('http://192.168.187.195:5001/api/user/signup'),
+        //Uri.parse('http://54.172.161.228:5001/api/user/login'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },

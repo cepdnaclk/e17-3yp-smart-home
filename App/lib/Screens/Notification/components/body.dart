@@ -31,6 +31,10 @@ class _BodyState extends State<Body> {
 
   //variable
   int _selectedIndex = 0;
+  String? homeid;
+  String? userid;
+  String? homeName;
+  String? senderName;
 
   //nav bar
   void _onItemTapped(int index) {
@@ -62,50 +66,155 @@ class _BodyState extends State<Body> {
   }
 
   //Notification list
-  List homeList = [
-    {'name': 'Nishanker invited you to join the\nhouse.', 'age': '12'},
-    {'name': 'Arshad request2', 'age': '13'},
-    {'name': 'Arshad request3', 'age': '14'}
+  List notif_List = [
+    // {'name': 'Nishanker invited you to join the\nhouse.', 'age': '12'},
+    // {'name': 'Arshad request2', 'age': '13'},
+    // {'name': 'Arshad request3', 'age': '14'}
   ];
 
   //get Notification
-  void getHome() async {
-    //print("1\n");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
-    String? userid = prefs.getString('userid');
-    print(token);
-    print(userid);
+  getNotification() async {
+    print("1");
+    try {
+      //print("1\n");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      userid = prefs.getString('userid');
+      print(token);
+      print(userid);
 
-    final queryParameters = {'userid': '$userid'};
+      final response = await http.post(
+        Uri.parse('http://192.168.187.195:5001/api/users/getNotification'), //4n
+        //Uri.parse('http://54.172.161.228:5001/api/users/getNotification'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          "Authorization": "Bearer $token"
+          // "Authorization":
+          //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiLCI2MTcyNmM2MDEzZDBkZTFjNDUyNTE1NzUiLCI2MTcyNzI4ZjEzZDBkZTFjNDUyNTE1ODgiXSwiX192IjowfSwiaWF0IjoxNjM1MDAyNTg3LCJleHAiOjE2MzUwMDk3ODd9.DvY7_vs7ZTQdgpxYS58unLUWKzjsHrbgGbivFv8-fc0"
+        },
+        body: jsonEncode(<String, String>{
+          'receiverId': userid.toString(),
+        }),
+      );
 
-    final response = await http.get(
-      Uri.parse('http://192.168.187.195:5001/api/user/alluser'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-        "Authorization": "Bearer $token"
-      },
-      //   body: jsonEncode(<String, String>{
-      //       'userid': '$userid'
-      //       //'userid': '616dae8edad0e97516bf053c'
-      //     }
-    );
+      print(response.statusCode);
+      print(response.body);
+      // print("inviteUser");
 
-    print(response.statusCode);
-    //print(widget.noOfRooms);
+      if (response.statusCode == 200) {
+        Map<String, dynamic> resp = json.decode(response.body);
 
-    // int nOhm = 1;
+        homeid = resp["homeid"]["_id"];
+        homeName = resp["home"];
+        senderName = resp["senderName"];
 
-    if (response.statusCode == 403) {
-      setState(() {
-        //print("set");
+        notif_List.add("$senderName  invited you to join the\n$homeName .");
 
-        // if (nOhm == 0) {
-        //   page = startpage();
-        // } else {
-        //   page = HomesMainPage();
-        // }
-      });
+        setState(() {
+          page = NotificationPage();
+        });
+      } else {
+        throw Exception('Failed to create.');
+      }
+    } on Exception catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //accept
+  accept() async {
+    try {
+      print("2\n");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      String? senderId = prefs.getString('userid');
+      print(senderId);
+      print(token);
+
+      final response = await http.post(
+        Uri.parse(
+            'http://192.168.187.195:5001/api/users/sendNotification'), //4n
+        //Uri.parse('http://54.172.161.228:5001/api/user/inviteUser'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          "Authorization": "Bearer $token"
+          // "Authorization":
+          //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiLCI2MTcyNmM2MDEzZDBkZTFjNDUyNTE1NzUiLCI2MTcyNzI4ZjEzZDBkZTFjNDUyNTE1ODgiXSwiX192IjowfSwiaWF0IjoxNjM1MDAyNTg3LCJleHAiOjE2MzUwMDk3ODd9.DvY7_vs7ZTQdgpxYS58unLUWKzjsHrbgGbivFv8-fc0"
+        },
+        body: jsonEncode(<String, String>{
+          'username': userid.toString(),
+          'homeid': homeid.toString(),
+        }),
+      );
+
+      print(response.statusCode);
+      print(response.body);
+      print("accept");
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> resp = json.decode(response.body);
+
+        setState(() {
+          notif_List = [];
+          page = NotificationPage();
+        });
+      } else {
+        throw Exception('Failed to create.');
+      }
+    } on Exception catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //cancel
+  cancel() async {
+    try {
+      print("1\n");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      String? senderId = prefs.getString('userid');
+      print(senderId);
+      print(token);
+
+      final response = await http.post(
+        Uri.parse(
+            'http://192.168.187.195:5001/api/users/sendNotification'), //4n
+        //Uri.parse('http://54.172.161.228:5001/api/user/inviteUser'),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          "Authorization": "Bearer $token"
+          // "Authorization":
+          //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiLCI2MTcyNmM2MDEzZDBkZTFjNDUyNTE1NzUiLCI2MTcyNzI4ZjEzZDBkZTFjNDUyNTE1ODgiXSwiX192IjowfSwiaWF0IjoxNjM1MDAyNTg3LCJleHAiOjE2MzUwMDk3ODd9.DvY7_vs7ZTQdgpxYS58unLUWKzjsHrbgGbivFv8-fc0"
+        },
+        body: jsonEncode(<String, String>{
+          // 'senderId': senderId.toString(),
+          // 'receiverId': recieverId.toString(),
+          // 'homeid': homeId,
+        }),
+      );
+
+      print(response.statusCode);
+      print(response.body);
+      print("accept");
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> resp = json.decode(response.body);
+
+        setState(() {
+          notif_List = [];
+          page = NotificationPage();
+        });
+      } else {
+        throw Exception('Failed to create.');
+      }
+    } on Exception catch (e) {
+      print(e);
+    } catch (e) {
+      print(e);
     }
   }
 
@@ -132,22 +241,12 @@ class _BodyState extends State<Body> {
           //SizedBox(height: size.height * 0.01),
           Expanded(
             child: ListView.builder(
-                itemCount: homeList.length,
+                itemCount: notif_List.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Column(children: [
                     ListCard(
-                      message: homeList[index]['name'],
+                      message: notif_List[index],
                     ),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.center,
-                    //   children: [
-                    //     Text("aa"),
-                    //     SizedBox(
-                    //       width: 30,
-                    //     ),
-                    //     Text("bb"),
-                    //   ],
-                    // ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -161,7 +260,8 @@ class _BodyState extends State<Body> {
                                   vertical: 15, horizontal: 20),
                               color: kPrimaryColor,
                               onPressed: () {
-                                print("pressed $index");
+                                print("pressed Accept");
+                                accept();
                               },
                               child: const Text(
                                 "Accept",
@@ -170,7 +270,7 @@ class _BodyState extends State<Body> {
                             ),
                           ),
                         ),
-                        SizedBox(
+                        const SizedBox(
                           width: 10,
                         ),
                         Container(
@@ -183,7 +283,8 @@ class _BodyState extends State<Body> {
                                   vertical: 15, horizontal: 20),
                               color: Colors.amber,
                               onPressed: () {
-                                print("pressed $index");
+                                print("pressed cancel");
+                                cancel();
                               },
                               child: const Text(
                                 "Cancel",
@@ -194,7 +295,6 @@ class _BodyState extends State<Body> {
                         ),
                       ],
                     ),
-
                     const Divider(
                       thickness: 1,
                     ),
@@ -234,6 +334,6 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     super.initState();
-    getHome();
+    getNotification();
   }
 }

@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
       //final queryParameters = {'userid': '$userid'};
 
       final response = await http.post(
-          Uri.parse('http://192.168.187.195:5001/api/home/allrooms'),
+          Uri.parse('http://3.80.158.225:5001/api/home/allrooms'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "Authorization": "Bearer $token"
@@ -242,7 +242,7 @@ class _HomePageState extends State<HomePage> {
       //print(token);
 
       final response = await http.post(
-          Uri.parse('http://192.168.187.195:5001/api/home/rooms/addroom'),
+          Uri.parse('http://3.80.158.225:5001/api/home/rooms/addroom'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "Authorization": "Bearer $token"

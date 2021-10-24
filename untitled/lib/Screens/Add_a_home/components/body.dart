@@ -65,7 +65,7 @@ class _BodyState extends State<Body> {
       print(token);
       print(userid);
       final response = await http.post(
-        Uri.parse('http://192.168.187.195:5001/api/home/addhome'),
+        Uri.parse('http://3.80.158.225:5001/api/home/addhome'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": "Bearer $token"

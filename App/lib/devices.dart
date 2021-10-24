@@ -1,19 +1,29 @@
+import 'dart:convert';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-//import 'package:cloud_firestore/cloud_firestore.dart';
-//import 'package:firebase_auth/firebase_auth.dart';
+import 'Screens/TypeOfDevices/rgb_light.dart';
+import 'Screens/TypeOfDevices/smart_plug.dart';
+import 'Screens/TypeOfDevices/white_light.dart';
 
 //Add device
-
 class Sample extends StatefulWidget {
-  const Sample({Key? key}) : super(key: key);
+  final String homeId;
+  final String roomId;
+  const Sample({Key? key, required this.homeId, required this.roomId})
+      : super(key: key);
 
   @override
-  _SampleState createState() => _SampleState();
+  _SampleState createState() => _SampleState(this.homeId, this.roomId);
 }
 
 class _SampleState extends State<Sample> {
+  String homeId;
+  String roomId;
+  _SampleState(this.homeId, this.roomId);
   TextEditingController roomNameController = TextEditingController();
   bool showPopup = false;
   bool showDelete = false;
@@ -29,32 +39,99 @@ class _SampleState extends State<Sample> {
   @override
   initState() {
     super.initState();
-    //getData();
+    getData();
     print(showDelete);
   }
 
-  //User? loggedInUser = FirebaseAuth.instance.currentUser;
-
   List data = [];
 
-  List allData = [];
+  void getData() async {
+    try {
+      //print("1\n");
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      print(token);
+      //tokensend = token.toString();
 
-  retunAlist(int n) {
-    List newList = [];
-    allData.add(newList);
-    return allData;
+      //final queryParameters = {'userid': '$userid'};
+
+      final response = await http.post(
+          Uri.parse('http://192.168.187.195:5001/api/devices/getallDevices'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            "Authorization": "Bearer $token"
+            // "Authorization":
+            //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiLCI2MTcyNmM2MDEzZDBkZTFjNDUyNTE1NzUiLCI2MTcyNzI4ZjEzZDBkZTFjNDUyNTE1ODgiXSwiX192IjowfSwiaWF0IjoxNjM0OTc2MDA4LCJleHAiOjE2MzQ5ODMyMDh9.ZhtMPZfQi9zRZx5GZ46HMNo8tGUqY_eBue4hs9JnLy8"
+          },
+          body: jsonEncode(
+            <String, String>{
+              //roomId
+              'roomid': roomId,
+              //'roomid': ''
+            },
+          ));
+
+      print(response.statusCode);
+      print(response.body);
+      //print(widget.noOfRooms);
+
+      int NoOfRooms;
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> resp = json.decode(response.body);
+
+        //print(resp["numberOfhomes"]);
+        data = resp["devices"];
+
+        //print(NoOfRooms);
+
+        setState(() {
+          //print("set");
+          //print(NoOfRooms);
+
+          // if (NoOfRooms == 0) {
+          //   page = startpage();
+          // } else {
+          //   page = HomesMainPage(homeList);
+          // }
+        });
+      } else if (response.statusCode == 403) {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      }
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(
+          msg: e.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          fontSize: 16.0,
+          backgroundColor: Colors.red,
+          textColor: Colors.white);
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(
+          msg: e.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          fontSize: 16.0,
+          backgroundColor: Colors.red,
+          textColor: Colors.white);
+    }
   }
-
-  // getData() async {
-  //   await FirebaseFirestore.instance
-  //       .collection("Devices")
-  //       .doc(loggedInUser == null ? "abc" : loggedInUser!.uid)
-  //       .get()
-  //       .then((value) {
-  //     data = value['devices'];
-  //   }).catchError((e) {});
-  //   setState(() {});
-  // }
 
   //Initial cardTile add,
   //& return all other widgets, main data[i] all will return
@@ -84,7 +161,36 @@ class _SampleState extends State<Sample> {
     ));
     for (var info in data) {
       widgetList.add(GestureDetector(
-        onTap: () {},
+        onTap: () {
+          if (info['deviceType'] == "images/smartbulb.png") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return RGB_light();
+                },
+              ),
+            );
+          } else if (info['deviceType'] == "images/bulb.png") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return WhiteLight();
+                },
+              ),
+            );
+          } else if (info['deviceType'] == "images/plug.png") {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) {
+                  return SmartPlug();
+                },
+              ),
+            );
+          }
+        },
         onLongPress: () {
           showDelete = true;
           print(showDelete);
@@ -96,7 +202,7 @@ class _SampleState extends State<Sample> {
           child: Stack(children: [
             Container(
               decoration: BoxDecoration(
-                color: Colors.blue[200],
+                color: Colors.white10,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: Center(
@@ -104,16 +210,22 @@ class _SampleState extends State<Sample> {
                 children: [
                   Flexible(
                     child: Container(
-                      padding: EdgeInsets.only(top: 10),
+                      padding: const EdgeInsets.only(top: 10),
                       height: 150,
-                      child: Image.asset(info['icon'] == null
-                          ? 'assets/images/pin.png'
-                          : 'assets/${info['icon']}'),
+                      child: Image.asset(
+                        info['deviceType'] == null
+                            ? 'assets/images/pin.png'
+                            : 'assets/${info['deviceType']}',
+                        width: 100,
+                      ),
                     ),
                   ),
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Text(info['deviceName']),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: Text(
+                      info['devicename'],
+                      style: TextStyle(fontWeight: FontWeight.bold),
+                    ),
                   )
                 ],
               )),
@@ -129,7 +241,7 @@ class _SampleState extends State<Sample> {
                     selectedInfo = info;
                     setState(() {});
                   },
-                  child: CircleAvatar(
+                  child: const CircleAvatar(
                     backgroundColor: Colors.white,
                     child: Icon(
                       Icons.close,
@@ -147,31 +259,109 @@ class _SampleState extends State<Sample> {
     return widgetList;
   }
 
-  saveRoom() async {
-    data.add({
-      'deviceName': roomNameController.text.trim(),
-      'icon': selectedIcon,
-      'type': selectedDevice,
-      'port': selectedPort
-    });
-    // await FirebaseFirestore.instance
-    //     .collection("Devices")
-    //     .doc(loggedInUser == null ? "abc" : loggedInUser!.uid)
-    //     .set({'devices': data});
+  saveDevice() async {
+    // data.add(({
+    //   'roomName': roomNameController.text.trim(),
+    //   'icon': selectedIcon,
+    // }));
+
+    try {
+      //print("1\n");
+
+      String deviceName = roomNameController.text.trim().toString();
+      String deviceType = selectedIcon.toString();
+      String port = selectedPort.toString();
+
+      print(deviceName);
+      print(deviceType);
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      prefs.setString('token', token.toString());
+      //print(token);
+
+      final response = await http.post(
+          Uri.parse('http://192.168.187.195:5001/api/devices/adddevice'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            "Authorization": "Bearer $token"
+            // "Authorization":
+            //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiLCI2MTcyNmM2MDEzZDBkZTFjNDUyNTE1NzUiLCI2MTcyNzI4ZjEzZDBkZTFjNDUyNTE1ODgiXSwiX192IjowfSwiaWF0IjoxNjM0OTc2MDA4LCJleHAiOjE2MzQ5ODMyMDh9.ZhtMPZfQi9zRZx5GZ46HMNo8tGUqY_eBue4hs9JnLy8"
+          },
+          body: jsonEncode(
+            <String, String>{
+              'homeid': homeId,
+              'roomid': roomId,
+              'deviceType': deviceType,
+              'devicename': deviceName,
+              'cdeviceid': 'A12345',
+              'port': port,
+              //print(widget.noOfRooms)
+            },
+          ));
+      //
+      print(response.statusCode);
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+            msg: "Your Device Successfully added.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+
+        getData();
+        setState(() {
+          // if (NoOfRooms == 0) {
+          //   page = startpage();
+          // } else {
+          //   page = HomesMainPage(homeList);
+          // }
+        });
+      } else if (response.statusCode == 403) {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      }
+    } on Exception catch (e) {
+      print(e);
+      Fluttertoast.showToast(
+          msg: e.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          fontSize: 16.0,
+          backgroundColor: Colors.red,
+          textColor: Colors.white);
+    } catch (e) {
+      print(e);
+      Fluttertoast.showToast(
+          msg: e.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          fontSize: 16.0,
+          backgroundColor: Colors.red,
+          textColor: Colors.white);
+    }
   }
 
   List iconList = [
-    'images/fan.png',
-    'images/bulb.png',
-    'images/curtain.png',
+    'images/smartbulb.png',
     'images/plug.png',
-    'images/smartbulb.png'
-  ];
-
-  List deviceType = [
-    'Smart Plug',
-    'White Light',
-    'RGB Light',
+    'images/bulb.png',
   ];
 
   List portNo = [
@@ -207,7 +397,7 @@ class _SampleState extends State<Sample> {
               height: 50,
             ),
           ),
-          Divider(
+          const Divider(
             thickness: 1,
           )
         ]),
@@ -234,12 +424,12 @@ class _SampleState extends State<Sample> {
       var newItem = DropdownMenuItem(
         child: Column(children: [
           Container(
-            padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
             height: 30,
             width: 115,
             child: Center(child: Text('$listItem')),
           ),
-          Divider(
+          const Divider(
             thickness: 1,
           )
         ]),
@@ -316,13 +506,20 @@ class _SampleState extends State<Sample> {
         return true;
       },
       child: Scaffold(
+        appBar: AppBar(
+          title: Text(
+            '                My Villa',
+            style: TextStyle(fontWeight: FontWeight.w500),
+          ),
+          backgroundColor: Colors.purple,
+        ),
         body: Stack(
           children: [
             //welcome
             Container(
               child: SafeArea(
                 child: Container(
-                  padding: EdgeInsets.only(top: 30, left: 20),
+                  padding: EdgeInsets.only(top: 15, left: 20),
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   child: Text(
@@ -342,7 +539,7 @@ class _SampleState extends State<Sample> {
             //devices
             Column(children: [
               SizedBox(
-                height: 150,
+                height: 100,
               ),
               Expanded(
                 child: Material(
@@ -355,15 +552,14 @@ class _SampleState extends State<Sample> {
                         borderRadius: BorderRadius.circular(30),
                       ),
                       child: Column(children: [
-                        SizedBox(
-                          height: 20,
+                        const SizedBox(
+                          height: 0,
                         ),
                         Row(
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Container(
-                              padding: EdgeInsets.only(
-                                  left: 30, top: 20, bottom: 20),
+                              padding: EdgeInsets.only(left: 30, top: 20),
                               alignment: Alignment.centerLeft,
                               child: Text(
                                 'Devices',
@@ -445,8 +641,8 @@ class _SampleState extends State<Sample> {
                       borderRadius: BorderRadius.circular(15),
                       child: Container(
                         width: MediaQuery.of(context).size.width * 0.8,
-                        height: MediaQuery.of(context).size.height * 0.7,
-                        padding: EdgeInsets.symmetric(horizontal: 30),
+                        height: MediaQuery.of(context).size.height * 0.6,
+                        padding: const EdgeInsets.symmetric(horizontal: 30),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(15),
                         ),
@@ -455,8 +651,9 @@ class _SampleState extends State<Sample> {
                           children: [
                             Container(
                                 alignment: Alignment.center,
-                                padding: EdgeInsets.fromLTRB(0, 25, 0, 10),
-                                child: Text(
+                                padding:
+                                    const EdgeInsets.fromLTRB(0, 25, 0, 10),
+                                child: const Text(
                                   'Add Device',
                                   style: TextStyle(
                                       fontSize: 20,
@@ -465,8 +662,8 @@ class _SampleState extends State<Sample> {
                                 )),
                             Container(
                               alignment: Alignment.center,
-                              padding: EdgeInsets.symmetric(vertical: 10),
-                              child: Text('Enter your Device Name :',
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: const Text('Enter your Device Name :',
                                   style: TextStyle(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w500,
@@ -482,18 +679,20 @@ class _SampleState extends State<Sample> {
                                 controller: roomNameController,
                                 textAlign: TextAlign.center,
                                 keyboardType: TextInputType.emailAddress,
-                                style: TextStyle(color: Colors.black),
+                                style: const TextStyle(color: Colors.black),
                                 decoration: kTextFieldDecoration.copyWith(
                                   hintText: 'Enter Your Device Name',
-                                  hintStyle: TextStyle(color: Colors.black54),
+                                  hintStyle:
+                                      const TextStyle(color: Colors.black54),
                                 ),
                               ),
                             ),
                             Row(
                               children: [
                                 Container(
-                                    padding: EdgeInsets.fromLTRB(0, 20, 0, 10),
-                                    child: Text('select Icon : ',
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 20, 0, 10),
+                                    child: const Text('select Device Type:',
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500,
@@ -504,22 +703,9 @@ class _SampleState extends State<Sample> {
                             Row(
                               children: [
                                 Container(
-                                    //padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: Text('Device Type: ',
-                                        style: TextStyle(
-                                            fontSize: 16,
-                                            fontWeight: FontWeight.w500,
-                                            color: Colors.black))),
-
-                                dropDownDevice(deviceType, 'device')
-                                //dropDown(deviceType, 'icon'),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                Container(
-                                    padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
-                                    child: Text('Port No: ',
+                                    padding:
+                                        const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                                    child: const Text('Port No:    ',
                                         style: TextStyle(
                                             fontSize: 16,
                                             fontWeight: FontWeight.w500,
@@ -533,9 +719,10 @@ class _SampleState extends State<Sample> {
                               child: Center(
                                   child: GestureDetector(
                                 onTap: () {
-                                  if (roomNameController.text.trim().length !=
-                                      0) {
-                                    saveRoom();
+                                  if (roomNameController.text
+                                      .trim()
+                                      .isNotEmpty) {
+                                    saveDevice();
                                     showPopup = false;
                                     selectedIcon = null;
                                     roomNameController.clear();
@@ -548,16 +735,15 @@ class _SampleState extends State<Sample> {
                                   child: Container(
                                     decoration: BoxDecoration(
                                         color: roomNameController.text
-                                                    .trim()
-                                                    .length ==
-                                                0
+                                                .trim()
+                                                .isEmpty
                                             ? Colors.blueGrey
                                             : Colors.blue,
                                         borderRadius:
                                             BorderRadius.circular(10)),
-                                    padding: EdgeInsets.symmetric(
+                                    padding: const EdgeInsets.symmetric(
                                         horizontal: 50, vertical: 17),
-                                    child: Text(
+                                    child: const Text(
                                       'Save',
                                       style: TextStyle(
                                           color: Colors.white, fontSize: 17),
@@ -599,7 +785,7 @@ class _SampleState extends State<Sample> {
             child: Container(
               width: MediaQuery.of(context).size.width * 0.8,
               height: MediaQuery.of(context).size.height * 0.4,
-              padding: EdgeInsets.symmetric(horizontal: 30),
+              padding: const EdgeInsets.symmetric(horizontal: 30),
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(15),
               ),
@@ -608,8 +794,8 @@ class _SampleState extends State<Sample> {
                 children: [
                   Container(
                       alignment: Alignment.center,
-                      padding: EdgeInsets.symmetric(vertical: 30),
-                      child: Text(
+                      padding: const EdgeInsets.symmetric(vertical: 30),
+                      child: const Text(
                         'Delete',
                         style: TextStyle(
                             fontSize: 20,
@@ -617,8 +803,8 @@ class _SampleState extends State<Sample> {
                             color: Colors.black),
                       )),
                   Container(
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    child: Text('Do You Want delete this Device entry?',
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    child: const Text('Do You Want delete this Device entry?',
                         style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
