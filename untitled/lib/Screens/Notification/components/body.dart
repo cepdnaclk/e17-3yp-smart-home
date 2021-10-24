@@ -80,7 +80,7 @@ class _BodyState extends State<Body> {
     final queryParameters = {'userid': '$userid'};
 
     final response = await http.get(
-      Uri.parse('http://192.168.187.195:5001/api/user/alluser'),
+      Uri.parse('http://3.80.158.225:5001/api/user/alluser'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
         "Authorization": "Bearer $token"
