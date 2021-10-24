@@ -48,6 +48,9 @@ router.post('/api/user/inviteUser', userControl.verifyToken, inviteUser.invite)
 router.post('/api/users/sendNotification',userControl.verifyToken, inviteUser.sendnotification  )
 //get notification
 router.post('/api/users/getNotification',userControl.verifyToken, inviteUser.getNotification )
+
+//Accept
+router.post('/api/user/accept',userControl.verifyToken, inviteUser.accept )
 //Change Password
 // router.put('api/user/changePass/:id', userControl.handlePasswordUpdate);
 
