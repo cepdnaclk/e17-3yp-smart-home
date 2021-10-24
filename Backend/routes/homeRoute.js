@@ -17,7 +17,7 @@ router.post('/api/home/allhomes/byuserId', userControl.verifyToken, homeControl.
 //invite Users
 
 //Get all rooms
-router.get(
+router.post(
 	'/api/home/allrooms',
 	userControl.verifyToken,
 	homeControl.getAllrooom

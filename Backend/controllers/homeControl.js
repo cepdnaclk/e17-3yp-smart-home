@@ -90,7 +90,7 @@ let functions = {
 
 	getAllrooom: async function (req, res) {
 		try {
-			let allRooms = await home.findById(req.body._id).populate('rooms').exec(function(err, home1){
+			home.findById(req.body._id).populate('rooms').exec(function(err, home1){
 				if(err)return res.status(400).json({success: false, msg: err.message})
 				res.status(200).json({
 					success: true,
