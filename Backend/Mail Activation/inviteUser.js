@@ -99,7 +99,7 @@ let functions = {
 			notification.findOne({receiver: req.body.receiverId}).populate('sender').populate('homeid').exec(function(err, doc){
 				if (err){ return res.json({success:false, msg:err.message})
 			}else{
-				return res.status(200).json({success:true, senderName: doc.sender.name, home: doc.homeid.homename , homeid: doc.homeid})
+				return res.status(200).json({success:true, senderName: doc.sender.name, home: doc.homeid.homename , homeid: doc.homeid, notificationid: doc._id})
 			}
 			})
 		}catch(err){
