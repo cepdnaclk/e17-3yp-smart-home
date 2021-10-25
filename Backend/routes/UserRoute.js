@@ -33,7 +33,7 @@ router.post('/api/user/uploadimg', userControl.verifyToken, userControl.AddProfi
 
 //Update user Name by ID req->id
 router.put(
-	'/api/user/updatename/:id',
+	'/api/user/updatename',
 	userControl.verifyToken,
 	userControl.handleNameUpdate
 );

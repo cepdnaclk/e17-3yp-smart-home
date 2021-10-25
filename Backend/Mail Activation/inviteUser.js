@@ -29,18 +29,31 @@ let functions = {
 
 	accept: function(req, res){
 		try{
-			users.findOne({name: req.body.username}, (err, doc)=>{
-				doc.update({$push:{homes: req.body.homeid}})
-				homes.findByIdAndUpdate(req.body.homeid, {$push:{ memberids: doc._id }},
-					{new: true, useFindAndModify:false})
-			})
+			if(req.body.notificationid){
+				notification.findById(req.body.notificationid, (err, data)=>{
+					if(err) return res.status(500).json({success:false, msg:err.message})
+					let receiver = data.receiver
+					let homeid = data.homeid
+					users.findById(receiver, (err, doc)=>{
+						console.log(doc.homes.includes(homeid), doc)
+						if(!doc) return res.status(404).json({success: false, msg:"User Not exist!"})
+						if(doc.homes.includes(homeid)) return res.status(408).json({success:false, msg:"invitation Already accepted"})
+						doc.homes.push(homeid)
+						doc.save()
+						homes.findByIdAndUpdate(homeid, {$push:{ memberids: doc._id }},
+							{new: true, useFindAndModify:false})
 
-			return res.json({
-				success: true,
-				msg: "Success Fully accepted"
-			})
-			
+							return res.json({
+								success: true,
+								msg: "Success Fully accepted"
+							})
+					})
+					
+				})
 
+			}else{
+				return res.status(404).json({success: false, msg: "Send the notificationid"})
+			}
 		}catch(err){
 			return res.json({
                 success: false,

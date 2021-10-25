@@ -161,7 +161,7 @@ var functions = {
 									} else {
 										
 										// var payload = jwt.decode(token, config.secret);
-										return res.json({ success: true, userid: user._id,username: user.name,homes:user.homes,numberOfhomes:user.homes.length, token: token});
+										return res.json({ success: true, userid: user._id, token: token});
 										
 									}
 								}
@@ -262,7 +262,7 @@ var functions = {
 		// console.log(req.body);
 		try {
 			let updatedUser = await users
-				.findByIdAndUpdate(req.params.id, {name: req.body.name})
+				.findByIdAndUpdate(req.body.userid, {name: req.body.name})
 				.select('-password');
 			return res.status(200).json({ success: true, msg: 'User Name Updated!' });
 			//Catch Error

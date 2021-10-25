@@ -8,9 +8,9 @@
 // var awsIot = require('aws-iot-device-sdk');
 
 // var device = awsIot.device({
-// 	keyPath: 'private.pem.key',
-// 	certPath: 'certificate.pem.crt',
-// 	caPath: 'AmazonRootCA1.pem',
+// 	keyPath: "./keys/private.pem.key",
+// 	certPath: './keys/certificate.pem.crt',
+// 	caPath: './keys/AmazonRootCA1.pem',
 // 	clientId: 'digitalHuT',
 // 	host: 'a2vg03neigl4wn-ats.iot.us-east-1.amazonaws.com',
 // });

@@ -47,8 +47,12 @@ let functions ={
     },
     getAllDevices:async function(req, res){
         try{
+            if(req.body.roomid){
             let alldevices = await devices.find({roomid: req.body.roomid})
             return res.status(200).json({success: true, devices: alldevices})
+            }else{
+                return res.status(404).json({success:false, msg:"Entre the room id"})
+            }
         }catch(err){
             
             return res.json({
