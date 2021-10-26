@@ -18,9 +18,9 @@ mongodbConnect();
 const app = express();
 app.use(
 	rateLimit({
-	  windowMs: 12 * 60 * 60 * 1000, // 12 hour duration in milliseconds
-	max: 1000,
-	message: "You exceeded 100 requests in 12 hour limit!",
+	  windowMs:  60 * 60 * 1000, // 1 hour duration in milliseconds
+	max: 2000,
+	message: "You exceeded 200 requests in 1 hour limit!",
 	headers: true,
 	})
 );
