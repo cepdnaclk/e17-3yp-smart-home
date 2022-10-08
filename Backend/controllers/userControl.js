@@ -18,7 +18,6 @@ const s3 = new aws.S3({
 })
 
 
-
 var functions = {
 	//AddNew
 	addNew: function (req, res, next) {
@@ -35,6 +34,7 @@ var functions = {
 					.json({ success: false, msg: 'Enter all fields' });
 			} //Both Password are same
 			else if (req.body.password === req.body.confpassword) {
+				console.log(req.body.name)
 				User.findOne({ mail: req.body.mail.toLowerCase() }, (err, data) => {
 					// console.log(data);
 					if (!data && !err) {
@@ -210,8 +210,6 @@ var functions = {
 	},
 
 	//Invite user
-
-
 
 	//Delete User
 	deleteuserByID : async function(req, res, next){

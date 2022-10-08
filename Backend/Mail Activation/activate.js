@@ -35,7 +35,6 @@ const sendMail = async (user) => {
 		},
 		{
 			// default message fields
-
 			// sender info
 			from: `From digitalHuT ${email}`,
 		}
