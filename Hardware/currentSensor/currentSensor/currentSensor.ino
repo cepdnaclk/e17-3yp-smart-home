@@ -1,55 +1,88 @@
-//    FILE: ACS712_20_AC_average.ino
-//  AUTHOR: Rob Tillaart
-// PURPOSE: demo AC measurement with point to point + averaging
-//     URL: https://github.com/RobTillaart/ACS712
+int pino_sensor = 34;
+int menor_valor;
+int valor_lido;
+int menor_valor_acumulado = 0;
+int ZERO_SENSOR = 0;
+float corrente_pico;
+float corrente_eficaz;
+double maior_valor=0;
+double corrente_valor=0;
 
+void setup() {
+  Serial.begin(9600);
+  pinMode(pino_sensor,INPUT);
+delay(3000);
+ //Fazer o AUTO-ZERO do sensor
+Serial.println("Fazendo o Auto ZERO do Sensor...");
+ /*
+ ZERO_SENSOR = analogRead(pino_sensor); 
+ for(int i = 0; i < 10000 ; i++){
+ valor_lido = analogRead(pino_sensor); 
+ ZERO_SENSOR = (ZERO_SENSOR +  valor_lido)/2; 
+ delayMicroseconds(1);  
+ }
+ Serial.print("Zero do Sensor:");
+ Serial.println(ZERO_SENSOR);
+ delay(3000);
 
-#include "ACS712.h"
-
-
-//  Arduino UNO has 5.0 volt with a max ADC value of 1023 steps
-//  ACS712 5A  uses 185 mV per A
-//  ACS712 20A uses 100 mV per A
-//  ACS712 30A uses  66 mV per A
-
-
-//ACS712  ACS(A0, 5.0, 1023, 100);
-//  ESP 32 example (might requires resistors to step down the logic voltage)
-  ACS712  ACS(25, 3.3, 4095, 185);  
-
-
-void setup()
-{
-  Serial.begin(115200);
-  while (!Serial);
-  Serial.println(__FILE__);
-  Serial.print("ACS712_LIB_VERSION: ");
-  Serial.println(ACS712_LIB_VERSION);
-
-  ACS.autoMidPoint();
-  Serial.print("MidPoint: ");
-  Serial.println(ACS.getMidPoint());
-  Serial.print("Noise mV: ");
-  Serial.println(ACS.getNoisemV());
-}
-
-
-void loop()
-{
-  float average = 0;
-  uint32_t start = millis();
-  for (int i = 0; i < 100; i++)
-  {
-    //  select sppropriate function
-    //  average += ACS.mA_AC_sampling();
-    average += ACS.mA_AC();
+ */
+menor_valor = 4095;
+ 
+  for(int i = 0; i < 10000 ; i++){
+  valor_lido = analogRead(pino_sensor);
+  if(valor_lido < menor_valor){
+  menor_valor = valor_lido;    
   }
-  float mA = average / 100.0;
-  uint32_t duration = millis() - start;
-  Serial.print("Time: ");
-  Serial.print(duration);
-  Serial.print("  mA: ");
-  Serial.println(mA);
+  delayMicroseconds(1);  
+  }
+  ZERO_SENSOR = menor_valor;
+  Serial.print("Zero do Sensor:");
+  Serial.println(ZERO_SENSOR);
+  delay(3000);
 
-  delay(1000);
+ 
+ }
+
+ 
+void loop() {
+
+  //Zerar valores
+  menor_valor = 4095;
+ 
+  for(int i = 0; i < 1600 ; i++){
+  valor_lido = analogRead(pino_sensor);
+  if(valor_lido < menor_valor){
+  menor_valor = valor_lido;    
+  }
+  delayMicroseconds(10);  
+  }
+
+  
+  Serial.print("Menor Valor:");
+  Serial.println(menor_valor);
+
+  //Transformar o maior valor em corrente de pico
+  corrente_pico = ZERO_SENSOR - menor_valor; // Como o ZERO do sensor é 2,5 V, é preciso remover este OFFSET. Na leitura Analógica do ESp32 com este sensor, vale 2800 (igual a 2,5 V).
+  corrente_pico = corrente_pico*0.805; // A resolução mínima de leitura para o ESp32 é de 0.8 mV por divisão. Isso transforma a leitura analógica em valor de tensão em [mV}
+  corrente_pico = corrente_pico/185;   // COnverter o valor de tensão para corrente de acordo com o modelo do sensor. No meu caso, esta sensibilidade vale 185mV/A
+                                      // O modelo dele é ACS712-05B. Logo, precisamos dividir o valor encontrado por 185 para realizar esta conversão                                       
+  
+  Serial.print("Peak Current:");
+  Serial.print(corrente_pico);
+  Serial.print(" A");
+  Serial.print(" --- ");
+  Serial.print(corrente_pico*1000);
+  Serial.println(" mA");
+  
+ 
+  //Converter para corrente eficaz  
+  corrente_eficaz = corrente_pico/1.4;
+  Serial.print("Effective Current:");
+  Serial.print(corrente_eficaz);
+  Serial.print(" A");
+  Serial.print(" --- ");
+  Serial.print(corrente_eficaz*1000);
+  Serial.println(" mA");
+ 
+ delay(5000);
 }
