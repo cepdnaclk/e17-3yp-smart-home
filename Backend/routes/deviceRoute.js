@@ -13,5 +13,6 @@ router.post('/api/devices/getallDevices', userControl.verifyToken, deviceControl
 
 //Turn on A device
 // router.post('/api/devices/turnOn', userControl.verifyToken, deviceFunction.turnOn)
+router.post('/api/devices/rgb',userControl.verifyToken, deviceControl.addDevice)
 
 module.exports = router
