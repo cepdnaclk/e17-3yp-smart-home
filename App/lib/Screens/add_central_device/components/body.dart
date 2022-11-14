@@ -2,7 +2,6 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/Screens/HomesPage/homes_page.dart';
 import 'package:untitled/Screens/Settings/settings.dart';
 import 'package:untitled/Screens/home_page.dart';
@@ -75,7 +74,7 @@ class _BodyState extends State<Body> {
       print(token);
 
       final response = await http.post(
-        Uri.parse('http://192.168.187.195:5001/api/cdevice/addCdevice'),
+        Uri.parse('http://$publicIP:$PORT/api/cdevice/addCdevice'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": "Bearer $token"
@@ -92,7 +91,7 @@ class _BodyState extends State<Body> {
 
       if (response.statusCode == 403) {
         Fluttertoast.showToast(
-            msg: "Entered email or password Incorrect!",
+            msg: "Given ID/Password is incorrect",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             fontSize: 16.0,
@@ -100,7 +99,7 @@ class _BodyState extends State<Body> {
             textColor: Colors.white);
       } else if (response.statusCode == 400) {
         Fluttertoast.showToast(
-            msg: "Given ID is wrong",
+            msg: "Given ID/Password is incorrect",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             fontSize: 16.0,
@@ -126,7 +125,7 @@ class _BodyState extends State<Body> {
         // then throw an exception.
         print("throw");
         Fluttertoast.showToast(
-            msg: "Given Password is wrong.",
+            msg: "Given ID/Password is incorrect",
             toastLength: Toast.LENGTH_SHORT,
             gravity: ToastGravity.BOTTOM,
             fontSize: 16.0,

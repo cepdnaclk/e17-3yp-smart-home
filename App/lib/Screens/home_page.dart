@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:untitled/Screens/HomesPage/homes_page.dart';
-import 'package:untitled/devices.dart';
+import 'package:untitled/devices.dart' hide kTextFieldDecoration;
+import '../constants.dart';
 import 'Settings/settings.dart';
 import 'package:http/http.dart' as http;
 
@@ -66,7 +67,8 @@ class _HomePageState extends State<HomePage> {
       //final queryParameters = {'userid': '$userid'};
 
       final response = await http.post(
-          Uri.parse('http://192.168.187.195:5001/api/home/allrooms'),
+          //Uri.parse('http://54.209.2.221:$PORT/api/home/allrooms'),
+          Uri.parse('http://$publicIP:$PORT/api/home/allrooms'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "Authorization": "Bearer $token"
@@ -75,9 +77,7 @@ class _HomePageState extends State<HomePage> {
           },
           body: jsonEncode(
             <String, String>{
-              //homeId
               '_id': homeId,
-              //'_id': '617253c61ff94c782ab8d274'
             },
           ));
 
@@ -93,6 +93,8 @@ class _HomePageState extends State<HomePage> {
         //print(resp["numberOfhomes"]);
         data = resp["rooms"];
         NoOfRooms = resp["numberOfrooms"];
+
+        print(data);
 
         //print(NoOfRooms);
 
@@ -265,7 +267,8 @@ class _HomePageState extends State<HomePage> {
       //print(token);
 
       final response = await http.post(
-          Uri.parse('http://192.168.187.195:5001/api/home/rooms/addroom'),
+          Uri.parse('http://$publicIP:$PORT/api/home/rooms/addroom'),
+          //Uri.parse('http://54.209.2.221:$PORT/api/home/rooms/addroom'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "Authorization": "Bearer $token"
@@ -445,19 +448,25 @@ class _HomePageState extends State<HomePage> {
                   height: MediaQuery.of(context).size.height,
                   child: Column(
                     children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
                       const Text(
-                        'Welcome To\nYour Home',
+                        'My Home',
                         style: TextStyle(
                           fontFamily: 'Circular Std',
-                          fontSize: 30,
+                          fontSize: 38,
                           color: Color(0xffffffff),
                           fontWeight: FontWeight.w700,
                         ),
                         textAlign: TextAlign.left,
                       ),
+                      const SizedBox(
+                        height: 5,
+                      ),
                       Row(
                         children: [
-                          SizedBox(
+                          const SizedBox(
                             width: 90,
                           ),
                           ClipRRect(

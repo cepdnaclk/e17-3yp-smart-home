@@ -71,14 +71,12 @@ class _BodyState extends State<Body> {
       String? token = prefs.getString('token');
       String? userid = prefs.getString('userid');
       print("homes Token...");
-      print(token);
-      print(userid);
+      //print(token);
 
-      //final queryParameters = {'userid': '$userid'};
 
       final response = await http.post(
-          Uri.parse('http://192.168.187.195:5001/api/home/allhomes/byuserId'),
-          //Uri.parse('http://54.172.161.228:5001/api/home/allhomes/byuserId'),
+          Uri.parse('http://$publicIP:$PORT/api/home/allhomes/byuserId'),
+          //Uri.parse('http://54.172.161.228:$PORT/api/home/allhomes/byuserId'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "Authorization": "Bearer $token"
@@ -90,7 +88,8 @@ class _BodyState extends State<Body> {
               'userid': '$userid'
               //'userid': '617244d0b8c067469d455abe'
             },
-          ));
+          )
+        );
 
       print(response.statusCode);
       print(response.body);

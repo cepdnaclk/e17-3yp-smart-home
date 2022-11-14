@@ -9,8 +9,8 @@ class RGB_light extends StatefulWidget {
 
 class _RGB_lightState extends State<RGB_light> {
   @override
-  String _lightName = 'RGB Front Light';
-  String _roomName = 'Bed Room';
+  String _lightName = 'RGB Light';
+  String _roomName = 'Bed Room  ';
   bool _lightIsOn = false;
   bool _scheduleIsOn = false;
 
@@ -26,6 +26,7 @@ class _RGB_lightState extends State<RGB_light> {
     if (newTime != null) {
       setState(() {
         _time = newTime;
+        print(_time);
       });
     }
   }
@@ -60,18 +61,18 @@ class _RGB_lightState extends State<RGB_light> {
       body: Stack(
         children: [
           Container(
-            color: Color(0xFF6F35A5),
+            color: const Color(0xFF6F35A5),
             child: Container(
               padding: EdgeInsets.only(top: 0, left: 20),
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               child: Container(
-                padding: EdgeInsets.only(top: 30, left: 20),
+                padding: const EdgeInsets.only(top: 30, left: 20),
                 width: MediaQuery.of(context).size.width,
                 height: MediaQuery.of(context).size.height,
                 child: Text(
-                  '$_lightName',
-                  style: TextStyle(
+                  _lightName,
+                  style: const TextStyle(
                     fontFamily: 'Circular Std',
                     fontSize: 30,
                     color: Color(0xffffffff),
@@ -84,7 +85,7 @@ class _RGB_lightState extends State<RGB_light> {
           ),
           Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 80,
               ),
               Expanded(
@@ -130,16 +131,16 @@ class _RGB_lightState extends State<RGB_light> {
                                   : 'TURN LIGHT ON'),
                             ),
                           ),
-                          Divider(
+                          const Divider(
                             color: Colors.black,
                             height: 25,
                           ),
 
                           //select color
                           Container(
-                            padding: EdgeInsets.symmetric(vertical: 7),
+                            padding: const EdgeInsets.symmetric(vertical: 7),
                             //margin: EdgeInsets.fromLTRB(0, 0, 190, 0),
-                            child: Text(
+                            child: const Text(
                               'Select Colour',
                               style: TextStyle(
                                 fontFamily: 'Circular Std',
@@ -174,7 +175,7 @@ class _RGB_lightState extends State<RGB_light> {
                                     print('$_selectedColor');
                                   });
                                 },
-                                child: CircleAvatar(
+                                child: const CircleAvatar(
                                   radius: 25,
                                   backgroundColor: Colors.blue,
                                 ),
@@ -187,7 +188,7 @@ class _RGB_lightState extends State<RGB_light> {
                                     print('$_selectedColor');
                                   });
                                 },
-                                child: CircleAvatar(
+                                child: const CircleAvatar(
                                   radius: 25,
                                   backgroundColor: Colors.lightGreen,
                                 ),
@@ -330,7 +331,7 @@ class _RGB_lightState extends State<RGB_light> {
                                   child: Text(_scheduleIsOn ? 'ON' : 'OFF')),
                             ),
                           ),
-                          SizedBox(height: 8),
+                          const SizedBox(height: 8),
                           ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               primary: Color(0xFFF1E6FF), // background
@@ -357,12 +358,12 @@ class _RGB_lightState extends State<RGB_light> {
                           ),
                           Text(
                             'Schedule Ends: ${_endTime.format(context)}',
-                            style: TextStyle(
+                            style: const TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w900,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 30,
                           ),
                         ],

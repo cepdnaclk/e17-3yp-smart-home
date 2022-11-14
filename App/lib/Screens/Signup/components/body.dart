@@ -33,8 +33,9 @@ class _BodyState extends State<Body> {
     try {
       //print("1\n");
       final response = await http.post(
-        Uri.parse('http://192.168.187.195:5001/api/user/signup'),
-        //Uri.parse('http://54.172.161.228:5001/api/user/login'),
+        Uri.parse('http://$publicIP:$PORT/api/user/signup'),
+        //Uri.parse('http://54.172.161.228:$PORT/api/user/signup'),
+
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
@@ -167,7 +168,7 @@ class _BodyState extends State<Body> {
                         textColor: Colors.white);
                   } else if (password!.length < 5) {
                     Fluttertoast.showToast(
-                        msg: "Password must be longer than 5 characters",
+                        msg: "Password must be longer than 7 characters",
                         toastLength: Toast.LENGTH_SHORT,
                         gravity: ToastGravity.BOTTOM,
                         fontSize: 16.0,
