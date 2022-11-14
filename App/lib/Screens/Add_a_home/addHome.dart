@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'components/body.dart';
 
 //settings->CentralDevices->Add Central Device

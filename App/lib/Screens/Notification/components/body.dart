@@ -84,8 +84,8 @@ class _BodyState extends State<Body> {
       print(userid);
 
       final response = await http.post(
-        Uri.parse('http://192.168.187.195:5001/api/users/getNotification'), //4n
-        //Uri.parse('http://54.172.161.228:5001/api/users/getNotification'),
+        Uri.parse('http://$publicIP:$PORT/api/users/getNotification'), //4n
+        //Uri.parse('http://54.172.161.228:$PORT/api/users/getNotification'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": "Bearer $token"
@@ -130,23 +130,20 @@ class _BodyState extends State<Body> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
       String? senderId = prefs.getString('userid');
+      print(homeid);
       print(senderId);
       print(token);
 
       final response = await http.post(
-        Uri.parse(
-            'http://192.168.187.195:5001/api/users/sendNotification'), //4n
-        //Uri.parse('http://54.172.161.228:5001/api/user/inviteUser'),
+        Uri.parse('http://192.168.187.195:$PORT/api/user/accept'), //4n
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": "Bearer $token"
           // "Authorization":
           //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiLCI2MTcyNmM2MDEzZDBkZTFjNDUyNTE1NzUiLCI2MTcyNzI4ZjEzZDBkZTFjNDUyNTE1ODgiXSwiX192IjowfSwiaWF0IjoxNjM1MDAyNTg3LCJleHAiOjE2MzUwMDk3ODd9.DvY7_vs7ZTQdgpxYS58unLUWKzjsHrbgGbivFv8-fc0"
         },
-        body: jsonEncode(<String, String>{
-          'username': userid.toString(),
-          'homeid': homeid.toString(),
-        }),
+        body: jsonEncode(
+            <String, String>{'notificationid': '61764573f95b47f7e5f6f577'}),
       );
 
       print(response.statusCode);
@@ -181,9 +178,8 @@ class _BodyState extends State<Body> {
       print(token);
 
       final response = await http.post(
-        Uri.parse(
-            'http://192.168.187.195:5001/api/users/sendNotification'), //4n
-        //Uri.parse('http://54.172.161.228:5001/api/user/inviteUser'),
+        Uri.parse('http://$publicIP:$PORT/api/users/sendNotification'), //4n
+        //Uri.parse('http://54.172.161.228:$PORT/api/user/inviteUser'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": "Bearer $token"

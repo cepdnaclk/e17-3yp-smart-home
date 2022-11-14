@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'Screens/TypeOfDevices/rgb_light.dart';
 import 'Screens/TypeOfDevices/smart_plug.dart';
 import 'Screens/TypeOfDevices/white_light.dart';
+import 'constants.dart';
 
 //Add device
 class Sample extends StatefulWidget {
@@ -56,7 +57,7 @@ class _SampleState extends State<Sample> {
       //final queryParameters = {'userid': '$userid'};
 
       final response = await http.post(
-          Uri.parse('http://192.168.187.195:5001/api/devices/getallDevices'),
+          Uri.parse('http://$publicIP:$PORT/api/devices/getallDevices'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "Authorization": "Bearer $token"
@@ -281,7 +282,7 @@ class _SampleState extends State<Sample> {
       //print(token);
 
       final response = await http.post(
-          Uri.parse('http://192.168.187.195:5001/api/devices/adddevice'),
+          Uri.parse('http://$publicIP:$PORT/api/devices/adddevice'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "Authorization": "Bearer $token"
@@ -523,7 +524,7 @@ class _SampleState extends State<Sample> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height,
                   child: Text(
-                    'Welcome To\nYour Room',
+                    'Bed Room',
                     style: TextStyle(
                       fontFamily: 'Circular Std',
                       fontSize: 30,
@@ -539,7 +540,7 @@ class _SampleState extends State<Sample> {
             //devices
             Column(children: [
               SizedBox(
-                height: 100,
+                height: 70,
               ),
               Expanded(
                 child: Material(

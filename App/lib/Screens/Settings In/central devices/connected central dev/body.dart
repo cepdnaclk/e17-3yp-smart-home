@@ -6,6 +6,7 @@ import 'package:untitled/Screens/HomesPage/homes_page.dart';
 import 'package:untitled/Screens/Settings/settings.dart';
 import 'package:http/http.dart' as http;
 import '../../../../background.dart';
+import '../../../../constants.dart';
 
 //Get All Connected Users
 
@@ -59,7 +60,7 @@ class _BodyState extends State<Body> {
       print(token);
 
       final response = await http.get(
-        Uri.parse('http://192.168.187.195:5005/api/user/alluser'),
+        Uri.parse('http://$publicIP:$PORT/api/user/alluser'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": "Bearer $token"

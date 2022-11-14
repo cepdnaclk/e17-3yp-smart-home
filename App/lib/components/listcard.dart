@@ -18,7 +18,6 @@ class ListCard extends StatelessWidget {
             builder: (context) {
               return HomePage(
                 homeId: homeId,
-                
               );
             },
           ),

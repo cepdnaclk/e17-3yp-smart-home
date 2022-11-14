@@ -36,8 +36,8 @@ class _BodyState extends State<Body> {
       String? token = prefs.getString('token');
       print(token);
       final response = await http.post(
-        Uri.parse('http://192.168.187.195:5001/api/user/inviteUser'), //4n
-        //Uri.parse('http://54.172.161.228:5001/api/user/inviteUser'),
+        Uri.parse('http://$publicIP:$PORT/api/user/inviteUser'), //4n
+        //Uri.parse('http://54.172.161.228:$PORT/api/user/inviteUser'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": "Bearer $token"
@@ -119,9 +119,8 @@ class _BodyState extends State<Body> {
       print(homeId);
       print("---------");
       final response = await http.post(
-        Uri.parse(
-            'http://192.168.187.195:5001/api/users/sendNotification'), //4n
-        //Uri.parse('http://54.172.161.228:5001/api/user/inviteUser'),
+        Uri.parse('http://$publicIP:$PORT/api/users/sendNotification'), //4n
+        //Uri.parse('http://54.172.161.228:$PORT/api/user/inviteUser'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
           "Authorization": "Bearer $token"
