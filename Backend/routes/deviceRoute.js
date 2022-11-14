@@ -9,10 +9,12 @@ const deviceFunction = require('../controllers/deviceFunction')
 router.post('/api/devices/adddevice', userControl.verifyToken, deviceControl.addDevice);
 
 //Get all devices
-router.post('/api/devices/getallDevices', userControl.verifyToken, deviceControl.getAllDevices )
+router.post('/api/devices/getallDevices', userControl.verifyToken, deviceControl.getAllDevices);
 
 //Turn on A device
-// router.post('/api/devices/turnOn', userControl.verifyToken, deviceFunction.turnOn)
-router.post('/api/devices/rgb',userControl.verifyToken, deviceControl.addDevice)
+router.post('/api/devices/turnOn', userControl.verifyToken, deviceFunction.turnOn)
+router.post('/api/devices/rgb', userControl.verifyToken, deviceFunction.rgbTurnOn);
 
+// MQtt publish test
+router.post('/api/devices/testPub', deviceFunction.testPub);
 module.exports = router
