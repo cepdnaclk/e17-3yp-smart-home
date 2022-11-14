@@ -97,7 +97,6 @@ var functions = {
 				msg:"successfull",
 				cdevices: cdevices
 			})
-
 		}catch(err){
 			return res.json({
 				success: false,

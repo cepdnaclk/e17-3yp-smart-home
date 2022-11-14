@@ -1,0 +1,12 @@
+
+[AWS IoT - MQTT broker to AWS]
+https://aws.amazon.com/blogs/iot/how-to-bridge-mosquitto-mqtt-broker-to-aws-iot/
+
+[AWS IoT - MQTT test client]
+https://ap-southeast-1.console.aws.amazon.com/iot/home?region=ap-southeast-1#/test
+
+[AWS IoT - Configuring and flashing an ESP32 IoT device]
+https://aws.amazon.com/blogs/compute/building-an-aws-iot-core-device-using-aws-serverless-and-an-esp32/
+
+[ESP32 AWS IoT Connect Template]
+https://github.com/0015/ThatProject/tree/master/ESP32_MQTT/0_AWS_Mosquitto_Test

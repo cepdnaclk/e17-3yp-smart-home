@@ -1,14 +1,12 @@
 var User = require('../models/users');
-let jwt = require('jsonwebtoken');
+`let jwt = require('jsonwebtoken');`
 var config = require('../config/dbconfig');
 const users = require('../models/users');
 const activate = require('../Mail Activation/activate');
-const multer = require('multer')
-const multers3 = require('multer-s3')
+const multer = require('multer');
+const multers3 = require('multer-s3');
 const aws = require('aws-sdk');
 let homes = require('../models/homes');
-
-
 
 
 const s3 = new aws.S3({
