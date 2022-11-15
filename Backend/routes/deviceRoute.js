@@ -18,3 +18,6 @@ router.post('/api/devices/rgb', userControl.verifyToken, deviceFunction.rgbTurnO
 // MQtt publish test
 router.post('/api/devices/testPub', deviceFunction.testPub);
 module.exports = router
+
+// MQTT subscribe test
+router.post('/api/devices/testsub', deviceFunction.testsub)
