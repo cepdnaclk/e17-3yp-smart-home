@@ -1,19 +1,11 @@
 var User = require('../models/users');
-`let jwt = require('jsonwebtoken');`
+let jwt = require('jsonwebtoken');
 var config = require('../config/dbconfig');
 const users = require('../models/users');
 const activate = require('../Mail Activation/activate');
-const multer = require('multer');
-const multers3 = require('multer-s3');
-const aws = require('aws-sdk');
 let homes = require('../models/homes');
 
 
-const s3 = new aws.S3({
-	accessKeyId: process.env.aws_access_key_id,
-	secretAccessKey: process.env.aws_secret_access_key,
-	region: process.env.AWS_REGION
-})
 
 
 var functions = {
@@ -305,53 +297,6 @@ var functions = {
 			})
 		}
 	},
-
-
-	AddProfile: async function (req, res, next){
-		try{
-			const upload = (imageName)=>
-				multer({
-					storage: multers3({
-					s3:s3,
-					bucket: 'digitalhutprofilepicture',
-					metadata: function(req, file, cb){
-						cb(null, {fieldName: file.fieldname});
-					},
-					key: function(req, file, cb){
-						if (file.mimetype === "image/jpeg")   {
-						cb(null, imageName+'jpeg');
-						console.log("jpeg")
-				}else if (file.mimetype === "image/png"){
-					cb(null, imageName+'png');
-					console.log("png")
-
-				}
-				else{
-					cb(new Error("Invalid file type, only JPEG and PNG is allowed!"), false);
-				}
-			}
-			}),
-			})
-			const uploadSingle = upload(req.username).single('image-upload');
-			uploadSingle(req, res, err=>{
-				if(err) return res.status(400).json({
-					success: false,
-					message: err.message
-				})
-				console.log(req.file)
-				return res.status(200).json({
-					data:req.file
-				})
-			})
-			
-		}catch(err){
-			return res.status(400).json({
-				success: false,
-				msg: err.message,
-				
-			})
-		}
-	}
 };
 
 
