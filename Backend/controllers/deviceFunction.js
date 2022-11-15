@@ -6,9 +6,6 @@ let mqtt = require('mqtt');
 const clientId = "digitalHut_smartBulb"
 const options = {
     clientId,
-    clean: true,
-    connectTimeout: 4000,
-    reconnectPeriod: 1,
 }
 
 let functions ={
@@ -78,14 +75,17 @@ let functions ={
                     (error) => { 
                         if (error) {
                             console.log(error)
+                            client.end();
                             return res.json({ success: false, msg: "Error in publishing" });
                         } else {
+                            client.end();
                             return res.json({ success: true, msg: "Msg published successfully" });
                         }
                     });
             });
         } catch (e) {
             console.log(`Error catched in testPub ${e.message}`)
+            client.end();
             return res.json({
 				success: false,
 				msg: 'Error on testPub try catch',
@@ -100,16 +100,11 @@ let functions ={
             let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
             client.on('connect', () => {
                 console.log('Connected')
-                
-            client.subscribe([topic], () => {
-                console.log(`Subscribe to topic '${topic}'`, (error) => {
-                    if (error) {
-                        return res.json({ success: false, msg: error.message })
-                }
+            client.subscribe([topic])
+            client.on('message', function (topic, message) {
+            console.log(message.toString());
             })
-            return res.json({ success: true, msg: `Successfully subscribed to topic ${topic}` });
     })
-})
         } catch (e) {
             console.log(e.message);
             return res.json({success:false, msg: e.message})
