@@ -218,7 +218,6 @@ var functions = {
 		}
 	},
 
-
 	//Get the all users
 	handleGet: async function (req, res, next) {
 		try {

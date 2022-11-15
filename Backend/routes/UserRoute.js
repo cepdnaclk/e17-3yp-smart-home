@@ -3,9 +3,7 @@ const router = express.Router();
 const path = require('path');
 const userControl = require('../controllers/userControl');
 const inviteUser = require('../Mail Activation/inviteUser')
-// router.get('/',(req,res)=>{
-// 	console.log("Testing 1 Root")
-// })
+
 
 //Adding New User Or SignUp=>{name, mail, password ,confirmPassword}--> Send mail
 router.post('/api/user/signup', userControl.addNew,()=>{
@@ -27,9 +25,6 @@ router.get(
 	userControl.verifyToken,
 	userControl.handleGetById
 );
-
-
-router.post('/api/user/uploadimg', userControl.verifyToken, userControl.AddProfile)
 
 //Update user Name by ID req->id
 router.put(

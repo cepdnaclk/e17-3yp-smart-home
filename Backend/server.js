@@ -12,6 +12,7 @@ const roomRoutes = require('./routes/roomRoute')
 const deviceRoute = require('./routes/deviceRoute')
 const cdevice = require('./routes/cdeviceRoute')
 const nonActive = require('./routes/NonActiveCdeviceRoute')
+// const subTotopics = require('./controllers/subscribe.js');
 //connect to database
 mongodbConnect();
 

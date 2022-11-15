@@ -21,7 +21,6 @@ let functions ={
                 });
                 return res.json({success:true, msg: "successfully Turned On!", device: doc})
             } )
-
         }catch(err){
             return res.json({
 				success: false,
@@ -29,13 +28,15 @@ let functions ={
 				error: err.message,
 			});
         }
-    },
+    }, 
     rgbTurnOn: async function(req, res) 
     {
         try {
             if (!req.body.cdeviceid,
                 !req.body.color,
-                !req.body.brightness
+                !req.body.brightness,
+                !req.body.portno,
+                !req.body.deviceid
             ) {
                 return res.json({ success: false, msg: "Enter All feilds for RGB" });
             }
@@ -47,7 +48,7 @@ let functions ={
                 client.on('connect', function () {
                     console.log('connect');
                     // device.subscribe('esp32/pub');
-                    let devicename = doc.devicename
+                    let deviceid = doc.deviceid
                     let cdeviceid = doc.cdeviceid
                     let color = req.body.color
                     let brightness = req.body.brightness
@@ -63,6 +64,9 @@ let functions ={
             });
     }   
     },
+
+
+
     // For testing the publishing
     testPub: async function (req, res) {
         try {
