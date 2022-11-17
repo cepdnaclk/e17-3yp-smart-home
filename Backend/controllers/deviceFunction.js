@@ -65,7 +65,7 @@ let functions ={
         } catch (e) {
             return res.json({
 				success: false,
-				msg: 'Error on add cdevice try catch',
+				msg: 'Error on add cdevice try catch 1',
 				error: e.message,
             });
     }   
