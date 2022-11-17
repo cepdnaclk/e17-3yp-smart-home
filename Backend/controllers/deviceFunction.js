@@ -56,10 +56,12 @@ let functions ={
                     console.log('connect');
                     // device.subscribe('esp32/pub');
                     // Device Type RGB 1
-                    client.publish('esp32/sub', JSON.stringify(dev), (error)=>{
-                        console.log(error.message);
-                        client.end();
-                        return res.json({ success: flase, msg: error.message });
+                    client.publish('esp32/sub', JSON.stringify(dev), (error) => {
+                        if (error) {
+                            console.log(error.message);
+                            client.end();
+                            return res.json({ success: true, msg: error.message });
+                        }
                     });
                 });
                 client.end();
