@@ -54,7 +54,7 @@ let functions ={
                     // let cdeviceid = doc.cdeviceid
                     let color = req.body.color
                     let brightness = req.body.brightness
-                    client.publish('esp32/sub/'+devicename, JSON.stringify({ deviceid: deviceid, color:color, brightness:brightness,portno:portno }));
+                    client.publish('esp32/sub/'+devicename, JSON.stringify({ deviceid: deviceid, color:color, brightness:brightness,portno:portno, deviceType:"rgb" }));
                 });
                 client.end();
                 return res.json({success:true, msg: "successfully Turned On!", device: doc})
@@ -67,8 +67,6 @@ let functions ={
             });
     }   
     },
-
-
 
     // For testing the publishing
     testPub: async function (req, res) {
@@ -92,7 +90,6 @@ let functions ={
             });
         } catch (e) {
             console.log(`Error catched in testPub ${e.message}`)
-            client.end();
             return res.json({
 				success: false,
 				msg: 'Error on testPub try catch',
