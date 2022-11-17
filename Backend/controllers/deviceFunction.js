@@ -56,7 +56,6 @@ let functions ={
                     console.log('connect');
                     // device.subscribe('esp32/pub');
                     // Device Type RGB 1
-
                     client.publish('esp32/sub' + devicename, JSON.stringify(dev), (error)=>{
                         console.log(error.message);
                         client.end();
