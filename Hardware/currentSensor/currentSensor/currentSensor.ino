@@ -1,4 +1,4 @@
-int pino_sensor = 34;
+int pino_sensor = 15;
 int menor_valor;
 int valor_lido;
 int menor_valor_acumulado = 0;

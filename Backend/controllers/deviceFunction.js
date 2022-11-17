@@ -32,15 +32,17 @@ let functions ={
     rgbTurnOn: async function(req, res) 
     {
         try {
-            if (!req.body.cdeviceid,
+            if (
                 !req.body.color,
                 !req.body.brightness,
                 !req.body.portno,
-                !req.body.deviceid
+                !req.body.deviceid,
+                !req.body.state
             ) {
                 return res.json({ success: false, msg: "Enter All feilds for RGB" });
             }
-            devices.findByIdAndUpdate(req.body.deviceid, { status: 1, StartTime: Date.now() }, (err, doc) => {
+            let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
+            devices.findByIdAndUpdate(req.body.deviceid, { state: state, StartTime: Date.now(), color: color, brightness:brightness }, (err, doc) => {
                 // If error happen
                 if (err) return res.json({ success: false, msg: err.message });
                 if (!doc) return res.json({ success: false, msg: "Device Not found!" });
@@ -49,11 +51,12 @@ let functions ={
                     console.log('connect');
                     // device.subscribe('esp32/pub');
                     let deviceid = doc.deviceid
-                    let cdeviceid = doc.cdeviceid
+                    // let cdeviceid = doc.cdeviceid
                     let color = req.body.color
                     let brightness = req.body.brightness
-                    client.publish('esp32/sub/'+cdeviceid+devicename, JSON.stringify({ devicename: 1, color:color, brightness:brightness }));
+                    client.publish('esp32/sub/'+devicename, JSON.stringify({ deviceid: deviceid, color:color, brightness:brightness,portno:portno }));
                 });
+                client.end();
                 return res.json({success:true, msg: "successfully Turned On!", device: doc})
             } )
         } catch (e) {
