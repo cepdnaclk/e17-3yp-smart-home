@@ -60,13 +60,14 @@ let functions ={
                         if (error) {
                             console.log(error.message);
                             client.end();
-                            return res.json({ success: true, msg: error.message });
+                            return res.json({ success: false, msg: error.message });
+                        }
+                        else {
+                            client.end();
+                            return res.json({ success: true, msg: "successfully Turned On!", device: dev });
                         }
                     });
                 });
-                client.end();
-                return res.json({ success: true, msg: "successfully Turned On!", device: dev });
-            
         } catch (e) {
             return res.json({
 				success: false,
