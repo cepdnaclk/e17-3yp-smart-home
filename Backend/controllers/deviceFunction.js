@@ -12,7 +12,8 @@ let functions ={
     turnOn: async function(req, res){
         try{
             devices.findByIdAndUpdate(req.body.deviceid, {status: 1, StartTime:Date.now()}, (err, doc)=>{
-                if(err) return res.json({success: false, msg: err.message})
+                if (err) return res.json({ success: false, msg: err.message })
+                let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                 client.on('connect', function () {
                     console.log('connect');
                     // device.subscribe('esp32/pub');
@@ -35,35 +36,37 @@ let functions ={
             if (
                 !req.body.color,
                 !req.body.brightness,
-                !req.body.portno,
+                !req.body.port,
                 !req.body.deviceid,
                 !req.body.state
             ) {
                 return res.json({ success: false, msg: "Enter All feilds for RGB" });
             }
             let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-            devices.findByIdAndUpdate(req.body.deviceid, { state: state, StartTime: Date.now(), color: color, brightness:brightness }, (err, doc) => {
+            devices.findByIdAndUpdate(req.body.deviceid, { status: req.body.state, StartTime: Date.now(), color: req.body.color, brightness:req.body.brightness }, (err, doc) => {
                 // If error happen
                 if (err) return res.json({ success: false, msg: err.message });
                 if (!doc) return res.json({ success: false, msg: "Device Not found!" });
                 // If the device found
+            
                 client.on('connect', function () {
                     console.log('connect');
                     // device.subscribe('esp32/pub');
-                    let deviceid = doc.deviceid
-                    // let cdeviceid = doc.cdeviceid
-                    let color = req.body.color
-                    let brightness = req.body.brightness
-                    client.publish('esp32/sub/'+devicename, JSON.stringify({ deviceid: deviceid, color:color, brightness:brightness,portno:portno, deviceType:"rgb" }));
+                    // Device Type RGB 1
+                    client.publish('esp32/sub/' + devicename, JSON.stringify({ d_id: req.body.deviceid, col: req.body.color, brtns: req.body.brightness, port: req.body.port, d_t: 1 }), (error)=>{
+                        console.log(error.message);
+                        client.end();
+                        return res.json({ success: flase, msg: error.message });
+                    });
                 });
                 client.end();
-                return res.json({success:true, msg: "successfully Turned On!", device: doc})
+                return res.json({ success: true, msg: "successfully Turned On!", device: doc });
             } )
         } catch (e) {
             return res.json({
 				success: false,
 				msg: 'Error on add cdevice try catch',
-				error: err.message,
+				error: e.message,
             });
     }   
     },

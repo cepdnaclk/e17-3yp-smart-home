@@ -51,6 +51,7 @@ let functions = {
 							return res.json({
 								success: true,
 								msg: 'Home Successfully saved!',
+								home_id: newHome._id
 							});
 						}
 					});

@@ -5,7 +5,7 @@ let rooms = require('../models/rooms')
 let functions ={
     addDevice: async function(req, res){
         try{
-            if(req.body.homeid && req.body.roomid && req.body.deviceType && req.body.devicename && req.body.cdeviceid && req.body.port){
+            if(req.body.homeid && req.body.roomid && req.body.deviceType && req.body.devicename && req.body.cdeviceNumber && req.body.port){
                 devices.findOne({
                     devicename : req.body.devicename,
                 }, (err, data)=>{
@@ -19,7 +19,9 @@ let functions ={
                             devicename : req.body.devicename,
                             deviceType : req.body.deviceType,
                             homeid : req.body.homeid,
-                            roomid : req.body.roomid
+                            roomid: req.body.roomid,
+                            cdeviceNumber: req.body.cdeviceNumber,
+                            port:req.body.port
                         })
                         devices.create(newdevice).then(devicedoc=>{
 							rooms.findByIdAndUpdate(req.body.roomid, 
@@ -60,8 +62,6 @@ let functions ={
                 msg: err
             })
         }
-        
     }
-    
 }
 module.exports = functions

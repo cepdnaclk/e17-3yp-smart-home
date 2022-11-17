@@ -4,6 +4,7 @@ int valor_lido;
 int menor_valor_acumulado = 0;
 int ZERO_SENSOR = 0;
 float corrente_pico;
+
 float corrente_eficaz;
 double maior_valor=0;
 double corrente_valor=0;
