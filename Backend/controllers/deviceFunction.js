@@ -30,6 +30,7 @@ let functions ={
 			});
         }
     }, 
+
     rgbTurnOn: async function(req, res) 
     {
         try {
@@ -48,20 +49,23 @@ let functions ={
                 if (err) return res.json({ success: false, msg: err.message });
                 if (!doc) return res.json({ success: false, msg: "Device Not found!" });
                 // If the device found
-            
+            })
+            let dev ={ d_id: req.body.deviceid, col: req.body.color, brtns: req.body.brightness, port: req.body.port, d_t: 1 }
+            console.log("Device Found")
                 client.on('connect', function () {
                     console.log('connect');
                     // device.subscribe('esp32/pub');
                     // Device Type RGB 1
-                    client.publish('esp32/sub/' + devicename, JSON.stringify({ d_id: req.body.deviceid, col: req.body.color, brtns: req.body.brightness, port: req.body.port, d_t: 1 }), (error)=>{
+
+                    client.publish('esp32/sub' + devicename, JSON.stringify(dev), (error)=>{
                         console.log(error.message);
                         client.end();
                         return res.json({ success: flase, msg: error.message });
                     });
                 });
                 client.end();
-                return res.json({ success: true, msg: "successfully Turned On!", device: doc });
-            } )
+                return res.json({ success: true, msg: "successfully Turned On!", device: dev });
+            
         } catch (e) {
             return res.json({
 				success: false,

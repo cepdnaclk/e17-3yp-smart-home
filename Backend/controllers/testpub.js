@@ -1,7 +1,4 @@
 
-let homes = require('../models/homes')
-
-
 let mqtt = require('mqtt');
 const clientId = "digitalHut_smartBulb"
 
