@@ -57,8 +57,8 @@ let functions ={
                 return res.json({ success: false, msg: "Enter All feilds for RGB" });
             }
             let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-            let color = req.body.color.split(" ");
-            devices.findByIdAndUpdate(req.body.deviceid, { status: req.body.state, StartTime: Date.now(), color: color, brightness:req.body.brightness }, (err, doc) => {
+            let r, g, b = req.body.color
+            devices.findByIdAndUpdate(req.body.deviceid, { status: req.body.state, StartTime: Date.now(), r:r, g:g, b:b, brightness:req.body.brightness }, (err, doc) => {
                 // If error happen
                 if (err) return res.json({ success: false, msg: err.message });
                 if (!doc) return res.json({ success: false, msg: "Device Not found!" });
