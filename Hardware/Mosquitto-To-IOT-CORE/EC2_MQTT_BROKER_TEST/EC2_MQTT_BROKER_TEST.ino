@@ -70,9 +70,8 @@ void publishMessage()
   client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
 }
 
-void rgb(unsigned char port)
+void rgb()
 {
-//  FastLED.addLeds<WS2812, port, GRB>(leds, NUM_LEDS);
   Serial.println("RGB.....");
   for (unsigned char i = 0; i <= 44; i++) {
     leds[i] = CRGB ( 0, 0, 255);
@@ -91,7 +90,7 @@ void messageHandler(String &topic, String &payload ) {
     Serial.println(led);
     digitalWrite(lamp, HIGH);
     Serial.println("Lamp_State changed to HIGH");
-    rgb(led);
+    rgb();
     
   }
   else if (d_t == 0) // 48 is the ASCI value of 0
@@ -113,6 +112,10 @@ void setup() {
 
 void loop() {
   publishMessage();
-  client.loop();
-  delay(1000);
+  //client.loop();
+  for (unsigned char i = 0; i <= 44; i++) {
+    leds[i] = CRGB ( 0, 0, 255);
+    FastLED.show();
+  }
+  delay(300);`
 }
