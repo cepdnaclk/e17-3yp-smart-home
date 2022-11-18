@@ -60,13 +60,13 @@ let functions ={
             let r = req.body.color[0];
             let g = req.body.color[1];
             let b = req.body.color[2];
-            devices.findByIdAndUpdate(req.body.deviceid, { status: req.body.state, StartTime: Date.now(), r:r, g:g, b:b, brightness:req.body.brightness }, (err, doc) => {
+            devices.findByIdAndUpdate(req.body.deviceid, { status: req.body.state, StartTime: Date.now() , brightness:req.body.brightness }, (err, doc) => {
                 // If error happen
                 if (err) return res.json({ success: false, msg: err.message });
                 if (!doc) return res.json({ success: false, msg: "Device Not found!" });
                 // If the device found
             })
-            let dev ={ d_id: req.body.deviceid, col: req.body.color, brtns: req.body.brightness, port: req.body.port, d_t: 1 }
+            let dev ={ d_id: req.body.deviceid, col: req.body.color, brtns: req.body.brightness, port: req.body.port, d_t: 1, r:r, g:g, b:b }
             console.log("Device Found")
                 client.on('connect', function () {
                     console.log('connect');
