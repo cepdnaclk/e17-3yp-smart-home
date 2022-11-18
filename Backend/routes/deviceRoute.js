@@ -12,7 +12,7 @@ router.post('/api/devices/adddevice', userControl.verifyToken, deviceControl.add
 router.post('/api/devices/getallDevices', userControl.verifyToken, deviceControl.getAllDevices);
 
 //Turn on A device
-router.post('/api/devices/turnOn', userControl.verifyToken, deviceFunction.turnOn)
+router.post('/api/devices/turnOn', userControl.verifyToken, deviceFunction.plugTurnOn)
 router.post('/api/devices/rgb', userControl.verifyToken, deviceFunction.rgbTurnOn);
 
 // MQtt publish test
