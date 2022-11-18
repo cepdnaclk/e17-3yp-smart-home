@@ -57,7 +57,9 @@ let functions ={
                 return res.json({ success: false, msg: "Enter All feilds for RGB" });
             }
             let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-            let r, g, b = req.body.color
+            let r = req.body.color[0];
+            let g = req.body.color[1];
+            let b = req.body.color[2];
             devices.findByIdAndUpdate(req.body.deviceid, { status: req.body.state, StartTime: Date.now(), r:r, g:g, b:b, brightness:req.body.brightness }, (err, doc) => {
                 // If error happen
                 if (err) return res.json({ success: false, msg: err.message });
