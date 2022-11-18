@@ -66,7 +66,7 @@ let functions ={
                 if (!doc) return res.json({ success: false, msg: "Device Not found!" });
                 // If the device found
             })
-            let dev ={ d_id: req.body.deviceid, col: req.body.color, brtns: req.body.brightness, port: req.body.port, d_t: 1, r:r, g:g, b:b }
+            let dev ={brtns: req.body.brightness, port: req.body.port, d_t: 1, r:r, g:g, b:b }
             console.log("Device Found")
                 client.on('connect', function () {
                     console.log('connect');
