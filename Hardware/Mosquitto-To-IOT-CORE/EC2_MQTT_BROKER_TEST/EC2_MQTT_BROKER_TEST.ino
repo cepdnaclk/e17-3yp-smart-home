@@ -9,14 +9,20 @@
 #define AWS_IOT_PUBLISH_TOPIC   "esp32/pub"
 #define AWS_IOT_SUBSCRIBE_TOPIC "esp32/sub"
 
-//Light
-#define lamp 23
+//RGBLights
 #define NUM_LEDS 44
-#define LED_PIN 4
 
-bool state = 0;
-CRGB leds[NUM_LEDS];
-TaskHandle_t NetTaskHandle;
+//RGB1
+#define LED_PIN_1 4
+CRGB leds_port_1[NUM_LEDS];
+//char color_1 = 'w'; //Default color
+
+//RGB 2
+#define LED_PIN_2 2
+CRGB leds_port_2[NUM_LEDS];
+//char color_2 = 'w'; //Default color
+
+
 
 
 WiFiClientSecure net = WiFiClientSecure();
@@ -67,16 +73,14 @@ void publishMessage()
   client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
 }
 
-/***********************************RUN RGB******************************************/
-void rgb()
+void rgb(unsigned r, unsigned g, unsigned b)
 {
   Serial.println("RGB ON.....");
   for (unsigned char i = 0; i <= 44; i++) {
-  leds[i] = CRGB ( 255, 0, 0);
+    leds[i] = CRGB ( r, g, b);
     FastLED.show();
-    delay(1000);
-    state = 0;
-  } 
+  }
+  state=0;
 }
 
 
@@ -89,15 +93,13 @@ void messageHandler(String &topic, String &payload ) {
   unsigned char led = doc["port"];
   if (d_t == 1) // 49 is the ASCI value of 1
   {
-    Serial.println(led);
-    digitalWrite(lamp, HIGH);
-    Serial.println("Lamp_State changed to HIGH");
-    state = 1;
-    Serial.println(state);
+    //digitalWrite(lamp, HIGH);
+    Serial.println("RGB Call");
+    rgb(255, 0, 0);   
   }
   else if (d_t == 0) // 48 is the ASCI value of 0
   {
-    digitalWrite(lamp, LOW);
+    //digitalWrite(lamp, LOW);
     Serial.println("Lamp_State changed to LOW");
   }
   Serial.println();
@@ -114,15 +116,9 @@ void setup() {
 void loop() {
   publishMessage();
   client.loop();
-  if(state){
-    rgb();
-  }else{
-      Serial.println("RGB ON.....");
-  for (unsigned char i = 0; i <= 44; i++) {
-  leds[i] = CRGB ( 0, 0, 0);
-    FastLED.show();
-    delay(1000);
-  }
-  delay(50);
-}
+//  if(state==1){
+//    rgb();
+//    Serial.println();
+//  }
+  delay(300);
 }
