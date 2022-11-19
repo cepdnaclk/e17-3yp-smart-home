@@ -48,7 +48,9 @@ let functions ={
     {
         try {
             if (
-                !req.body.color,
+                !req.body.r,
+                !req.body.g,
+                !req.body.b,
                 !req.body.brightness,
                 !req.body.port,
                 !req.body.deviceid,
@@ -57,9 +59,9 @@ let functions ={
                 return res.json({ success: false, msg: "Enter All feilds for RGB" });
             }
             let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-            let r = req.body.color[0];
-            let g = req.body.color[1];
-            let b = req.body.color[2];
+            let r = req.body.r;
+            let g = req.body.g;
+            let b = req.body.b;
             let state = 0;
             if (req.body.state === "true") {
                 state = 1;
@@ -93,7 +95,6 @@ let functions ={
         } catch (e) {
             return res.json({
 				success: false,
-				msg: 'Error on add cdevice try catch 1',
 				error: e.message,
             });
     }   
