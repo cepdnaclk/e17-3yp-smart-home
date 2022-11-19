@@ -85,7 +85,9 @@ void rgb(unsigned r, unsigned g, unsigned b, unsigned char port)
 
   if(port == 1){
     Serial.println(port);
-    Serial.println(r,g,b);
+    Serial.println(r);
+    Serial.println(g);
+    Serial.println(b);
     for (unsigned char i = 0; i <= 44; i++) {
       leds_port_1[i] = CRGB ( r, g, b);
       FastLED.show();
@@ -115,33 +117,42 @@ void messageHandler(String &topic, String &payload ) {
   if (d_t == 1) // 49 is the ASCI value of 1
   {
     Serial.println("RGB Call");
-    //digitalWrite(lamp, HIGH);
     rgb(r, g, b, port);   
   }
   else if (d_t == 0) // 48 is the ASCI value of 0
   {
-    //digitalWrite(lamp, LOW);
     Serial.println("Lamp_State changed to LOW");
   }
   Serial.println();
-  
 }
+
+
+void brightness(unsigned char br, unsigned char port){
+
+  if(port==1){
+    for (int i=NUM_LEDS; i> 44; i-- )
+    {
+      FastLED.setBrightness(10);
+      FastLED.show();
+  //        delay (250);
+  
+    }
+  }
+  else if(port==2){
+    
+  }  
+}
+
 
 void setup() {
   Serial.begin(115200);
   connectAWS();
-  //pinMode(lamp, OUTPUT);
   FastLED.addLeds<WS2812, LED_PIN_1, GRB>(leds_port_1, NUM_LEDS);
   FastLED.addLeds<WS2812, LED_PIN_2, GRB>(leds_port_2, NUM_LEDS);
-  //digitalWrite(lamp, LOW);
 }
 
 void loop() {
   publishMessage();
   client.loop();
-//  if(state==1){
-//    rgb();
-//    Serial.println();
-//  }
   delay(300);
 }

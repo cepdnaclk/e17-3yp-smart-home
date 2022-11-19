@@ -11,6 +11,9 @@ router.post('/api/devices/adddevice', userControl.verifyToken, deviceControl.add
 //Get all devices
 router.post('/api/devices/getallDevices', userControl.verifyToken, deviceControl.getAllDevices);
 
+// Delete a device 
+router.post('/api/devices/deleteone', userControl.verifyToken, deviceControl.deleteDevice);
+
 //Turn on A device
 router.post('/api/devices/turnOn', userControl.verifyToken, deviceFunction.plugTurnOn)
 router.post('/api/devices/rgb', userControl.verifyToken, deviceFunction.rgbTurnOn);

@@ -59,7 +59,41 @@ let functions ={
             
             return res.json({
                 success: false,
-                msg: err
+                msg: err.message
+            })
+        }
+    },
+    deleteDevice: async function (req, res) {
+        try {
+            if (req.body.deviceid & req.body.roomid) {
+                await devices.deleteOne({ _id: req.body.deviceid }, (err, doc) => {
+                    if (err) {
+                        return res.json({ success: false, msg: err.message });   
+                    }
+                    else if (doc) {
+                        if (doc.userid != req.body.userid) {
+                            return res.json({ success: false, msg: "Device_id not from this user" });
+                        }                    
+                    } else {
+                        return res.json({success:false, msg: "Device id not found!"})
+                    }
+                });
+                await rooms.findByIdAndUpdate(req.body.roomid, { $inc: { numberOfDevices: -1 } }, (err, doc) => {
+                    if (err) {
+                        return res.json({ success: false, msg: err.message });   
+                    }
+                    if (!doc) {
+                        return res.json({success:false, msg: "room id not found!"})
+                    }
+                })
+                return res.json({success:true, msg: "Device id not found!"})
+            } else {
+                return res.status(404).json({ success: false, msg: "Enter the device id" });
+            }
+        } catch(err){
+            return res.json({
+                success: false,
+                msg: err.message
             })
         }
     }
