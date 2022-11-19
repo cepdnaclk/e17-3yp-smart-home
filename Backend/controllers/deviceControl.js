@@ -21,7 +21,7 @@ let functions ={
                             homeid : req.body.homeid,
                             roomid: req.body.roomid,
                             cdeviceNumber: req.body.cdeviceNumber,
-                            port:req.body.port
+                            port:parseInt(req.body.port)
                         })
                         devices.create(newdevice).then(devicedoc=>{
 							rooms.findByIdAndUpdate(req.body.roomid, 
