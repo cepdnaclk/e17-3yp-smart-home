@@ -43,6 +43,26 @@ let functions ={
 			});
         }
     }, 
+    deviceStatus: async function (req, res) {
+        try {
+            if (req.body.deviceid) {
+                devices.findById(req.body.deviceid, (err, doc) => {
+                    // If error happen
+                    if (err) return res.status(404).json({ success: false, msg: err.message });
+                    if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
+                    // If the device found
+
+                    return res.json({ success: true, device: doc});
+                    
+                })
+
+            } else {
+                return res.json({ success: false, msg: "Enter the device_id" });
+            }
+        } catch (e) {
+            
+        }
+    },
 
     rgbTurnOn: async function(req, res) 
     {
@@ -73,7 +93,7 @@ let functions ={
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
                 // If the device found
-            })
+            
             let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
             let dev ={state:state, brtns: req.body.brightness, port: parseInt(req.body.port), d_t: 1, r:r, g:g, b:b }
             console.log("Device Found")
@@ -87,11 +107,14 @@ let functions ={
                         }
                         else {
                             client.end();
+                            console.log('send');
                             return res.json({ success: true, msg: "successfully Turned On!", device: dev });
                         }
                     });
                 });
+            })
         } catch (e) {
+            console.log('catch e');
             return res.status(404).json({
 				success: false,
 				error: e.message,

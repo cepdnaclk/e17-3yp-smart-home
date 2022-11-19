@@ -35,12 +35,18 @@ let deviceSchema = new schema({
 		type: schema.Types.ObjectId,
 		ref: 'rooms'
 	},
-
-	color:{
-		type: String,
-		default: '#FFFFFF'
+	r: {
+		type: Number,
+		default: 0
 	},
-
+	g: {
+		type: Number,
+		default: 0
+	},
+	b: {
+		type: Number,
+		default: 0
+	},
 	brightness:{
 		type : Number,
 		default: 0
