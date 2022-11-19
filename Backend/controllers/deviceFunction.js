@@ -58,7 +58,6 @@ let functions ={
             ) {
                 return res.json({ success: false, msg: "Enter All feilds for RGB" });
             }
-            let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
             let r = req.body.r;
             let g = req.body.g;
             let b = req.body.b;
@@ -71,12 +70,12 @@ let functions ={
             }
             devices.findByIdAndUpdate(req.body.deviceid, { status: state, StartTime: Date.now() , brightness:req.body.brightness }, (err, doc) => {
                 // If error happen
-                if (err) return res.json({ success: false, msg: err.message });
-                if (!doc) return res.json({ success: false, msg: "Device Not found!" });
+                if (err) return res.status(404).json({ success: false, msg: err.message });
+                if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
                 // If the device found
             })
-            
-            let dev ={state:state, brtns: req.body.brightness, port: req.body.port, d_t: 1, r:r, g:g, b:b }
+            let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
+            let dev ={state:state, brtns: req.body.brightness, port: parseInt(req.body.port), d_t: 1, r:r, g:g, b:b }
             console.log("Device Found")
                 client.on('connect', function () {
                     console.log('connect');
@@ -84,7 +83,7 @@ let functions ={
                         if (error) {
                             console.log(error.message);
                             client.end();
-                            return res.json({ success: false, msg: error.message });
+                            return res.status(404).json({ success: false, msg: error.message });
                         }
                         else {
                             client.end();
@@ -93,7 +92,7 @@ let functions ={
                     });
                 });
         } catch (e) {
-            return res.json({
+            return res.status(404).json({
 				success: false,
 				error: e.message,
             });
