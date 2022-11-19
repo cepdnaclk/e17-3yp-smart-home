@@ -79,7 +79,7 @@ void publishMessage()
   client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
 }
 
-void rgb(unsigned r, unsigned g, unsigned b, unsigned char port)
+void rgb(unsigned r, unsigned g, unsigned b, unsigned char port, unsigned char br)
 {
   Serial.println("RGB.....");
 
@@ -90,15 +90,19 @@ void rgb(unsigned r, unsigned g, unsigned b, unsigned char port)
     Serial.println(b);
     for (unsigned char i = 0; i <= 44; i++) {
       leds_port_1[i] = CRGB ( r, g, b);
-      FastLED.show();
+      //FastLED.setBrightness(br);
+      //FastLED.show();
     }
+    FastLED.setBrightness(br);
+    FastLED.show();
   }
   else if(port == 2){
     Serial.println(port);
     for (unsigned char i = 0; i <= 44; i++) {
       leds_port_2[i] = CRGB ( r, g, b);
-      FastLED.show();
     }
+    FastLED.setBrightness(br);
+    FastLED.show();
   }
 
   
@@ -117,7 +121,8 @@ void messageHandler(String &topic, String &payload ) {
   if (d_t == 1) // 49 is the ASCI value of 1
   {
     Serial.println("RGB Call");
-    rgb(r, g, b, port);   
+    //digitalWrite(lamp, HIGH);
+    rgb(r, g, b, port, 255);   
   }
   else if (d_t == 0) // 48 is the ASCI value of 0
   {
@@ -127,32 +132,21 @@ void messageHandler(String &topic, String &payload ) {
 }
 
 
-void brightness(unsigned char br, unsigned char port){
-
-  if(port==1){
-    for (int i=NUM_LEDS; i> 44; i-- )
-    {
-      FastLED.setBrightness(10);
-      FastLED.show();
-  //        delay (250);
-  
-    }
-  }
-  else if(port==2){
-    
-  }  
-}
-
-
 void setup() {
   Serial.begin(115200);
   connectAWS();
   FastLED.addLeds<WS2812, LED_PIN_1, GRB>(leds_port_1, NUM_LEDS);
   FastLED.addLeds<WS2812, LED_PIN_2, GRB>(leds_port_2, NUM_LEDS);
+//  rgb(0,0,255,2,255);
+//  delay(3000);
+//  rgb(0,0,255,2,50);
+//  delay(3000);
 }
 
 void loop() {
   publishMessage();
   client.loop();
-  delay(300);
+
+  Serial.println("!!!");
+  
 }
