@@ -55,7 +55,6 @@ let functions ={
                     return res.json({ success: true, device: doc});
                     
                 })
-
             } else {
                 return res.json({ success: false, msg: "Enter the device_id" });
             }
@@ -82,13 +81,13 @@ let functions ={
             let g = req.body.g;
             let b = req.body.b;
             let state = 0;
-            if (req.body.state === "true") {
+            if (req.body.state === true) {
                 state = 1;
             }
             else {
                 state = 0;
             }
-            devices.findByIdAndUpdate(req.body.deviceid, { status: state, StartTime: Date.now() , brightness:req.body.brightness }, (err, doc) => {
+            devices.findByIdAndUpdate(req.body.deviceid, { status: state, StartTime: Date.now() , brightness:req.body.brightness, r:r, g:g, b:b }, (err, doc) => {
                 // If error happen
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
