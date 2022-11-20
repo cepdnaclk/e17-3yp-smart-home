@@ -186,7 +186,6 @@ let functions ={
                             });
                         });
                     })
-                    const listeners = emitter.rawListeners('log');
                 } else {
                     
                     let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"];
