@@ -193,7 +193,9 @@ let functions ={
                     if (startS & endS) {
                         startS.cancel();
                         endS.cancel();
+                        console.log('Cleared...');
                     }
+
                     
                 }
             })
