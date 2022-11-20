@@ -126,7 +126,6 @@ void messageHandler(String &topic, String &payload ) {
   }
   else if (d_t == 0) // 48 is the ASCI value of 0
   {
-    //digitalWrite(lamp, LOW);
     Serial.println("Lamp_State changed to LOW");
   }
   Serial.println();

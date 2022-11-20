@@ -43,12 +43,33 @@ let functions ={
 			});
         }
     }, 
+    deviceStatus: async function (req, res) {
+        try {
+            if (req.body.deviceid) {
+                devices.findById(req.body.deviceid, (err, doc) => {
+                    // If error happen
+                    if (err) return res.status(404).json({ success: false, msg: err.message });
+                    if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
+                    // If the device found
+
+                    return res.json({ success: true, device: doc});
+                    
+                })
+            } else {
+                return res.json({ success: false, msg: "Enter the device_id" });
+            }
+        } catch (e) {
+            
+        }
+    },
 
     rgbTurnOn: async function(req, res) 
     {
         try {
             if (
-                !req.body.color,
+                !req.body.r,
+                !req.body.g,
+                !req.body.b,
                 !req.body.brightness,
                 !req.body.port,
                 !req.body.deviceid,
@@ -56,17 +77,24 @@ let functions ={
             ) {
                 return res.json({ success: false, msg: "Enter All feilds for RGB" });
             }
-            let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-            let r = req.body.color[0];
-            let g = req.body.color[1];
-            let b = req.body.color[2];
-            devices.findByIdAndUpdate(req.body.deviceid, { status: req.body.state, StartTime: Date.now() , brightness:req.body.brightness }, (err, doc) => {
+            let r = req.body.r;
+            let g = req.body.g;
+            let b = req.body.b;
+            let state = 0;
+            if (req.body.state === true) {
+                state = 1;
+            }
+            else {
+                state = 0;
+            }
+            devices.findByIdAndUpdate(req.body.deviceid, { status: state, StartTime: Date.now() , brightness:req.body.brightness, r:r, g:g, b:b }, (err, doc) => {
                 // If error happen
-                if (err) return res.json({ success: false, msg: err.message });
-                if (!doc) return res.json({ success: false, msg: "Device Not found!" });
+                if (err) return res.status(404).json({ success: false, msg: err.message });
+                if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
                 // If the device found
-            })
-            let dev ={brtns: req.body.brightness, port: req.body.port, d_t: 1, r:r, g:g, b:b }
+            
+            let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
+            let dev ={state:state, brtns: req.body.brightness, port: parseInt(req.body.port), d_t: 1, r:r, g:g, b:b }
             console.log("Device Found")
                 client.on('connect', function () {
                     console.log('connect');
@@ -74,18 +102,20 @@ let functions ={
                         if (error) {
                             console.log(error.message);
                             client.end();
-                            return res.json({ success: false, msg: error.message });
+                            return res.status(404).json({ success: false, msg: error.message });
                         }
                         else {
                             client.end();
+                            console.log('send');
                             return res.json({ success: true, msg: "successfully Turned On!", device: dev });
                         }
                     });
                 });
+            })
         } catch (e) {
-            return res.json({
+            console.log('catch e');
+            return res.status(404).json({
 				success: false,
-				msg: 'Error on add cdevice try catch 1',
 				error: e.message,
             });
     }   

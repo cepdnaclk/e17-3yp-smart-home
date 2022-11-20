@@ -171,11 +171,6 @@ var functions = {
 	allUserofAhouse: async function (req, res, next) {
 		try{
 			if(req.body.homeid){
-			// let members = await homes.findById(req.body.homeid).select('memberids')
-			// return res.json({
-			// 	members:members,
-			// })
-
 			homes.findById(req.body.homeid).populate('adminid').exec(function (err, home){
 				if (err) return res.json({error:err.message});
 				if(!home) return res.json({success: false, msg: " Home id wrong!"})
@@ -272,7 +267,7 @@ var functions = {
 					} else {
 						req.name = authData.name;
 						req.mail = authData.mail;
-						req.password = authData.password;
+						req.userid = authData._id
 						next();
 					}
 				});
