@@ -187,10 +187,14 @@ let functions ={
                         });
                     })
                 } else {
-                    let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"]
-                    let endS = nodeSchedule.scheduledJobs[req.body.deviceid + "end"]
-                    startS.cancel()
-                    endS.cancel()
+                    console.log(nodeSchedule.scheduledJobs)
+                    let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"];
+                    let endS = nodeSchedule.scheduledJobs[req.body.deviceid + "end"];
+                    if (startS & endS) {
+                        startS.cancel();
+                        endS.cancel();
+                    }
+                    
                 }
             })
             return res.status(200).json({ success: true, msg: "Schedule Successfully!" });
