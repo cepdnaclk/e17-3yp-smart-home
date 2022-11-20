@@ -145,7 +145,8 @@ let functions ={
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                 
                 if (state) {
-                    nodeSchedule.scheduleJob(`* ${StartTime.getMinutes} ${StartTime.getHours} * * *`, () => {
+                    console.log(StartTime.getMinutes(),StartTime.getHours());
+                    nodeSchedule.scheduleJob(`* ${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
                         client.on('connect', function () {
                             console.log('connect');
                             client.publish('esp32/sub', JSON.stringify({state:true}), (error) => {
@@ -162,7 +163,8 @@ let functions ={
                             });
                         });
                     })
-                    nodeSchedule.scheduleJob(`* ${EndTime.getMinutes} ${EndTime.getHours} * * *`, () => {
+                    console.log(EndTime.getMinutes(), EndTime.getHours());
+                    nodeSchedule.scheduleJob(`* ${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
                         client.on('connect', function () {
                             console.log('connect');
                             client.publish('esp32/sub', JSON.stringify({state:false}), (error) => {
