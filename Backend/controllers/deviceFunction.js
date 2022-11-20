@@ -186,6 +186,7 @@ let functions ={
                             });
                         });
                     })
+                    const listeners = emitter.rawListeners('log');
                 } else {
                     
                     let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"];
@@ -206,51 +207,51 @@ let functions ={
         }
     },
     // For testing the publishing
-    testPub: async function (req, res) {
-        try {
-            console.log(req.body.name, req.body.topic);
-            let topic = req.body.topic
-            let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-            client.on('connect', ()=> {
-                console.log('connect');
-                client.publish(topic, JSON.stringify({ devicename: 1 }),
-                    (error) => { 
-                        if (error) {
-                            console.log(error)
-                            client.end();
-                            return res.json({ success: false, msg: "Error in publishing" });
-                        } else {
-                            client.end();
-                            return res.json({ success: true, msg: "Msg published successfully" });
-                        }
-                    });
-            });
-        } catch (e) {
-            console.log(`Error catched in testPub ${e.message}`)
-            return res.json({
-				success: false,
-				msg: 'Error on testPub try catch',
-				error: err.message,
-            });
-        }
-    },
-    // For testing subcribtion
-    testsub: async function (req, res) {
-        try {
-            let topic = req.body.topic;
-            let client = mqtt.connect("mqtt://127.0.0.1:1883", options);``
-            client.on('connect', () => {
-                console.log('Connected')
-            client.subscribe([topic])
-            client.on('message', function (topic, message) {
-            console.log(message.toString());
-            })
-    })
-        } catch (e) {
-            console.log(e.message);
-            return res.json({success:false, msg: e.message})
-        }
-    },
+    // testPub: async function (req, res) {
+    //     try {
+    //         console.log(req.body.name, req.body.topic);
+    //         let topic = req.body.topic
+    //         let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
+    //         client.on('connect', ()=> {
+    //             console.log('connect');
+    //             client.publish(topic, JSON.stringify({ devicename: 1 }),
+    //                 (error) => { 
+    //                     if (error) {
+    //                         console.log(error)
+    //                         client.end();
+    //                         return res.json({ success: false, msg: "Error in publishing" });
+    //                     } else {
+    //                         client.end();
+    //                         return res.json({ success: true, msg: "Msg published successfully" });
+    //                     }
+    //                 });
+    //         });
+    //     } catch (e) {
+    //         console.log(`Error catched in testPub ${e.message}`)
+    //         return res.json({
+	// 			success: false,
+	// 			msg: 'Error on testPub try catch',
+	// 			error: err.message,
+    //         });
+    //     }
+    // },
+    // // For testing subcribtion
+    // testsub: async function (req, res) {
+    //     try {
+    //         let topic = req.body.topic;
+    //         let client = mqtt.connect("mqtt://127.0.0.1:1883", options);``
+    //         client.on('connect', () => {
+    //             console.log('Connected')
+    //         client.subscribe([topic])
+    //         client.on('message', function (topic, message) {
+    //         console.log(message.toString());
+    //         })
+    // })
+    //     } catch (e) {
+    //         console.log(e.message);
+    //         return res.json({success:false, msg: e.message})
+    //     }
+    // },
 
 
 }
