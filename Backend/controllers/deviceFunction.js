@@ -29,7 +29,7 @@ let functions ={
                     console.log('connect');
                     let plug = { port: req.body.port, state: state, d_t: 2 }; //d_t --> Device type plug-->2
                     
-                    client.publish('esp32/sub/', JSON.stringify(plug), (error) => {
+                    client.publish('esp32/sub', JSON.stringify(plug), (error) => {
                         if (!error) {
                             client.end();
                             return res.json({success:true, msg: "successfully state Changed!", device:plug })
