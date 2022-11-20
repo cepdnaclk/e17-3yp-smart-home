@@ -187,7 +187,7 @@ let functions ={
                         });
                     })
                 } else {
-                    console.log(nodeSchedule.scheduledJobs)
+                    console.log(nodeSchedule.scheduledJobs[req.body.deviceid + "start"])
                     let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"];
                     let endS = nodeSchedule.scheduledJobs[req.body.deviceid + "end"];
                     if (startS & endS) {
