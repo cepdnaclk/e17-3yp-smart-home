@@ -189,8 +189,8 @@ let functions ={
                 } else {
                     let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"]
                     let endS = nodeSchedule.scheduledJobs[req.body.deviceid + "end"]
-                    startS.cancelJob()
-                    endS.cancelJob()
+                    startS.cancel()
+                    endS.cancel()
                 }
             })
             return res.status(200).json({ success: true, msg: "Schedule Successfully!" });
