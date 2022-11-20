@@ -24,13 +24,15 @@ let functions ={
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                 client.on('connect', function () {
                     console.log('connect');
-                    let plug = { port: req.body.port, state: req.body.state, d_t: 2 }; //d_t --> Device type plug-->2
+                    let plug = { port: req.body.port, state: state, d_t: 2 }; //d_t --> Device type plug-->2
                     
                     client.publish('esp32/sub/', JSON.stringify(plug), (error) => {
                         if (!error) {
-                            return res.json({success:true, msg: "successfully state Changed!", device: doc})
+                            client.end();
+                            return res.json({success:true, msg: "successfully state Changed!", device:plug })
                         }
                         else {
+                            client.end();
                             return res.json({ success: false, msg: error.message });
                         }
                     });
