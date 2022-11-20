@@ -167,7 +167,7 @@ void messageHandler(String &topic, String &payload ) {
 
 
 void setup() {
-  Serial.begin(115200);
+  Serial.begin(9600);
   connectAWS();
 
   //RGB
