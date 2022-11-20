@@ -7,6 +7,8 @@ const options = {
     clientId,
 }
 
+process.env.TZ = "Asia/Calcutta";
+
 let functions ={
     plugTurnOn: async function(req, res){
         try {
