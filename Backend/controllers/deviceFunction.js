@@ -56,6 +56,7 @@ let functions ={
                     if (err) return res.status(404).json({ success: false, msg: err.message });
                     if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
                     // If the device found
+                    console.log("test")
                     return res.json({ success: true, device: doc});
                     
                 })
