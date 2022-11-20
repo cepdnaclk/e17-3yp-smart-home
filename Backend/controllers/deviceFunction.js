@@ -18,13 +18,14 @@ let functions ={
             return res.json({ success: false, msg: "Enter All feilds for Smart Plugd" });
             }
             console.log(req.body.state);
-            var state = (req.body.state === 'true');
-            await devices.findByIdAndUpdate(req.body.deviceid, {status: state}, (err, doc)=>{
+            let state = (req.body.state == 'true');
+            devices.findByIdAndUpdate(req.body.deviceid, {status: state}, (err, doc)=>{
                 if (err) return res.json({ success: false, msg: err.message })
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                 client.on('connect', function () {
                     console.log('connect');
                     let plug = { port: req.body.port, state: req.body.state, d_t: 2 }; //d_t --> Device type plug-->2
+                    
                     client.publish('esp32/sub/', JSON.stringify(plug), (error) => {
                         if (!error) {
                             return res.json({success:true, msg: "successfully state Changed!", device: doc})
@@ -80,8 +81,7 @@ let functions ={
             let r = req.body.r;
             let g = req.body.g;
             let b = req.body.b;
-            let state = 0;
-
+            let state = (req.body.state == "true")
             devices.findByIdAndUpdate(req.body.deviceid, { status: req.body.state, StartTime: Date.now() , brightness:req.body.brightness, r:r, g:g, b:b }, (err, doc) => {
                 // If error happen
                 if (err) return res.status(404).json({ success: false, msg: err.message });
