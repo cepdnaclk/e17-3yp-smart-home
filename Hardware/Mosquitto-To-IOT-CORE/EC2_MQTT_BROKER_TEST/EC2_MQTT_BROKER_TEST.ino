@@ -103,7 +103,6 @@ void rgb(unsigned r, unsigned g, unsigned b, unsigned char port, unsigned char b
     FastLED.setBrightness(br);
     FastLED.show();
   }
-
   
 }
 
@@ -113,16 +112,18 @@ void messageHandler(String &topic, String &payload ) {
   deserializeJson(doc, payload);
   unsigned char d_t = doc["d_t"];  //RGB 1 // plug 2 // normal 3 //fan 4  //device type
   unsigned char port = doc["port"];
-  
-  
+  bool state = doc["state"];
 
+  
 //  Serial.println(doc);
+    Serial.println(d_t);
+    Serial.println(port);
+    Serial.println(state);
   
   if (d_t == 1) // 49 is the ASCI value of 1
   {
-    Serial.println("RGB Call");
+    Serial.println("1. RGB Call");
     
-    bool state = doc["state"];
     unsigned char brtns = doc["brtns"];
     unsigned char r  = doc["r"];
     unsigned char g  = doc["g"];
@@ -132,36 +133,59 @@ void messageHandler(String &topic, String &payload ) {
     Serial.println(r);
     Serial.println(g);
     Serial.println(b);
-    
 
-    if(state)
+    if(state==1)
       rgb(r, g, b, port, brtns);  
     else
       rgb(0,0,0,port,0); 
   }
-  else if (d_t == 0) // 48 is the ASCI value of 0
+  else if (d_t == 2) // 48 is the ASCI value of 0
   {
-    Serial.println("Lamp_State changed to LOW");
+    Serial.println("2. Smart Plug/White Light call...");
+
+    if(port==3){
+      Serial.println("port 3: ");
+      if(state==1){
+        Serial.print("12 high");
+        digitalWrite(12, HIGH); 
+      }else{
+        digitalWrite(12, LOW);
+        Serial.print("12 low");
+      }
+    }
+    if(port==4){
+      Serial.println("port 4: ");
+      if(state==1)
+        digitalWrite(14, HIGH); 
+      else
+        digitalWrite(14, LOW);
+    }
+    
   }
-  Serial.println();
+
 }
 
 
 void setup() {
   Serial.begin(115200);
   connectAWS();
+
+  //RGB
   FastLED.addLeds<WS2812, LED_PIN_1, GRB>(leds_port_1, NUM_LEDS);
   FastLED.addLeds<WS2812, LED_PIN_2, GRB>(leds_port_2, NUM_LEDS);
-//  rgb(0,0,255,2,255);
-//  delay(3000);
-//  rgb(0,0,255,2,50);
-//  delay(3000);
+  rgb(0,0,0,1,0);
+  rgb(0,0,0,2,0);
+
+  //SMART PLUG
+  pinMode(12, OUTPUT);
+
+  //WHITE BULB
+  pinMode(14, OUTPUT);
+  
 }
 
 void loop() {
   publishMessage();
   client.loop();
-
-  //Serial.println("!!!");
   
 }
