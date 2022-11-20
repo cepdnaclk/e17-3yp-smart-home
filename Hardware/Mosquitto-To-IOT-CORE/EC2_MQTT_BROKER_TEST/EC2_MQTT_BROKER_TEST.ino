@@ -24,7 +24,6 @@ CRGB leds_port_2[NUM_LEDS];
 
 
 
-
 WiFiClientSecure net = WiFiClientSecure();
 MQTTClient client = MQTTClient(256);
 
@@ -114,15 +113,31 @@ void messageHandler(String &topic, String &payload ) {
   deserializeJson(doc, payload);
   unsigned char d_t = doc["d_t"];  //RGB 1 // plug 2 // normal 3 //fan 4  //device type
   unsigned char port = doc["port"];
-  unsigned char r  = doc["r"];
-  unsigned char g  = doc["g"];
-  unsigned char b  = doc["b"];
+  
+  
+
+//  Serial.println(doc);
   
   if (d_t == 1) // 49 is the ASCI value of 1
   {
     Serial.println("RGB Call");
-    //digitalWrite(lamp, HIGH);
-    rgb(r, g, b, port, 255);   
+    
+    bool state = doc["state"];
+    unsigned char brtns = doc["brtns"];
+    unsigned char r  = doc["r"];
+    unsigned char g  = doc["g"];
+    unsigned char b  = doc["b"];
+    Serial.println(state);
+    Serial.println(brtns);
+    Serial.println(r);
+    Serial.println(g);
+    Serial.println(b);
+    
+
+    if(state)
+      rgb(r, g, b, port, brtns);  
+    else
+      rgb(0,0,0,port,0); 
   }
   else if (d_t == 0) // 48 is the ASCI value of 0
   {
@@ -147,6 +162,6 @@ void loop() {
   publishMessage();
   client.loop();
 
-  Serial.println("!!!");
+  //Serial.println("!!!");
   
 }
