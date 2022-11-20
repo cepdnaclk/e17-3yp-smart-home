@@ -191,11 +191,9 @@ let functions ={
                     let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"];
                     let endS = nodeSchedule.scheduledJobs[req.body.deviceid + "end"];
                     console.log(startS, endS)
-                    if (startS | endS) {
                         startS.cancel();
                         endS.cancel();
                         console.log('Cleared...');
-                    }
 
                     
                 }
