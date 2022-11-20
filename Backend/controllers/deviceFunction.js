@@ -18,7 +18,8 @@ let functions ={
             return res.json({ success: false, msg: "Enter All feilds for Smart Plugd" });
             }
             console.log(req.body.state);
-            await devices.findByIdAndUpdate(req.body.deviceid, {status: req.body.state}, (err, doc)=>{
+            var state = (req.body.state === 'true');
+            await devices.findByIdAndUpdate(req.body.deviceid, {status: state}, (err, doc)=>{
                 if (err) return res.json({ success: false, msg: err.message })
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                 client.on('connect', function () {
