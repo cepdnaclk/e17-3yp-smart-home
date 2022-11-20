@@ -23,7 +23,8 @@ router.post('/api/devices/turnOn', userControl.verifyToken, deviceFunction.plugT
 // Turn on the rgb light
 router.post('/api/devices/rgb', userControl.verifyToken, deviceFunction.rgbTurnOn);
 
-
+// Shedule the Device
+router.post('/api/devices/schedule',userControl.verifyToken, deviceFunction.scheduleDevice )
 
 // MQtt publish test
 router.post('/api/devices/testPub', deviceFunction.testPub);

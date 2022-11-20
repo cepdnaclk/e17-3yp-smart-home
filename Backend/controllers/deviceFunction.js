@@ -1,4 +1,5 @@
 let devices = require('../models/devices')
+const nodeSchedule = require('node-schedule')
 
 let mqtt = require('mqtt');
 const clientId = "digitalHut"
@@ -109,6 +110,7 @@ let functions ={
                     });
                 });
             })
+            return res.json({ success: true, msg: "Schedule Successfully! "});
         } catch (e) {
             console.log('catch e');
             return res.status(404).json({
@@ -131,7 +133,41 @@ let functions ={
             devices.findByIdAndUpdate(req.body.deviceid, { schedule: req.body.schedulestate, StartTime: req.body.StartTime, EndTime: req.body.EndTime }, (err, doc) => {
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
-                
+                let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
+                nodeSchedule.scheduleJob(StartTime, () => {
+                    client.on('connect', function () {
+                        console.log('connect');
+                        client.publish('esp32/sub', JSON.stringify({state:true}), (error) => {
+                            if (error) {
+                                console.log(error.message);
+                                client.end();
+                                return res.status(404).json({ success: false, msg: error.message });
+                            }
+                            else {
+                                client.end();
+                                console.log('send');
+                                return res.json({ success: true, msg: "successfully Turned On!", device: doc });
+                            }
+                        });
+                    });
+                })
+                nodeSchedule.scheduleJob(EndTime, () => {
+                    client.on('connect', function () {
+                        console.log('connect');
+                        client.publish('esp32/sub', JSON.stringify({state:false}), (error) => {
+                            if (error) {
+                                console.log(error.message);
+                                client.end();
+                                return res.status(404).json({ success: false, msg: error.message });
+                            }
+                            else {
+                                client.end();
+                                console.log('send');
+                                return res.json({ success: true, msg: "successfully Turned On!", device: doc });
+                            }
+                        });
+                    });
+                })
             })
         } catch (e) {
             console.log(e.message);
