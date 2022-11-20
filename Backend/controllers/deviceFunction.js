@@ -131,7 +131,8 @@ let functions ={
                 !req.body.deviceid,
                 !req.body.port,
                 !req.body.StartTime,
-                !req.body.EndTime
+                !req.body.EndTime,
+                !req.body.d_t
             ) {
                 return res.json({ success: false, msg: "Enter All the  feilds for scheule" });
             }
@@ -149,7 +150,7 @@ let functions ={
                     nodeSchedule.scheduleJob(`* ${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
                         client.on('connect', function () {
                             console.log('connect');
-                            client.publish('esp32/sub', JSON.stringify({state:true}), (error) => {
+                            client.publish('esp32/sub', JSON.stringify({state:true, port:req.body.port, d_t:d_t}), (error) => {
                                 if (error) {
                                     console.log(error.message);
                                     client.end();
@@ -167,7 +168,7 @@ let functions ={
                     nodeSchedule.scheduleJob(`* ${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
                         client.on('connect', function () {
                             console.log('connect');
-                            client.publish('esp32/sub', JSON.stringify({state:false}), (error) => {
+                            client.publish('esp32/sub', JSON.stringify({state:false, port:req.body.port, d_t:d_t }), (error) => {
                                 if (error) {
                                     console.log(error.message);
                                     client.end();
