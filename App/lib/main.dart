@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:untitled/Screens/Welcome/welcome_screen.dart';
 
+import 'Screens/TypeOfDevices/rgb_light.dart';
+import 'Screens/TypeOfDevices/white_light.dart';
+
 void main() {
   runApp(MyApp());
 }

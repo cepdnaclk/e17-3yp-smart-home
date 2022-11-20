@@ -1,13 +1,34 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class WhiteLight extends StatefulWidget {
-  const WhiteLight({Key? key}) : super(key: key);
+  final String homeId;
+  final String roomId;
+  final String deviceid;
+  final String port;
+  const WhiteLight({
+    Key? key,
+    required this.homeId,
+    required this.roomId,
+    required this.deviceid,
+    required this.port,
+  }) : super(key: key);
 
   @override
-  _WhiteLightState createState() => _WhiteLightState();
+  _WhiteLightState createState() =>
+      _WhiteLightState(homeId, roomId, deviceid, port);
 }
 
 class _WhiteLightState extends State<WhiteLight> {
+  String homeId;
+  String roomId;
+  String deviceid;
+  String port;
+  _WhiteLightState(this.homeId, this.roomId, this.deviceid, this.port);
+
+
   String _lightName = 'Bed Room';
   String _roomName = 'Bed Room';
   bool _lightIsOn = false;
@@ -15,6 +36,132 @@ class _WhiteLightState extends State<WhiteLight> {
 
   TimeOfDay _time = TimeOfDay(hour: 7, minute: 00);
   TimeOfDay _endTime = TimeOfDay(hour: 8, minute: 00);
+
+
+  //send Data
+  void sendData() async {
+    try {
+      print("1\n");
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      userid = prefs.getString('userid');
+      print(token);
+      tokensend = token.toString();
+
+      //final queryParameters = {'userid': '$userid'};
+
+      final response =
+          await http.post(Uri.parse('http://$publicIP:$PORT/api/devices/...'),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+                "Authorization": "Bearer $token"
+              },
+              body: jsonEncode(
+                <String, String>{
+                  //'_id': homeId,
+                  '_id': roomId,
+                },
+              ));
+
+      print(response.statusCode);
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> resp = json.decode(response.body);
+
+        //print(resp["numberOfhomes"]);
+        //data = resp["rooms"];
+        //NoOfRooms = resp["numberOfrooms"];
+
+        setState(() {
+        });
+      } else if (response.statusCode == 403) {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      }
+    } on Exception catch (e) {
+      print("exep");
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+//get data
+  void getData() async {
+    try {
+      print("1\n");
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      userid = prefs.getString('userid');
+      print(token);
+      tokensend = token.toString();
+
+      final response =
+          await http.post(Uri.parse('http://$publicIP:$PORT/api/devices/status'),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+                "Authorization": "Bearer $token"
+              },
+              body: jsonEncode(
+                <String, String>{
+                  'deviceid': deviceid,
+                },
+              ));
+
+      print(response.statusCode);
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> resp = json.decode(response.body);
+
+        //print(resp["numberOfhomes"]);
+        //data = resp["rooms"];
+        //NoOfRooms = resp["numberOfrooms"];
+
+        setState(() {
+        });
+      } else if (response.statusCode == 403) {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      }
+    } on Exception catch (e) {
+      print("exep");
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
 
   void _selectTime() async {
     final TimeOfDay? newTime = await showTimePicker(
@@ -42,7 +189,6 @@ class _WhiteLightState extends State<WhiteLight> {
     }
   }
 
-  RangeValues _currentRangeValues = RangeValues(40, 80);
   double _rating = 0;
 
   @override
@@ -152,7 +298,8 @@ class _WhiteLightState extends State<WhiteLight> {
                                   },
                                 );
                               },
-                              //divisions: 10,
+                              label: _rating.round().toString(),
+                              divisions: 5,
                               min: 0,
                               max: 100,
                             ),
