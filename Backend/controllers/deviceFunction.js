@@ -187,10 +187,10 @@ let functions ={
                         });
                     })
                 } else {
-                    console.log(nodeSchedule.scheduledJobs[req.body.deviceid + "start"])
+                    console.log(nodeSchedule.scheduledJobs[req.body.deviceid + "end"])
                     let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"];
                     let endS = nodeSchedule.scheduledJobs[req.body.deviceid + "end"];
-                    if (startS & endS) {
+                    if (startS | endS) {
                         startS.cancel();
                         endS.cancel();
                         console.log('Cleared...');
