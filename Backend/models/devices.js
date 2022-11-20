@@ -1,6 +1,26 @@
 var mongoose = require('mongoose');
 var schema = mongoose.Schema;
 
+
+let Energy = new schema({
+	current_level: {
+		type: Number,
+		default: 0,
+	},
+	today_level: {
+		type: Number,
+		default: 0,
+	},
+	monthly_level: {
+		type: Number,
+		default: 0,
+	},
+	allTime: {
+		type: Number,
+		default: 0,
+	}
+})
+
 let deviceSchema = new schema({
 	devicename: {
 		type: String,
@@ -11,12 +31,13 @@ let deviceSchema = new schema({
 		type: String,
 		require: true,
 	},
-	Energy: {
-		type: Number,
+	energy: {
+		type: schema.Types.ObjectId,
+		ref: 'energy'
 	},
 	status: {
-		type: Number,
-		default: 0,
+		type: Boolean,
+		default: false,
 	},
 	cdeviceid:{
 		type: String,
@@ -61,9 +82,9 @@ let deviceSchema = new schema({
 	},
 
 	Schedule:{
-		type: Date
-		
+		type: Boolean,
+		default: false
 	}
 });
-
+module.exports = mongoose.model('energy', Energy);
 module.exports = mongoose.model('devices', deviceSchema);

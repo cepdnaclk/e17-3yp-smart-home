@@ -31,7 +31,6 @@ var functions = {
 												//if the passwords are matched
 												if (!err && isMatch) {
 													var newcDevice = cdevice({
-														
 														password : req.body.password,
 														cdeviceNumber : req.body.cdeviceNumber,
 														homeid: req.body.homeid

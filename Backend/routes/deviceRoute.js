@@ -20,11 +20,17 @@ router.post('/api/devices/status', userControl.verifyToken, deviceFunction.devic
 //Turn on A device
 router.post('/api/devices/turnOn', userControl.verifyToken, deviceFunction.plugTurnOn)
 
+// Turn on the rgb light
 router.post('/api/devices/rgb', userControl.verifyToken, deviceFunction.rgbTurnOn);
+
+
 
 // MQtt publish test
 router.post('/api/devices/testPub', deviceFunction.testPub);
-module.exports = router
-
 // MQTT subscribe test
 router.post('/api/devices/testsub', deviceFunction.testsub)
+
+
+
+
+module.exports = router

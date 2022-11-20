@@ -1,9 +1,7 @@
-let homes = require('../models/homes')
 let devices = require('../models/devices')
-let rooms = require('../models/rooms')
 
 let mqtt = require('mqtt');
-const clientId = "digitalHut_smartBulb"
+const clientId = "digitalHut"
 const options = {
     clientId,
 }
@@ -17,14 +15,15 @@ let functions ={
             !req.body.state
             )
         {
-            return res.json({ success: false, msg: "Enter All feilds for Smart Plugd]" });
+            return res.json({ success: false, msg: "Enter All feilds for Smart Plugd" });
         }
-            devices.findByIdAndUpdate(req.body.deviceid, {status: state, StartTime:Date.now()}, (err, doc)=>{
+            devices.findByIdAndUpdate(req.body.deviceid, {status: req.body.state, StartTime:Date.now()}, (err, doc)=>{
                 if (err) return res.json({ success: false, msg: err.message })
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                 client.on('connect', function () {
                     console.log('connect');
-                    client.publish('esp32/sub/', JSON.stringify({ port: req.body.port, deviceid: req.body.deviceid, state: state }), (error) => {
+                    let plug = { port: req.body.port, state: req.body.state, d_t: 2 }; //d_t --> Device type plug-->2
+                    client.publish('esp32/sub/', JSON.stringify(plug), (error) => {
                         if (!error) {
                             return res.json({success:true, msg: "successfully state Changed!", device: doc})
                         }
@@ -38,7 +37,7 @@ let functions ={
         }catch(err){
             return res.json({
 				success: false,
-				msg: 'Error on add cdevice try catch',
+				msg: 'Error on turnOn try catch',
 				error: err.message,
 			});
         }
@@ -51,7 +50,6 @@ let functions ={
                     if (err) return res.status(404).json({ success: false, msg: err.message });
                     if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
                     // If the device found
-
                     return res.json({ success: true, device: doc});
                     
                 })
@@ -81,13 +79,8 @@ let functions ={
             let g = req.body.g;
             let b = req.body.b;
             let state = 0;
-            if (req.body.state === true) {
-                state = 1;
-            }
-            else {
-                state = 0;
-            }
-            devices.findByIdAndUpdate(req.body.deviceid, { status: state, StartTime: Date.now() , brightness:req.body.brightness, r:r, g:g, b:b }, (err, doc) => {
+
+            devices.findByIdAndUpdate(req.body.deviceid, { status: req.body.state, StartTime: Date.now() , brightness:req.body.brightness, r:r, g:g, b:b }, (err, doc) => {
                 // If error happen
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
@@ -120,7 +113,27 @@ let functions ={
             });
     }   
     },
-
+        // Schuduling the Devices in the applications
+    scheduleDevice : async function (req, res) {
+        try {
+            if (!req.body.schedulestate,
+                !req.body.deviceid,
+                !req.body.port,
+                !req.body.StartTime,
+                !req.body.EndTime
+            ) {
+                return res.json({ success: false, msg: "Enter All the  feilds for scheule" });
+            }
+            devices.findByIdAndUpdate(req.body.deviceid, { schedule: req.body.schedulestate, StartTime: req.body.StartTime, EndTime: req.body.EndTime }, (err, doc) => {
+                if (err) return res.status(404).json({ success: false, msg: err.message });
+                if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
+                
+            })
+        } catch (e) {
+            console.log(e.message);
+            return res.json({success:false, msg: e.message})
+        }
+    },
     // For testing the publishing
     testPub: async function (req, res) {
         try {
@@ -166,7 +179,8 @@ let functions ={
             console.log(e.message);
             return res.json({success:false, msg: e.message})
         }
-    }
+    },
+
 
 }
 
