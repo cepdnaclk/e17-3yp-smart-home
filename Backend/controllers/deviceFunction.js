@@ -134,46 +134,50 @@ let functions ={
                 return res.json({ success: false, msg: "Enter All the  feilds for scheule" });
             }
             console.log(req.body.StartTime, req.body.EndTime);
-            
-            devices.findByIdAndUpdate(req.body.deviceid, { schedule: req.body.schedulestate, StartTime: StartTime.getTime(), EndTime: EndTime.getTime() }, (err, doc) => {
+            let state = (req.body.schedulestate == "true");
+            devices.findByIdAndUpdate(req.body.deviceid, { schedule: req.body.state, StartTime: req.body.StartTime, EndTime: req.body.EndTime }, (err, doc) => {
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                 
-                nodeSchedule.scheduleJob(`* ${StartTime.split(":")[0]} ${StartTime.split(":")[1]} * * *`, () => {
-                    client.on('connect', function () {
-                        console.log('connect');
-                        client.publish('esp32/sub', JSON.stringify({state:true}), (error) => {
-                            if (error) {
-                                console.log(error.message);
-                                client.end();
-                                // return res.status(404).json({ success: false, msg: error.message });
-                            }
-                            else {
-                                client.end();
-                                console.log('send');
-                                // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
-                            }
+                if (state) {
+                    nodeSchedule.scheduleJob(`* ${StartTime.split(":")[0]} ${StartTime.split(":")[1]} * * *`, () => {
+                        client.on('connect', function () {
+                            console.log('connect');
+                            client.publish('esp32/sub', JSON.stringify({state:true}), (error) => {
+                                if (error) {
+                                    console.log(error.message);
+                                    client.end();
+                                    // return res.status(404).json({ success: false, msg: error.message });
+                                }
+                                else {
+                                    client.end();
+                                    console.log('send');
+                                    // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
+                                }
+                            });
                         });
-                    });
-                })
-                nodeSchedule.scheduleJob(`* ${EndTime.getMinutes} ${EndTime.getHours} * * *`, () => {
-                    client.on('connect', function () {
-                        console.log('connect');
-                        client.publish('esp32/sub', JSON.stringify({state:false}), (error) => {
-                            if (error) {
-                                console.log(error.message);
-                                client.end();
-                                // return res.status(404).json({ success: false, msg: error.message });
-                            }
-                            else {
-                                client.end();
-                                console.log('send');
-                                // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
-                            }
+                    })
+                    nodeSchedule.scheduleJob(`* ${EndTime.getMinutes} ${EndTime.getHours} * * *`, () => {
+                        client.on('connect', function () {
+                            console.log('connect');
+                            client.publish('esp32/sub', JSON.stringify({state:false}), (error) => {
+                                if (error) {
+                                    console.log(error.message);
+                                    client.end();
+                                    // return res.status(404).json({ success: false, msg: error.message });
+                                }
+                                else {
+                                    client.end();
+                                    console.log('send');
+                                    // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
+                                }
+                            });
                         });
-                    });
-                })
+                    })
+                }
+                
+                
 
             })
             return res.status(200).json({ success: true, msg: "Schedule Successfully!" });
