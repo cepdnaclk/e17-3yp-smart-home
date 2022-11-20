@@ -131,14 +131,13 @@ let functions ={
                 return res.json({ success: false, msg: "Enter All the  feilds for scheule" });
             }
             console.log(req.body.StartTime, req.body.EndTime);
-            let StartTime = new Date(req.body.StartTime);
-            let EndTime = new Date(req.body.EndTime);
-
-            devices.findByIdAndUpdate(req.body.deviceid, { schedule: req.body.schedulestate, StartTime: StartTime, EndTime: EndTime }, (err, doc) => {
+            
+            devices.findByIdAndUpdate(req.body.deviceid, { schedule: req.body.schedulestate, StartTime: StartTime.getTime(), EndTime: EndTime.getTime() }, (err, doc) => {
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-                nodeSchedule.scheduleJob(StartTime, () => {
+                
+                nodeSchedule.scheduleJob(`* ${StartTime.split(":")[0]} ${StartTime.split(":")[1]} * * *`, () => {
                     client.on('connect', function () {
                         console.log('connect');
                         client.publish('esp32/sub', JSON.stringify({state:true}), (error) => {
@@ -155,7 +154,7 @@ let functions ={
                         });
                     });
                 })
-                nodeSchedule.scheduleJob(EndTime, () => {
+                nodeSchedule.scheduleJob(`* ${EndTime.getMinutes} ${EndTime.getHours} * * *`, () => {
                     client.on('connect', function () {
                         console.log('connect');
                         client.publish('esp32/sub', JSON.stringify({state:false}), (error) => {
