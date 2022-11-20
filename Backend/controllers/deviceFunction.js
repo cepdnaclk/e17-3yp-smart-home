@@ -153,7 +153,7 @@ let functions ={
                     console.log(StartTime.getMinutes(), StartTime.getHours());
                     nodeSchedule.scheduleJob(req.body.deviceid + "start",`* ${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
                         client.on('connect', function () {
-                            console.log('connect');
+                            console.log('Start Schedule');
                             client.publish('esp32/sub', JSON.stringify({state:true, port:req.body.port, d_t:req.body.d_t}), (error) => {
                                 if (error) {
                                     console.log(error.message);
@@ -171,7 +171,7 @@ let functions ={
                     console.log(EndTime.getMinutes(), EndTime.getHours());
                     nodeSchedule.scheduleJob(req.body.deviceid + "end",`* ${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
                         client.on('connect', function () {
-                            console.log('connect');
+                            console.log('End Schedule');
                             client.publish('esp32/sub', JSON.stringify({state:false, port:req.body.port, d_t:req.body.d_t }), (error) => {
                                 if (error) {
                                     console.log(error.message);
