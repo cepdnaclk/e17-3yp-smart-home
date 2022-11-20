@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -11,18 +10,26 @@ import '../../constants.dart';
 class SmartPlug extends StatefulWidget {
   final String homeId;
   final String roomId;
+  final String deviceid;
+  final String port;
 
-  const SmartPlug({Key? key, required this.homeId, required this.roomId})
+  const SmartPlug({Key? key, required this.homeId,
+    required this.roomId,
+    required this.deviceid,
+    required this.port,})
       : super(key: key);
 
   @override
-  _SmartPlugState createState() => _SmartPlugState(this.homeId, this.roomId);
+  // ignore: no_logic_in_create_state
+  _SmartPlugState createState() => _SmartPlugState(homeId, roomId, deviceid, port);
 }
 
 class _SmartPlugState extends State<SmartPlug> {
   String homeId;
   String roomId;
-  _SmartPlugState(this.homeId, this.roomId);
+  String deviceid;
+  String port;
+  _SmartPlugState(this.homeId, this.roomId, this.deviceid, this.port);
 
   String _plugName = 'Plug 1';
   String _roomName = 'Bed Room';
@@ -30,8 +37,10 @@ class _SmartPlugState extends State<SmartPlug> {
   bool _scheduleIsOn = false;
   String? userid;
   String? tokensend;
+  String _power = '5';
+  //String _powerStr = '';
 
-  TimeOfDay _time = TimeOfDay(hour: 7, minute: 15);
+  TimeOfDay _startTime = TimeOfDay(hour: 7, minute: 15);
   TimeOfDay _endTime = TimeOfDay(hour: 7, minute: 15);
 
   @override
@@ -54,8 +63,8 @@ class _SmartPlugState extends State<SmartPlug> {
   //Rooms List
   List data = [];
 
-  //get Data
-  void getData() async {
+  //send Data
+  void sendData() async {
     try {
       print("1\n");
 
@@ -68,7 +77,7 @@ class _SmartPlugState extends State<SmartPlug> {
       //final queryParameters = {'userid': '$userid'};
 
       final response =
-          await http.post(Uri.parse('http://$publicIP:$PORT/api/home/allrooms'),
+          await http.post(Uri.parse('http://$publicIP:$PORT/api/devices/...'),
               headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8',
                 "Authorization": "Bearer $token"
@@ -76,30 +85,21 @@ class _SmartPlugState extends State<SmartPlug> {
               body: jsonEncode(
                 <String, String>{
                   //'_id': homeId,
+                  '_id': roomId,
                 },
               ));
 
       print(response.statusCode);
       print(response.body);
-      //print(widget.noOfRooms);
-
-      int NoOfRooms;
 
       if (response.statusCode == 200) {
         Map<String, dynamic> resp = json.decode(response.body);
 
         //print(resp["numberOfhomes"]);
-        data = resp["rooms"];
-        NoOfRooms = resp["numberOfrooms"];
-
-        //print(NoOfRooms);
+        //data = resp["rooms"];
+        //NoOfRooms = resp["numberOfrooms"];
 
         setState(() {
-          // if (NoOfRooms == 0) {
-          //   page = startpage();
-          // } else {
-          //   page = HomesMainPage(homeList);
-          // }
         });
       } else if (response.statusCode == 403) {
         Fluttertoast.showToast(
@@ -126,15 +126,76 @@ class _SmartPlugState extends State<SmartPlug> {
     }
   }
 
+//get data
+  void getData() async {
+    try {
+      print("1\n");
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      userid = prefs.getString('userid');
+      print(token);
+      tokensend = token.toString();
+
+      final response =
+          await http.post(Uri.parse('http://$publicIP:$PORT/api/devices/status'),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+                "Authorization": "Bearer $token"
+              },
+              body: jsonEncode(
+                <String, String>{
+                  'deviceid': deviceid,
+                },
+              ));
+
+      print(response.statusCode);
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> resp = json.decode(response.body);
+
+        //print(resp["numberOfhomes"]);
+        //data = resp["rooms"];
+        //NoOfRooms = resp["numberOfrooms"];
+
+        setState(() {
+        });
+      } else if (response.statusCode == 403) {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      }
+    } on Exception catch (e) {
+      print("exep");
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+
   void _selectTime() async {
     final TimeOfDay? newTime = await showTimePicker(
       context: context,
-      initialTime: _time,
+      initialTime: _startTime,
       initialEntryMode: TimePickerEntryMode.input,
     );
     if (newTime != null) {
       setState(() {
-        _time = newTime;
+        _startTime = newTime;
       });
     }
   }
@@ -168,7 +229,7 @@ class _SmartPlugState extends State<SmartPlug> {
       body: Stack(
         children: [
           Container(
-            color: Color(0xFF6F35A5),
+            color: const Color(0xFF6F35A5),
             child: Container(
               padding: EdgeInsets.only(top: 0, left: 20),
               width: MediaQuery.of(context).size.width,
@@ -192,7 +253,7 @@ class _SmartPlugState extends State<SmartPlug> {
           ),
           Column(
             children: [
-              SizedBox(
+              const SizedBox(
                 height: 80,
               ),
               Expanded(
@@ -286,7 +347,7 @@ class _SmartPlugState extends State<SmartPlug> {
                           ),
                           SizedBox(height: 8),
                           Text(
-                            'Schedule Starts : ${_time.format(context)}',
+                            'Schedule Starts : ${_startTime.format(context)}',
                             style: const TextStyle(
                               fontSize: 17,
                               fontWeight: FontWeight.w900,
@@ -345,13 +406,21 @@ class _SmartPlugState extends State<SmartPlug> {
                                   width: 60,
                                 ),
                               ),
-                              Container(
-                                child: Center(
-                                  child: Text(
-                                    '70 kJ',
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: 35,
+                              GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    // Toggle light when tapped.
+                                    //_scheduleIsOn = !_scheduleIsOn;
+                                  });
+                                },
+                                child: Container(
+                                  child: Center(
+                                    child: Text(
+                                      _power + ' J',
+                                      style: const TextStyle(
+                                        fontWeight: FontWeight.w800,
+                                        fontSize: 35,
+                                      ),
                                     ),
                                   ),
                                 ),

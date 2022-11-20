@@ -66,20 +66,19 @@ class _HomePageState extends State<HomePage> {
 
       //final queryParameters = {'userid': '$userid'};
 
-      final response = await http.post(
-          //Uri.parse('http://54.209.2.221:$PORT/api/home/allrooms'),
-          Uri.parse('http://$publicIP:$PORT/api/home/allrooms'),
-          headers: <String, String>{
-            'Content-Type': 'application/json; charset=UTF-8',
-            "Authorization": "Bearer $token"
-            // "Authorization":
-            //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiLCI2MTcyNmM2MDEzZDBkZTFjNDUyNTE1NzUiLCI2MTcyNzI4ZjEzZDBkZTFjNDUyNTE1ODgiXSwiX192IjowfSwiaWF0IjoxNjM0OTE1MzQzLCJleHAiOjE2MzQ5MjI1NDN9.L9XenAuK9qjmsgFWuP-AQzll5EgAaT4YjEAPkYfKbqQ"
-          },
-          body: jsonEncode(
-            <String, String>{
-              '_id': homeId,
-            },
-          ));
+      final response =
+          await http.post(Uri.parse('http://$publicIP:$PORT/api/home/allrooms'),
+              headers: <String, String>{
+                'Content-Type': 'application/json; charset=UTF-8',
+                "Authorization": "Bearer $token"
+                // "Authorization":
+                //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiLCI2MTcyNmM2MDEzZDBkZTFjNDUyNTE1NzUiLCI2MTcyNzI4ZjEzZDBkZTFjNDUyNTE1ODgiXSwiX192IjowfSwiaWF0IjoxNjM0OTE1MzQzLCJleHAiOjE2MzQ5MjI1NDN9.L9XenAuK9qjmsgFWuP-AQzll5EgAaT4YjEAPkYfKbqQ"
+              },
+              body: jsonEncode(
+                <String, String>{
+                  '_id': homeId,
+                },
+              ));
 
       print(response.statusCode);
       print(response.body);
@@ -268,7 +267,6 @@ class _HomePageState extends State<HomePage> {
 
       final response = await http.post(
           Uri.parse('http://$publicIP:$PORT/api/home/rooms/addroom'),
-          //Uri.parse('http://54.209.2.221:$PORT/api/home/rooms/addroom'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "Authorization": "Bearer $token"
@@ -494,7 +492,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             width: 10,
                           ),
                           ClipRRect(

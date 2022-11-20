@@ -61,14 +61,11 @@ class _SampleState extends State<Sample> {
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "Authorization": "Bearer $token"
-            // "Authorization":
-            //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiLCI2MTcyNmM2MDEzZDBkZTFjNDUyNTE1NzUiLCI2MTcyNzI4ZjEzZDBkZTFjNDUyNTE1ODgiXSwiX192IjowfSwiaWF0IjoxNjM0OTc2MDA4LCJleHAiOjE2MzQ5ODMyMDh9.ZhtMPZfQi9zRZx5GZ46HMNo8tGUqY_eBue4hs9JnLy8"
           },
           body: jsonEncode(
             <String, String>{
               //roomId
               'roomid': roomId,
-              //'roomid': ''
             },
           ));
 
@@ -80,6 +77,7 @@ class _SampleState extends State<Sample> {
 
       if (response.statusCode == 200) {
         Map<String, dynamic> resp = json.decode(response.body);
+        print(resp);
 
         //print(resp["numberOfhomes"]);
         data = resp["devices"];
@@ -168,7 +166,12 @@ class _SampleState extends State<Sample> {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return RGB_light();
+                  return RGB_light(
+                    homeId: homeId,
+                    roomId: roomId,
+                    deviceid: info['_id'],
+                    port: info['port'].toString(),
+                  );
                 },
               ),
             );
@@ -177,7 +180,12 @@ class _SampleState extends State<Sample> {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return WhiteLight();
+                  return WhiteLight(
+                    homeId: homeId,
+                    roomId: roomId,
+                    deviceid: info['_id'],
+                    port: info['port'].toString(),
+                  );
                 },
               ),
             );
@@ -186,7 +194,12 @@ class _SampleState extends State<Sample> {
               context,
               MaterialPageRoute(
                 builder: (context) {
-                  return SmartPlug();
+                  return SmartPlug(
+                    homeId: homeId,
+                    roomId: roomId,
+                    deviceid: info['_id'],
+                    port: info['port'].toString(),
+                  );
                 },
               ),
             );
@@ -281,6 +294,8 @@ class _SampleState extends State<Sample> {
       prefs.setString('token', token.toString());
       //print(token);
 
+      //portNo.remove(port);
+
       final response = await http.post(
           Uri.parse('http://$publicIP:$PORT/api/devices/adddevice'),
           headers: <String, String>{
@@ -295,7 +310,7 @@ class _SampleState extends State<Sample> {
               'roomid': roomId,
               'deviceType': deviceType,
               'devicename': deviceName,
-              'cdeviceid': 'A12345',
+              'cdeviceNumber': '1234567890',
               'port': port,
               //print(widget.noOfRooms)
             },
@@ -375,12 +390,6 @@ class _SampleState extends State<Sample> {
     '7',
     '8',
     '9',
-    '10',
-    '11',
-    '12',
-    '13',
-    '14',
-    '15'
   ];
 
   DropdownButton dropDown(List dropList, String type) {
@@ -508,7 +517,7 @@ class _SampleState extends State<Sample> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text(
+          title: const Text(
             '                My Villa',
             style: TextStyle(fontWeight: FontWeight.w500),
           ),
