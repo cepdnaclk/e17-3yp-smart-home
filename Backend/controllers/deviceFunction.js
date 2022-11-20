@@ -51,12 +51,11 @@ let functions ={
     deviceStatus: async function (req, res) {
         try {
             if (req.body.deviceid) {
-                await devices.findById(req.body.deviceid, (err, doc) => {
+                devices.findById(req.body.deviceid, (err, doc) => {
                     // If error happen
                     if (err) return res.status(404).json({ success: false, msg: err.message });
                     if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
                     // If the device found
-                    console.log("test")
                     return res.json({ success: true, device: doc});
                     
                 })
