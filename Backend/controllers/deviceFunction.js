@@ -130,8 +130,10 @@ let functions ={
             ) {
                 return res.json({ success: false, msg: "Enter All the  feilds for scheule" });
             }
+            console.log(req.body.StartTime, req.body.EndTime);
             let StartTime = new Date(req.body.StartTime);
             let EndTime = new Date(req.body.EndTime);
+
             devices.findByIdAndUpdate(req.body.deviceid, { schedule: req.body.schedulestate, StartTime: StartTime, EndTime: EndTime }, (err, doc) => {
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
