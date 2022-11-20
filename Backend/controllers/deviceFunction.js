@@ -135,13 +135,15 @@ let functions ={
             }
             console.log(req.body.StartTime, req.body.EndTime);
             let state = (req.body.schedulestate == "true");
-            devices.findByIdAndUpdate(req.body.deviceid, { schedule: req.body.state, StartTime: req.body.StartTime, EndTime: req.body.EndTime }, (err, doc) => {
+            let StartTime = new Date(req.body.StartTime);
+            let EndTime = new Date(req.body.EndTime);
+            devices.findByIdAndUpdate(req.body.deviceid, { schedule: req.body.state, StartTime: StartTime, EndTime: EndTime }, (err, doc) => {
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                 
                 if (state) {
-                    nodeSchedule.scheduleJob(`* ${StartTime.split(":")[0]} ${StartTime.split(":")[1]} * * *`, () => {
+                    nodeSchedule.scheduleJob(`* ${StartTime.getMinutes} ${StartTime.getHours} * * *`, () => {
                         client.on('connect', function () {
                             console.log('connect');
                             client.publish('esp32/sub', JSON.stringify({state:true}), (error) => {
@@ -175,10 +177,9 @@ let functions ={
                             });
                         });
                     })
+                } else {
+                    nodeSchedule.cancelJob
                 }
-                
-                
-
             })
             return res.status(200).json({ success: true, msg: "Schedule Successfully!" });
         } catch (e) {
