@@ -26,10 +26,10 @@ router.post('/api/devices/rgb', userControl.verifyToken, deviceFunction.rgbTurnO
 // Shedule the Device
 router.post('/api/devices/schedule',userControl.verifyToken, deviceFunction.scheduleDevice )
 
-// MQtt publish test
-router.post('/api/devices/testPub', deviceFunction.testPub);
-// MQTT subscribe test
-router.post('/api/devices/testsub', deviceFunction.testsub)
+// // MQtt publish test
+// router.post('/api/devices/testPub', deviceFunction.testPub);
+// // MQTT subscribe test
+// router.post('/api/devices/testsub', deviceFunction.testsub)
 
 
 
