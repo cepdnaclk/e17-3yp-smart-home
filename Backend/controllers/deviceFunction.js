@@ -6,8 +6,12 @@ const clientId = "digitalHut"
 const options = {
     clientId,
 }
+let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
 
 process.env.TZ = "Asia/Calcutta";
+
+
+
 
 let functions ={
     plugTurnOn: async function(req, res){
@@ -24,7 +28,7 @@ let functions ={
             let state = (req.body.state == 'true');
             devices.findByIdAndUpdate(req.body.deviceid, {status: state}, (err, doc)=>{
                 if (err) return res.json({ success: false, msg: err.message })
-                let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
+                
                 client.on('connect', function () {
                     console.log('connect');
                     let plug = { port: req.body.port, state: state, d_t: 2 }; //d_t --> Device type plug-->2
@@ -96,8 +100,6 @@ let functions ={
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
                 // If the device found
-            
-            let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
             let dev ={state:state, brtns: req.body.brightness, port: parseInt(req.body.port), d_t: 1, r:r, g:g, b:b }
             console.log("Device Found")
                 client.on('connect', function () {
@@ -143,11 +145,10 @@ let functions ={
             devices.findByIdAndUpdate(req.body.deviceid, { schedule: req.body.state, StartTime: StartTime, EndTime: EndTime }, (err, doc) => {
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
-                let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                 
                 if (state) {
-                    console.log(StartTime.getMinutes(),StartTime.getHours());
-                    nodeSchedule.scheduleJob(`* ${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
+                    console.log(StartTime.getMinutes(), StartTime.getHours());
+                    nodeSchedule.scheduleJob(req.body.deviceid + "start",`* ${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
                         client.on('connect', function () {
                             console.log('connect');
                             client.publish('esp32/sub', JSON.stringify({state:true, port:req.body.port, d_t:req.body.d_t}), (error) => {
@@ -165,7 +166,7 @@ let functions ={
                         });
                     })
                     console.log(EndTime.getMinutes(), EndTime.getHours());
-                    nodeSchedule.scheduleJob(`* ${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
+                    nodeSchedule.scheduleJob(req.body.deviceid + "end",`* ${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
                         client.on('connect', function () {
                             console.log('connect');
                             client.publish('esp32/sub', JSON.stringify({state:false, port:req.body.port, d_t:req.body.d_t }), (error) => {
@@ -183,6 +184,8 @@ let functions ={
                         });
                     })
                 } else {
+                    let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"]
+                    let endS = nodeSchedule.scheduledJobs[req.body.deviceid + "end"]
                     nodeSchedule.cancelJob
                 }
             })
@@ -197,7 +200,6 @@ let functions ={
         try {
             console.log(req.body.name, req.body.topic);
             let topic = req.body.topic
-            let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
             client.on('connect', ()=> {
                 console.log('connect');
                 client.publish(topic, JSON.stringify({ devicename: 1 }),
@@ -225,7 +227,6 @@ let functions ={
     testsub: async function (req, res) {
         try {
             let topic = req.body.topic;
-            let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
             client.on('connect', () => {
                 console.log('Connected')
             client.subscribe([topic])
