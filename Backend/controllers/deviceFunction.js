@@ -114,7 +114,6 @@ let functions ={
                     });
                 });
             })
-            return res.json({ success: true, msg: "Schedule Successfully! "});
         } catch (e) {
             console.log('catch e');
             return res.status(404).json({
@@ -148,12 +147,12 @@ let functions ={
                             if (error) {
                                 console.log(error.message);
                                 client.end();
-                                return res.status(404).json({ success: false, msg: error.message });
+                                // return res.status(404).json({ success: false, msg: error.message });
                             }
                             else {
                                 client.end();
                                 console.log('send');
-                                return res.json({ success: true, msg: "successfully Turned On!", device: doc });
+                                // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
                             }
                         });
                     });
@@ -165,17 +164,19 @@ let functions ={
                             if (error) {
                                 console.log(error.message);
                                 client.end();
-                                return res.status(404).json({ success: false, msg: error.message });
+                                // return res.status(404).json({ success: false, msg: error.message });
                             }
                             else {
                                 client.end();
                                 console.log('send');
-                                return res.json({ success: true, msg: "successfully Turned On!", device: doc });
+                                // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
                             }
                         });
                     });
                 })
+
             })
+            return res.status(200).json({ success: true, msg: "Schedule Successfully!" });
         } catch (e) {
             console.log(e.message);
             return res.json({success:false, msg: e.message})
