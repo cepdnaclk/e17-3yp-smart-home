@@ -157,42 +157,43 @@ let functions ={
                 // client.setMaxListeners(Infinity);
                 if (state) {
                     console.log(StartTime.getMinutes(), StartTime.getHours());
-                    nodeSchedule.scheduleJob(req.body.deviceid + "start", `${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
+                    let rule = new nodeSchedule.RecurrenceRule();
+                    rule.hour = StartTime.getHours;
+                    rule.minute = StartTime.getMinutes;
+                    nodeSchedule.scheduleJob(req.body.deviceid + "start", rule, () => {
                         const clientId = "digitalHut_Schedule"
                         const options = {
                             clientId,
                         }
                         let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                         devices.findByIdAndUpdate(req.body.deviceid, { status: true });
+
                         client.once('connect', function () {
                             console.log('Start Schedule');
                             client.publish('esp32/sub', JSON.stringify({ state: true, port: req.body.port, d_t: req.body.d_t }), (error) => {
                                 if (error) {
                                     console.log(error.message);
                                     client.end();
-                                    // return res.status(404).json({ success: false, msg: error.message });
                                 }
                                 else {
-                                    // client.removeAllListeners('connect');
+                                    
                                     client.end();
                                     let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"];
                                     startS.cancel();
                                     console.log('send');
-                                    // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
                                 }
                             });
                         });
                     });
-                    // client = mqtt.connect("mqtt://127.0.0.1:1883", {clientId:"EndTime"});
-                    // console.log(client.removeAllListeners('connect'));
                     console.log(EndTime.getMinutes(), EndTime.getHours());
-                    nodeSchedule.scheduleJob(req.body.deviceid + "end", `${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
+                    rule.hour = EndTime.getHours();
+                    rule.minute = EndTime.getMinutes();
+                    nodeSchedule.scheduleJob(req.body.deviceid + "end", rule, () => {
                         const clientId = "digitalHut_Schedule"
                         const options = {
                             clientId,
                         }
                         let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-                        client.removeAllListeners('connect');
                         devices.findByIdAndUpdate(req.body.deviceid, { status: false });
                         client.once('connect', function () {
                             console.log('End Schedule');
