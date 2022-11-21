@@ -157,17 +157,14 @@ let functions ={
                 // client.setMaxListeners(Infinity);
                 if (state) {
                     console.log(StartTime.getMinutes(), StartTime.getHours());
-                    let rule = new nodeSchedule.RecurrenceRule();
-                    rule.hour = StartTime.getHours;
-                    rule.minute = StartTime.getMinutes;
-                    nodeSchedule.scheduleJob(req.body.deviceid + "start", rule, () => {
+                    nodeSchedule.scheduleJob(req.body.deviceid + "start", `${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
                         const clientId = "digitalHut_Schedule"
                         const options = {
                             clientId,
                         }
                         let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                         devices.findByIdAndUpdate(req.body.deviceid, { status: true });
-
+                        
                         client.once('connect', function () {
                             console.log('Start Schedule');
                             client.publish('esp32/sub', JSON.stringify({ state: true, port: req.body.port, d_t: req.body.d_t }), (error) => {
@@ -186,9 +183,7 @@ let functions ={
                         });
                     });
                     console.log(EndTime.getMinutes(), EndTime.getHours());
-                    rule.hour = EndTime.getHours();
-                    rule.minute = EndTime.getMinutes();
-                    nodeSchedule.scheduleJob(req.body.deviceid + "end", rule, () => {
+                    nodeSchedule.scheduleJob(req.body.deviceid + "end", `${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
                         const clientId = "digitalHut_Schedule"
                         const options = {
                             clientId,
