@@ -183,7 +183,8 @@ let functions ={
                         });
                     })
                     console.log(EndTime.getMinutes(), EndTime.getHours());
-                    nodeSchedule.scheduleJob(req.body.deviceid + "end",`* ${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
+                    nodeSchedule.scheduleJob(req.body.deviceid + "end", `* ${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
+                        console.log(client.rawListeners('connect'));
                         client.on('connect', function () {
                             console.log('End Schedule');
                             client.publish('esp32/sub', JSON.stringify({state:false, port:req.body.port, d_t:req.body.d_t }), (error) => {
