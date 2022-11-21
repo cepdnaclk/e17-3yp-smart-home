@@ -15,10 +15,10 @@ const subscribe = async function () {
         client.on('connect', () => {
             console.log('Connected to MQTT broker...')
             client.subscribe([topic])
-            console.log(`Subscribed to ${topic}`)
+            // console.log(`Subscribed to ${topic}`)
         })
         client.on('message', function (topic, message) {
-            console.log("Message received", message.toString())
+            // console.log("Message received", message.toString())
             let payload = JSON.parse(message.toString());
             // if (payload.d_t === 1) {
             //     console.log("rgb")
