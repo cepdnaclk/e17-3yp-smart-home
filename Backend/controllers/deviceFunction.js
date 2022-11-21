@@ -1,7 +1,7 @@
 let devices = require('../models/devices')
 const nodeSchedule = require('node-schedule')
 
-require("events").EventEmitter.defaultMaxListners = 50;
+require("events").EventEmitter.defaultMaxListners = 70;
 
 let mqtt = require('mqtt');
 const clientId = "digitalHut"

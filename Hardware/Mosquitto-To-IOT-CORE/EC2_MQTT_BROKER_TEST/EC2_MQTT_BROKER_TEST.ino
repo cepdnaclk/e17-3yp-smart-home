@@ -15,18 +15,24 @@
 //RGB1
 #define LED_PIN_1 4
 CRGB leds_port_1[NUM_LEDS];
-//char color_1 = 'w'; //Default color
 
 //RGB 2
 #define LED_PIN_2 2
 CRGB leds_port_2[NUM_LEDS];
-//char color_2 = 'w'; //Default color
 
-
+//globals
+unsigned char d_t = 1;
+bool state =0;
+unsigned char port =1;
+unsigned char r = 0;
+unsigned char g = 0;
+unsigned char b = 0;
+unsigned char brtns = 0;
 
 WiFiClientSecure net = WiFiClientSecure();
 MQTTClient client = MQTTClient(256);
 
+//***************************************CONNECTAWS*********************************/
 void connectAWS()
 {
   WiFi.mode(WIFI_STA);
@@ -68,6 +74,8 @@ void connectAWS()
   Serial.println("AWS IoT Connected!");
 }
 
+
+//***************************************PUBLISH MESSAGE********************************
 void publishMessage()
 {
   StaticJsonDocument<200> doc;
@@ -78,63 +86,52 @@ void publishMessage()
   client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
 }
 
-void rgb(unsigned r, unsigned g, unsigned b, unsigned char port, unsigned char br)
+//***************************************RGB FUNCTION***********************************
+void rgb(unsigned char r, unsigned char g, unsigned char b, unsigned char port, unsigned char br)
 {
   Serial.println("RGB.....");
-
-  if(port == 1){
-    Serial.println(port);
-    Serial.println(r);
-    Serial.println(g);
-    Serial.println(b);
+  if(port == 1){    
     for (unsigned char i = 0; i <= 44; i++) {
       leds_port_1[i] = CRGB ( r, g, b);
-      //FastLED.setBrightness(br);
-      //FastLED.show();
+      Serial.println(i);
     }
-    FastLED.setBrightness(br);
     FastLED.show();
-  }
+  } //port==1
+  
   else if(port == 2){
     Serial.println(port);
     for (unsigned char i = 0; i <= 44; i++) {
-      leds_port_2[i] = CRGB ( r, g, b);
+      leds_port_2[i] = CRGB ( r, g, b);;
     }
     FastLED.setBrightness(br);
     FastLED.show();
   }
   
-}
+}///RGB Function
 
+//*********************************MESSAGE HANDLER*************************************
 void messageHandler(String &topic, String &payload ) {
   Serial.println("incoming: " + topic + " - " + payload);
   StaticJsonDocument<200> doc;
   deserializeJson(doc, payload);
-  unsigned char d_t = doc["d_t"];  //RGB 1 // plug 2 // normal 3 //fan 4  //device type
-  unsigned char port = doc["port"];
-  bool state = doc["state"];
-
+  d_t = doc["d_t"];  //RGB 1 // plug 2 // normal 3 //fan 4  //device type
+  port = doc["port"];
+  state = doc["state"];
+  Serial.println(d_t);
+  Serial.println(port);
+  Serial.println(state);
   
-//  Serial.println(doc);
-    Serial.println(d_t);
-    Serial.println(port);
-    Serial.println(state);
-  
-  if (d_t == 1) // 49 is the ASCI value of 1
+  if (d_t == 1) 
   {
     Serial.println("1. RGB Call");
-    
-    unsigned char brtns = doc["brtns"];
-    unsigned char r  = doc["r"];
-    unsigned char g  = doc["g"];
-    unsigned char b  = doc["b"];
-//    Serial.println(state);
-//    Serial.println(brtns);
+     brtns = doc["brtns"];
+     r  = doc["r"];
+     g  = doc["g"];
+     b  = doc["b"];
     Serial.println("color");
     Serial.println(r);
     Serial.println(g);
     Serial.println(b);
-
     if(state==1)
       rgb(r, g, b, port, brtns);  
     else
@@ -143,7 +140,6 @@ void messageHandler(String &topic, String &payload ) {
   else if (d_t == 2) // 48 is the ASCI value of 0
   {
     Serial.println("2. Smart Plug/White Light call...");
-
     if(port==3){
       Serial.println("port 3: ");
       if(state==1){
@@ -160,33 +156,33 @@ void messageHandler(String &topic, String &payload ) {
         digitalWrite(14, LOW); 
       else
         digitalWrite(14, HIGH);
-    }
-    
+    } 
   }
-
 }
 
 
+//**************************************SETUP FUNCTION******************************
 void setup() {
-  Serial.begin(9600);
+  Serial.begin(115200);
   connectAWS();
 
   //RGB
   FastLED.addLeds<WS2812, LED_PIN_1, GRB>(leds_port_1, NUM_LEDS);
-  FastLED.addLeds<WS2812, LED_PIN_2, GRB>(leds_port_2, NUM_LEDS);
+//  FastLED.addLeds<WS2812, LED_PIN_2, GRB>(leds_port_2, NUM_LEDS);
   rgb(0,0,0,1,0);
-  rgb(0,0,0,2,0);
 
   //SMART PLUG
   pinMode(12, OUTPUT);
 
   //WHITE BULB
-  pinMode(14, OUTPUT);
-  
+  pinMode(14, OUTPUT);  
 }
 
+//*********************************LOOP RUNS*****************************************
 void loop() {
   publishMessage();
   client.loop();
+//  FastLED.show();
+  delay(10);
   
 }
