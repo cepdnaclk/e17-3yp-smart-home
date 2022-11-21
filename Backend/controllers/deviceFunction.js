@@ -6,7 +6,10 @@ require("events").EventEmitter.defaultMaxListners = 70;
 let mqtt = require('mqtt');
 
 process.env.TZ = "Asia/Calcutta";
-
+const clientId = "digitalHut_plug"
+                const options = {
+                    clientId,
+                }
 
 
 
@@ -23,10 +26,7 @@ let functions ={
             }
             console.log(req.body.state);
             let state = (req.body.state == 'true');
-            const clientId = "digitalHut_plug"
-                const options = {
-                    clientId,
-                }
+            
             let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
             devices.findByIdAndUpdate(req.body.deviceid, {status: state}, (err, doc)=>{
                 if (err) return res.json({ success: false, msg: err.message })
@@ -102,10 +102,7 @@ let functions ={
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
                 // If the device found
-                const clientId = "digitalHut_RGB"
-                const options = {
-                    clientId,
-                }
+                
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
             let dev ={state:state, brtns: req.body.brightness, port: parseInt(req.body.port), d_t: 1, r:r, g:g, b:b }
             console.log("Device Found")
@@ -153,10 +150,7 @@ let functions ={
             devices.findByIdAndUpdate(req.body.deviceid, { schedule: req.body.state, StartTime: StartTime, EndTime: EndTime }, (err, doc) => {
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
-                const clientId = "digitalHut_Scheduler"
-                const options = {
-                    clientId,
-                }
+            
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                 client.setMaxListeners(Infinity);
                 if (state) {
