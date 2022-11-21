@@ -1,12 +1,13 @@
 let devices = require('../models/devices')
 const nodeSchedule = require('node-schedule')
 
+require("events").EventEmitter.defaultMaxListners = 50;
+
 let mqtt = require('mqtt');
 const clientId = "digitalHut"
 const options = {
     clientId,
 }
-
 
 process.env.TZ = "Asia/Calcutta";
 

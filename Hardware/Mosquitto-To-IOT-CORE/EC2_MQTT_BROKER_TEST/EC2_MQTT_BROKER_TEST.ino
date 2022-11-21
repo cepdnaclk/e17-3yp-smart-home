@@ -128,8 +128,9 @@ void messageHandler(String &topic, String &payload ) {
     unsigned char r  = doc["r"];
     unsigned char g  = doc["g"];
     unsigned char b  = doc["b"];
-    Serial.println(state);
-    Serial.println(brtns);
+//    Serial.println(state);
+//    Serial.println(brtns);
+    Serial.println("color");
     Serial.println(r);
     Serial.println(g);
     Serial.println(b);
@@ -147,18 +148,18 @@ void messageHandler(String &topic, String &payload ) {
       Serial.println("port 3: ");
       if(state==1){
         Serial.print("12 high");
-        digitalWrite(12, HIGH); 
+        digitalWrite(12, LOW); 
       }else{
         digitalWrite(12, LOW);
-        Serial.print("12 low");
+        Serial.print("12 HIGH");
       }
     }
     if(port==4){
       Serial.println("port 4: ");
       if(state==1)
-        digitalWrite(14, HIGH); 
+        digitalWrite(14, LOW); 
       else
-        digitalWrite(14, LOW);
+        digitalWrite(14, HIGH);
     }
     
   }
