@@ -44,33 +44,25 @@ void connectAWS()
     delay(500);
     Serial.print(".");
   }
-
   // Configure WiFiClientSecure to use the AWS IoT device credentials
   net.setCACert(AWS_CERT_CA);
   net.setCertificate(AWS_CERT_CRT);
   net.setPrivateKey(AWS_CERT_PRIVATE);
-
   // Connect to the MQTT broker on the AWS endpoint we defined earlier
   client.begin(AWS_IOT_ENDPOINT, 8883, net);
-
   // Create a message handler
   client.onMessage(messageHandler);
-
   Serial.print("Connecting to AWS IOT");
-
   while (!client.connect(THINGNAME)) {
     Serial.print(".");
     delay(100);
   }
-
   if(!client.connected()){
     Serial.println("AWS IoT Timeout!");
     return;
   }
-
   // Subscribe to a topic
   client.subscribe(AWS_IOT_SUBSCRIBE_TOPIC);
-
   Serial.println("AWS IoT Connected!");
 }
 
@@ -93,7 +85,7 @@ void rgb(unsigned char r, unsigned char g, unsigned char b, unsigned char port, 
   if(port == 1){    
     for (unsigned char i = 0; i <= 44; i++) {
       leds_port_1[i] = CRGB ( r, g, b);
-      Serial.println(i);
+      Serial.print(i);
     }
     FastLED.show();
   } //port==1
@@ -168,7 +160,7 @@ void setup() {
 
   //RGB
   FastLED.addLeds<WS2812, LED_PIN_1, GRB>(leds_port_1, NUM_LEDS);
-//  FastLED.addLeds<WS2812, LED_PIN_2, GRB>(leds_port_2, NUM_LEDS);
+  FastLED.addLeds<WS2812, LED_PIN_2, GRB>(leds_port_2, NUM_LEDS);
   rgb(0,0,0,1,0);
 
   //SMART PLUG
