@@ -100,7 +100,7 @@ let functions ={
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
             })
             let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-            let dev ={state:state, brtns: b_t, port: parseInt(req.body.port), d_t: 1, r:r, g:g, b:b }
+            let dev ={state:state, brtns: b_t, port: parseInt(req.body.port), d_t: 1, r:req.body.r, g:req.body.g, b:req.body.b }
             console.log("Device Found")
                 client.once('connect', function () {
                     console.log('connect');
