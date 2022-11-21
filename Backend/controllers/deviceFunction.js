@@ -32,7 +32,6 @@ let functions ={
                 if (err) return res.json({ success: false, msg: err.message });
                 if (!doc) return res.json({ success: false, msg: "Device Not Found" });
             })
-            
             client.on('connect', function () {
                     client.publish('esp32/sub', JSON.stringify(plug), (error) => {
                         if (!error) {
@@ -45,8 +44,6 @@ let functions ={
                         }
                     });
                 });
-                
-            
         }catch(err){
             return res.json({
 				success: false,
@@ -100,7 +97,9 @@ let functions ={
                 // If error happen
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
-                let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
+            })
+
+            let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
             let dev ={state:state, brtns: req.body.brightness, port: req.body.port, d_t: 1, r:r, g:g, b:b }
             console.log("Device Found")
                 client.once('connect', function () {
@@ -108,15 +107,16 @@ let functions ={
                     client.publish('esp32/sub', JSON.stringify(dev), (error) => {
                         if (error) {
                             console.log(error.message);
+                            client.end();
                             return res.status(404).json({ success: false, msg: error.message });
                         }
                         else {
                             console.log('send');
+                            client.end();
                             return res.json({ success: true, msg: "successfully Turned On!", device: dev });
                         }
                     });
                 });
-            })
         } catch (e) {
             console.log('catch e');
             return res.status(404).json({
@@ -145,18 +145,12 @@ let functions ={
             devices.findByIdAndUpdate(req.body.deviceid, { schedule: req.body.state, StartTime: StartTime, EndTime: EndTime }, (err, doc) => {
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
-                
-                // client.setMaxListeners(Infinity);
+            })
                 if (state) {
                     console.log(StartTime.getMinutes(), StartTime.getHours());
                     nodeSchedule.scheduleJob(req.body.deviceid + "start", `${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
-                        // const clientId = "digitalHut_Schedule"
-                        // const options = {
-                        //     clientId,
-                        // }
                         let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                         devices.findByIdAndUpdate(req.body.deviceid, { status: true });
-                        
                         client.once('connect', function () {
                             console.log('Start Schedule');
                             client.publish('esp32/sub', JSON.stringify({ state: true, port: req.body.port, d_t: req.body.d_t }), (error) => {
@@ -165,7 +159,6 @@ let functions ={
                                     client.end();
                                 }
                                 else {
-                                    
                                     client.end();
                                     let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"];
                                     startS.cancel();
@@ -176,10 +169,6 @@ let functions ={
                     });
                     console.log(EndTime.getMinutes(), EndTime.getHours());
                     nodeSchedule.scheduleJob(req.body.deviceid + "end", `${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
-                        // const clientId = "digitalHut_Schedule"
-                        // const options = {
-                        //     clientId,
-                        // }
                         let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                         devices.findByIdAndUpdate(req.body.deviceid, { status: false });
                         client.once('connect', function () {
@@ -199,7 +188,6 @@ let functions ={
                         });
                     })
                 } else {
-                    
                     let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"];
                     let endS = nodeSchedule.scheduledJobs[req.body.deviceid + "end"];
                     console.log( startS,endS)
@@ -208,9 +196,7 @@ let functions ={
                         endS.cancel();
                         console.log('Cleared...');
                     }
-                    
                 }
-            })
             return res.status(200).json({ success: true, msg: "Schedule Successfully!" });
         } catch (e) {
             console.log(e.message);
