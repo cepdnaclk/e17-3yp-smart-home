@@ -12,7 +12,7 @@ const roomRoutes = require('./routes/roomRoute')
 const deviceRoute = require('./routes/deviceRoute')
 const cdevice = require('./routes/cdeviceRoute')
 const nonActive = require('./routes/NonActiveCdeviceRoute')
-// const subTotopics = require('./controllers/subscribe.js');
+const subTotopics = require('./controllers/subscribe.js');
 //connect to database
 mongodbConnect();
 
@@ -37,6 +37,7 @@ app.use(deviceRoute);
 app.use(cdevice);
 app.use(nonActive);
 app.use(passport.initialize());
+app.use(subTotopics)
 require('./config/passport')(passport);
 
 /*

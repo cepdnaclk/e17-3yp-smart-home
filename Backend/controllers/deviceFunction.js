@@ -156,6 +156,7 @@ let functions ={
                 if (state) {
                     console.log(StartTime.getMinutes(), StartTime.getHours());
                     nodeSchedule.scheduleJob(req.body.deviceid + "start", `* ${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
+                        devices.findByIdAndUpdate(req.body.deviceid, { status: true });
                         client.on('connect', function () {
                             console.log('Start Schedule');
                             client.publish('esp32/sub', JSON.stringify({ state: true, port: req.body.port, d_t: req.body.d_t }), (error) => {
@@ -166,6 +167,7 @@ let functions ={
                                 }
                                 else {
                                     // client.removeAllListeners('connect');
+                                    client.end();
                                     console.log('send');
                                     // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
                                 }
@@ -176,19 +178,17 @@ let functions ={
                     // console.log(client.removeAllListeners('connect'));
                     console.log(EndTime.getMinutes(), EndTime.getHours());
                     nodeSchedule.scheduleJob(req.body.deviceid + "end", `* ${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
-                        
+                        devices.findByIdAndUpdate(req.body.deviceid, { status: false });
                         client.on('connect', function () {
                             console.log('End Schedule');
                             client.publish('esp32/sub', JSON.stringify({state:false, port:req.body.port, d_t:req.body.d_t }), (error) => {
                                 if (error) {
                                     console.log(error.message);
                                     client.end();
-                                    // return res.status(404).json({ success: false, msg: error.message });
                                 }
                                 else {
                                     client.end();
                                     console.log('send');
-                                    // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
                                 }
                             });
                         });
@@ -212,54 +212,7 @@ let functions ={
             return res.json({success:false, msg: e.message})
         }
     },
-    // For testing the publishing
-    // testPub: async function (req, res) {
-    //     try {
-    //         console.log(req.body.name, req.body.topic);
-    //         let topic = req.body.topic
-    //         let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-    //         client.on('connect', ()=> {
-    //             console.log('connect');
-    //             client.publish(topic, JSON.stringify({ devicename: 1 }),
-    //                 (error) => { 
-    //                     if (error) {
-    //                         console.log(error)
-    //                         client.end();
-    //                         return res.json({ success: false, msg: "Error in publishing" });
-    //                     } else {
-    //                         client.end();
-    //                         return res.json({ success: true, msg: "Msg published successfully" });
-    //                     }
-    //                 });
-    //         });
-    //     } catch (e) {
-    //         console.log(`Error catched in testPub ${e.message}`)
-    //         return res.json({
-	// 			success: false,
-	// 			msg: 'Error on testPub try catch',
-	// 			error: err.message,
-    //         });
-    //     }
-    // },
-    // // For testing subcribtion
-    // testsub: async function (req, res) {
-    //     try {
-    //         let topic = req.body.topic;
-    //         let client = mqtt.connect("mqtt://127.0.0.1:1883", options);``
-    //         client.on('connect', () => {
-    //             console.log('Connected')
-    //         client.subscribe([topic])
-    //         client.on('message', function (topic, message) {
-    //         console.log(message.toString());
-    //         })
-    // })
-    //     } catch (e) {
-    //         console.log(e.message);
-    //         return res.json({success:false, msg: e.message})
-    //     }
-    // },
-
-
+    
 }
 
 module.exports = functions

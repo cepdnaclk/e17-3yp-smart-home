@@ -1,5 +1,6 @@
 const mqtt = require('mqtt')
 const devices = require('../models/devices');
+const nodeSchedule = require("node-schedule")
 
 const clientId = "nodeJs_Application"
 const options = {
@@ -8,22 +9,30 @@ const options = {
 let topic = "esp32/pub"
 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
 
-client.on('connect', () => {
-    console.log('Connected to MQTT broker...')
-    client.subscribe([topic])
-    console.log(`Subscribed to ${topic}`)
-})
+const subscribe = async function () {
+    try {
+        client.on('connect', () => {
+            console.log('Connected to MQTT broker...')
+            client.subscribe([topic])
+            console.log(`Subscribed to ${topic}`)
+        })
+        client.on('message', function (topic, message) {
+            console.log("Message received", message.toString())
+            let payload = JSON.parse(message.toString());
+            // if (payload.d_t === 1) {
+            //     console.log("rgb")
 
-client.on('message', function (topic, message) {
-    console.log("Message received", message.toString())
-    let payload = JSON.parse(message.toString());
-    if (payload.deviceType === "rgb") {
-        console.log("rgb")
+            // }
+            console.log(payload);
+        })
+
+
+    } catch (e) {
+        console.log(e.message);
     }
-})
 
-const updateRGB = async function (deviceid) {
-    User.findOne({ deviceid: deviceid }, (err, data) => {
-        
-    })
-}
+} 
+
+
+
+module.exports = subscribe

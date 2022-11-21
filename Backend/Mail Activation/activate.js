@@ -53,7 +53,7 @@ const sendMail = async (user) => {
 		const mailOptions = {
 			from: email,
 			to: clientMail,
-			subject: 'Verify the Email',
+			subject: 'Verification mail from DigitalHuT',
 			generateTextFromHTML: true,
 			html: `<h2 style="color:green">digitalHuT<h2>Click <a href= " http://localhost:5001/api/user/validate?token=${token_1}"><button type="button">Verify!</button></a>`,
 		};
