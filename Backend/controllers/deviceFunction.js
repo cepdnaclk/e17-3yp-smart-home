@@ -152,7 +152,7 @@ let functions ={
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
             
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-                client.setMaxListeners(Infinity);
+                // client.setMaxListeners(Infinity);
                 if (state) {
                     console.log(StartTime.getMinutes(), StartTime.getHours());
                     nodeSchedule.scheduleJob(req.body.deviceid + "start", `* ${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
@@ -165,14 +165,15 @@ let functions ={
                                     // return res.status(404).json({ success: false, msg: error.message });
                                 }
                                 else {
-                                    client.end();
+                                    // client.end();
+                                    // client.removeAllListeners('connect');
                                     console.log('send');
                                     // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
                                 }
                             });
                         });
                     });
-                    console.log(client.removeAllListeners('connect'));
+                    // console.log(client.removeAllListeners('connect'));
                     console.log(EndTime.getMinutes(), EndTime.getHours());
                     nodeSchedule.scheduleJob(req.body.deviceid + "end", `* ${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
                         
