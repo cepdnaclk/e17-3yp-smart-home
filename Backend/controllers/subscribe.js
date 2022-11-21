@@ -23,7 +23,7 @@ const subscribe = async function () {
             // if (payload.d_t === 1) {
             //     console.log("rgb")
             // }
-            console.log(payload); 
+            // console.log(payload); 
         })
     } catch (e) {
         console.log(e.message);
