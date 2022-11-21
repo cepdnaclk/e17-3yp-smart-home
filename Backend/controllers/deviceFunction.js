@@ -10,8 +10,11 @@ process.env.TZ = "Asia/Calcutta";
 const clientId = "digitalHut_plug"
                 const options = {
                     clientId,
-                }
-
+}
+                
+function scale (number, inMin, inMax, outMin, outMax) {
+    return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
+}
 
 let functions ={
     plugTurnOn: async function(req, res){
