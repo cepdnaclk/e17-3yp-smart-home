@@ -178,6 +178,7 @@ let functions ={
                     // console.log(client.removeAllListeners('connect'));
                     console.log(EndTime.getMinutes(), EndTime.getHours());
                     nodeSchedule.scheduleJob(req.body.deviceid + "end", `* ${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
+                        client.removeAllListeners('connect');
                         devices.findByIdAndUpdate(req.body.deviceid, { status: false });
                         client.on('connect', function () {
                             console.log('End Schedule');
@@ -197,7 +198,7 @@ let functions ={
                     
                     let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"];
                     let endS = nodeSchedule.scheduledJobs[req.body.deviceid + "end"];
-                    console.log( endS)
+                    console.log( StartS,endS)
                     if (startS != undefined) {
                         startS.cancel();
                         endS.cancel();
