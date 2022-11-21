@@ -164,6 +164,7 @@ let functions ={
                                 else {
                                     client.end();
                                     console.log('send');
+                                    nodeSchedule.scheduledJobs[req.body.deviceid + "start"].cancel()
                                     // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
                                 }
                             });
