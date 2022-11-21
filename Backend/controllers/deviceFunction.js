@@ -89,18 +89,15 @@ let functions ={
             ) {
                 return res.json({ success: false, msg: "Enter All feilds for RGB" });
             }
-            let r = req.body.r;
-            let g = req.body.g;
-            let b = req.body.b;
             let state = (req.body.state == "true")
-            devices.findByIdAndUpdate(req.body.deviceid, { status: state, StartTime: Date.now() , brightness:req.body.brightness, r:r, g:g, b:b }, (err, doc) => {
+            let b_t = scale(parseInt(req.body.brightness), 0, 100, 0, 255)
+            devices.findByIdAndUpdate(req.body.deviceid, { status: state, StartTime: Date.now() , brightness:b_t, r:req.body.r, g:req.body.g, b:req.body.b }, (err, doc) => {
                 // If error happen
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
             })
-
             let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-            let dev ={state:state, brtns: req.body.brightness, port: req.body.port, d_t: 1, r:r, g:g, b:b }
+            let dev ={state:state, brtns: b_t, port: parseInt(req.body.port), d_t: 1, r:r, g:g, b:b }
             console.log("Device Found")
                 client.once('connect', function () {
                     console.log('connect');
@@ -153,7 +150,7 @@ let functions ={
                         devices.findByIdAndUpdate(req.body.deviceid, { status: true });
                         client.once('connect', function () {
                             console.log('Start Schedule');
-                            client.publish('esp32/sub', JSON.stringify({ state: true, port: req.body.port, d_t: req.body.d_t }), (error) => {
+                            client.publish('esp32/sub', JSON.stringify({ state: true, port: parseInt(req.body.port), d_t: req.body.d_t }), (error) => {
                                 if (error) {
                                     console.log(error.message);
                                     client.end();
