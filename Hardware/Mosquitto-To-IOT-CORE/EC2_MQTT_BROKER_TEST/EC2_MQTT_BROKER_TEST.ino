@@ -40,27 +40,20 @@ void connectAWS()
 {
   WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-
   Serial.println("Connecting to Wi-Fi");
-
   while (WiFi.status() != WL_CONNECTED){
     delay(500);
     Serial.print(".");
   }
-
   // Configure WiFiClientSecure to use the AWS IoT device credentials
   net.setCACert(AWS_CERT_CA);
   net.setCertificate(AWS_CERT_CRT);
   net.setPrivateKey(AWS_CERT_PRIVATE);
-
   // Connect to the MQTT broker on the AWS endpoint we defined earlier
   client.begin(AWS_IOT_ENDPOINT, 8883, net);
-
   // Create a message handler
   client.onMessage(messageHandler);
-
   Serial.print("Connecting to AWS IOT");
-
   while (!client.connect(THINGNAME)) {
     Serial.print(".");
     delay(100);
@@ -76,6 +69,7 @@ void connectAWS()
 
   Serial.println("AWS IoT Connected!");
 }
+
 
 void publishMessage()
 {
@@ -93,20 +87,13 @@ void rgb(unsigned r, unsigned g, unsigned b, unsigned char port, unsigned char b
   //Serial.println("RGB.....");
 
   if(port == 1){
-//    Serial.println(port);
-//    Serial.println(r);
-//    Serial.println(g);
-//    Serial.println(b);
     for (unsigned char i = 0; i <= 44; i++) {
       leds_port_1[i] = CRGB ( r, g, b);
-      //FastLED.setBrightness(br);
-      //FastLED.show();
     }
     FastLED.setBrightness(br);
     FastLED.show();
   }
   else if(port == 2){
-//    Serial.println(port);
     for (unsigned char i = 0; i <= 44; i++) {
       leds_port_2[i] = CRGB ( r, g, b);
     }
@@ -151,17 +138,17 @@ void messageHandler(String &topic, String &payload ) {
     Serial.println(g1);
     Serial.println(b1);
 
-    if(state==1 && port==1){
+    if(state && port==1){
       rgb(r1, g1, b1, port, brtns);  
-    }if(state==1 && port==2){
+    }if(state && port==2){
       rgb(r2, g2, b2, port, brtns);  
-    }else if(state==0 && port==1){
+    }else if(!state && port==1){
       r1=0;
       g1=0;
       b1=0;
       brtns=0;
       rgb(0,0,0,1,0);
-    }else if(state==0 && port==2){
+    }else if(!state && port==2){
       r2=0;
       g2=0;
       b2=0;
@@ -172,9 +159,9 @@ void messageHandler(String &topic, String &payload ) {
   else if (d_t == 2) // 48 is the ASCI value of 0
   {
     Serial.println("2. Smart Plug/White Light call...");
-if(port==3){
+    if(port==3){
       Serial.println("port 3: ");
-      if(state==1){
+      if(state){
         Serial.print("12 high");
         digitalWrite(12, LOW); 
       }else{
@@ -184,17 +171,15 @@ if(port==3){
     }
     if(port==4){
       Serial.println("port 4: ");
-      if(state==1){
+      if(state){
         digitalWrite(14, LOW); 
         Serial.print("14 high");
       }else{
         digitalWrite(14, HIGH);
         Serial.print("14 low");
       }
-    }
-    
+    } 
   }
-
 }
 
 

@@ -24,28 +24,28 @@ let functions ={
         {
             return res.json({ success: false, msg: "Enter All feilds for Smart Plugd" });
             }
-            console.log(req.body.state);
+            console.log("Plug Turn On",req.body.state);
             let state = (req.body.state == 'true');
-            
             let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
+            let plug = { port: req.body.port, state: state, d_t: 2 }; //d_t --> Device type plug-->
             devices.findByIdAndUpdate(req.body.deviceid, {status: state}, (err, doc)=>{
-                if (err) return res.json({ success: false, msg: err.message })
-                client.on('connect', function () {
+                if (err) return res.json({ success: false, msg: err.message });
+                if (!doc) return res.json({ success: false, msg: "Device Not Found" });
+            })
+            
+            client.on('connect', function () {
                     console.log('connect');
-                    let plug = { port: req.body.port, state: state, d_t: 2 }; //d_t --> Device type plug-->
                     client.publish('esp32/sub', JSON.stringify(plug), (error) => {
                         if (!error) {
-                            client.end()
                             return res.json({success:true, msg: "successfully state Changed!", device:plug })
                         }
                         else {
-                            client.end()
                             return res.json({ success: false, msg: error.message });
                         }
                     });
                 });
                 
-            } )
+            
         }catch(err){
             return res.json({
 				success: false,
@@ -99,24 +99,17 @@ let functions ={
                 // If error happen
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
-                // If the device found
-                // const clientId = "digitalHut_RGB"
-                // const options = {
-                //     clientId,
-                // }
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-            let dev ={state:state, brtns: req.body.brightness, port: parseInt(req.body.port), d_t: 1, r:r, g:g, b:b }
+            let dev ={state:state, brtns: req.body.brightness, port: req.body.port, d_t: 1, r:r, g:g, b:b }
             console.log("Device Found")
                 client.once('connect', function () {
                     console.log('connect');
                     client.publish('esp32/sub', JSON.stringify(dev), (error) => {
                         if (error) {
                             console.log(error.message);
-                            client.end();
                             return res.status(404).json({ success: false, msg: error.message });
                         }
                         else {
-                            client.end();
                             console.log('send');
                             return res.json({ success: true, msg: "successfully Turned On!", device: dev });
                         }
