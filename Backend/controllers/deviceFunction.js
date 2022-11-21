@@ -157,7 +157,7 @@ let functions ={
                 // client.setMaxListeners(Infinity);
                 if (state) {
                     console.log(StartTime.getMinutes(), StartTime.getHours());
-                    nodeSchedule.scheduleJob(req.body.deviceid + "start", `* ${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
+                    nodeSchedule.scheduleJob(req.body.deviceid + "start", `${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
                         const clientId = "digitalHut_Schedule"
                         const options = {
                             clientId,
@@ -175,6 +175,8 @@ let functions ={
                                 else {
                                     // client.removeAllListeners('connect');
                                     client.end();
+                                    let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"];
+                                    startS.cancel();
                                     console.log('send');
                                     // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
                                 }
@@ -184,7 +186,7 @@ let functions ={
                     // client = mqtt.connect("mqtt://127.0.0.1:1883", {clientId:"EndTime"});
                     // console.log(client.removeAllListeners('connect'));
                     console.log(EndTime.getMinutes(), EndTime.getHours());
-                    nodeSchedule.scheduleJob(req.body.deviceid + "end", `* ${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
+                    nodeSchedule.scheduleJob(req.body.deviceid + "end", `${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
                         const clientId = "digitalHut_Schedule"
                         const options = {
                             clientId,
@@ -201,6 +203,8 @@ let functions ={
                                 }
                                 else {
                                     client.end();
+                                    let endS = nodeSchedule.scheduledJobs[req.body.deviceid + "end"];
+                                    endS.cancel();
                                     console.log('send');
                                 }
                             });
