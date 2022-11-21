@@ -31,7 +31,7 @@ let functions ={
             devices.findByIdAndUpdate(req.body.deviceid, {status: state}, (err, doc)=>{
                 if (err) return res.json({ success: false, msg: err.message })
                 
-                client.on('connect', function () {
+                client.once('connect', function () {
                     console.log('connect');
                     let plug = { port: req.body.port, state: state, d_t: 2 }; //d_t --> Device type plug-->2
                     
@@ -109,7 +109,7 @@ let functions ={
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
             let dev ={state:state, brtns: req.body.brightness, port: parseInt(req.body.port), d_t: 1, r:r, g:g, b:b }
             console.log("Device Found")
-                client.on('connect', function () {
+                client.once('connect', function () {
                     console.log('connect');
                     client.publish('esp32/sub', JSON.stringify(dev), (error) => {
                         if (error) {
@@ -164,7 +164,7 @@ let functions ={
                         }
                         let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                         devices.findByIdAndUpdate(req.body.deviceid, { status: true });
-                        client.on('connect', function () {
+                        client.once('connect', function () {
                             console.log('Start Schedule');
                             client.publish('esp32/sub', JSON.stringify({ state: true, port: req.body.port, d_t: req.body.d_t }), (error) => {
                                 if (error) {
@@ -192,7 +192,7 @@ let functions ={
                         let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                         client.removeAllListeners('connect');
                         devices.findByIdAndUpdate(req.body.deviceid, { status: false });
-                        client.on('connect', function () {
+                        client.once('connect', function () {
                             console.log('End Schedule');
                             client.publish('esp32/sub', JSON.stringify({state:false, port:req.body.port, d_t:req.body.d_t }), (error) => {
                                 if (error) {
