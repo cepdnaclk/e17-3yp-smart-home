@@ -162,7 +162,7 @@ let functions ={
                     clientId,
                 }
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-                client.setMaxListeners(0);
+                client.setMaxListeners(Infinity);
                 if (state) {
                     console.log(StartTime.getMinutes(), StartTime.getHours());
                     nodeSchedule.scheduleJob(req.body.deviceid + "start",`* ${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
