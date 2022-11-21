@@ -11,10 +11,6 @@ const clientId = "digitalHut_plug"
                 const options = {
                     clientId,
 }
-                
-function scale (number, inMin, inMax, outMin, outMax) {
-    return (number - inMin) * (outMax - outMin) / (inMax - inMin) + outMin;
-}
 
 let functions ={
     plugTurnOn: async function(req, res){
@@ -93,14 +89,13 @@ let functions ={
                 return res.json({ success: false, msg: "Enter All feilds for RGB" });
             }
             let state = (req.body.state == "true")
-            let b_t = scale(parseInt(req.body.brightness), 0, 100, 0, 255)
-            devices.findByIdAndUpdate(req.body.deviceid, { status: state, StartTime: Date.now() , brightness:b_t, r:req.body.r, g:req.body.g, b:req.body.b }, (err, doc) => {
+            devices.findByIdAndUpdate(req.body.deviceid, { status: state, StartTime: Date.now() , brightness:req.body.brightness, r:req.body.r, g:req.body.g, b:req.body.b }, (err, doc) => {
                 // If error happen
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
             })
             let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
-            let dev ={state:state, brtns: b_t, port: parseInt(req.body.port), d_t: 1, r:req.body.r, g:req.body.g, b:req.body.b }
+            let dev ={state:state, brtns: req.body.brightness, port: parseInt(req.body.port), d_t: 1, r:req.body.r, g:req.body.g, b:req.body.b }
             console.log("Device Found")
                 client.once('connect', function () {
                     console.log('connect');
