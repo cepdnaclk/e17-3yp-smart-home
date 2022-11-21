@@ -27,6 +27,10 @@ let functions ={
             }
             console.log(req.body.state);
             let state = (req.body.state == 'true');
+            const clientId = "digitalHut_plug"
+                const options = {
+                    clientId,
+                }
             let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
             devices.findByIdAndUpdate(req.body.deviceid, {status: state}, (err, doc)=>{
                 if (err) return res.json({ success: false, msg: err.message })
@@ -64,7 +68,6 @@ let functions ={
                     if (err) return res.status(404).json({ success: false, msg: err.message });
                     if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
                     // If the device found
-                    let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                     return res.json({ success: true, device: doc});
                     
                 })
@@ -103,6 +106,10 @@ let functions ={
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
                 // If the device found
+                const clientId = "digitalHut_RGB"
+                const options = {
+                    clientId,
+                }
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
             let dev ={state:state, brtns: req.body.brightness, port: parseInt(req.body.port), d_t: 1, r:r, g:g, b:b }
             console.log("Device Found")
@@ -146,9 +153,14 @@ let functions ={
             let state = (req.body.schedulestate == "true");
             let StartTime = new Date(req.body.StartTime);
             let EndTime = new Date(req.body.EndTime);
+
             devices.findByIdAndUpdate(req.body.deviceid, { schedule: req.body.state, StartTime: StartTime, EndTime: EndTime }, (err, doc) => {
                 if (err) return res.status(404).json({ success: false, msg: err.message });
                 if (!doc) return res.status(404).json({ success: false, msg: "Device Not found!" });
+                const clientId = "digitalHut_Scheduler"
+                const options = {
+                    clientId,
+                }
                 let client = mqtt.connect("mqtt://127.0.0.1:1883", options);
                 if (state) {
                     console.log(StartTime.getMinutes(), StartTime.getHours());
@@ -164,7 +176,6 @@ let functions ={
                                 else {
                                     client.end();
                                     console.log('send');
-                                    nodeSchedule.scheduledJobs[req.body.deviceid + "start"].cancel()
                                     // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
                                 }
                             });
