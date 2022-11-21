@@ -4,10 +4,6 @@ const nodeSchedule = require('node-schedule')
 require("events").EventEmitter.defaultMaxListners = 70;
 
 let mqtt = require('mqtt');
-const clientId = "digitalHut"
-const options = {
-    clientId,
-}
 
 process.env.TZ = "Asia/Calcutta";
 
