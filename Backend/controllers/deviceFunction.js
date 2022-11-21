@@ -34,12 +34,13 @@ let functions ={
             })
             
             client.on('connect', function () {
-                    console.log('connect');
                     client.publish('esp32/sub', JSON.stringify(plug), (error) => {
                         if (!error) {
+                            client.end()
                             return res.json({success:true, msg: "successfully state Changed!", device:plug })
                         }
                         else {
+                            client.end()
                             return res.json({ success: false, msg: error.message });
                         }
                     });
