@@ -165,7 +165,6 @@ let functions ={
                                     // return res.status(404).json({ success: false, msg: error.message });
                                 }
                                 else {
-                                    client.end();
                                     // client.removeAllListeners('connect');
                                     console.log('send');
                                     // return res.json({ success: true, msg: "successfully Turned On!", device: doc });
@@ -173,7 +172,7 @@ let functions ={
                             });
                         });
                     });
-                    client = mqtt.connect("mqtt://127.0.0.1:1883", {clientId:"EndTime"});
+                    // client = mqtt.connect("mqtt://127.0.0.1:1883", {clientId:"EndTime"});
                     // console.log(client.removeAllListeners('connect'));
                     console.log(EndTime.getMinutes(), EndTime.getHours());
                     nodeSchedule.scheduleJob(req.body.deviceid + "end", `* ${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
