@@ -165,10 +165,10 @@ let functions ={
                 client.setMaxListeners(Infinity);
                 if (state) {
                     console.log(StartTime.getMinutes(), StartTime.getHours());
-                    nodeSchedule.scheduleJob(req.body.deviceid + "start",`* ${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
+                    nodeSchedule.scheduleJob(req.body.deviceid + "start", `* ${StartTime.getMinutes()} ${StartTime.getHours()} * * *`, () => {
                         client.on('connect', function () {
                             console.log('Start Schedule');
-                            client.publish('esp32/sub', JSON.stringify({state:true, port:req.body.port, d_t:req.body.d_t}), (error) => {
+                            client.publish('esp32/sub', JSON.stringify({ state: true, port: req.body.port, d_t: req.body.d_t }), (error) => {
                                 if (error) {
                                     console.log(error.message);
                                     client.end();
@@ -181,10 +181,11 @@ let functions ={
                                 }
                             });
                         });
-                    })
+                    });
+                    console.log(client.removeAllListeners('connect'));
                     console.log(EndTime.getMinutes(), EndTime.getHours());
                     nodeSchedule.scheduleJob(req.body.deviceid + "end", `* ${EndTime.getMinutes()} ${EndTime.getHours()} * * *`, () => {
-                        console.log(client.rawListeners('connect'));
+                        
                         client.on('connect', function () {
                             console.log('End Schedule');
                             client.publish('esp32/sub', JSON.stringify({state:false, port:req.body.port, d_t:req.body.d_t }), (error) => {
@@ -205,7 +206,7 @@ let functions ={
                     
                     let startS = nodeSchedule.scheduledJobs[req.body.deviceid + "start"];
                     let endS = nodeSchedule.scheduledJobs[req.body.deviceid + "end"];
-                    console.log(startS, endS)
+                    console.log( endS)
                     if (startS != undefined) {
                         startS.cancel();
                         endS.cancel();
