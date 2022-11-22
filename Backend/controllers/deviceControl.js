@@ -38,6 +38,11 @@ let functions ={
                 }   )
             }
         })
+            } else {
+                res.json({
+                    success: false,
+                    msg: "Enter all feilds for add device"
+                })
     }
 }
         catch(err){
