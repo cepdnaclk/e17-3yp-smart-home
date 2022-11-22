@@ -4,7 +4,8 @@ let rooms = require('../models/rooms')
 let functions ={
     addDevice: async function(req, res){
         try{
-            if( req.body.roomid && req.body.deviceType && req.body.devicename && req.body.port){
+            if (req.body.roomid && req.body.deviceType && req.body.devicename && req.body.port) {
+                console.log("reached add device")
                 devices.findOne({
                     devicename : req.body.devicename,
                 }, (err, data)=>{
@@ -43,7 +44,7 @@ let functions ={
             console.log(err);
             return res.json({
                 success: false,
-                msg: err
+                msg: err.message
             })
         }
     },
