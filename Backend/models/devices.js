@@ -46,12 +46,12 @@ let deviceSchema = new schema({
 	},
 	StartTime :{
 		type: String,
-		default: Date.toString
+		default: Date.now
 	},
 
 	EndTime :{
 		type: String,
-		default: Date.toString
+		default: Date.now
 		
 	},
 
