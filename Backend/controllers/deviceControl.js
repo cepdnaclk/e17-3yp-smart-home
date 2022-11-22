@@ -1,11 +1,10 @@
-let homes = require('../models/homes')
 let devices = require('../models/devices')
 let rooms = require('../models/rooms')
 
 let functions ={
     addDevice: async function(req, res){
         try{
-            if(req.body.homeid && req.body.roomid && req.body.deviceType && req.body.devicename && req.body.cdeviceNumber && req.body.port){
+            if( req.body.roomid && req.body.deviceType && req.body.devicename && req.body.port){
                 devices.findOne({
                     devicename : req.body.devicename,
                 }, (err, data)=>{
@@ -23,7 +22,8 @@ let functions ={
                             cdeviceNumber: req.body.cdeviceNumber,
                             port:parseInt(req.body.port)
                         })
-                        devices.create(newdevice).then(devicedoc=>{
+                        devices.create(newdevice).then(devicedoc => {
+                            console.log("Device Created");
 							rooms.findByIdAndUpdate(req.body.roomid, 
 								{ $push: { devices: devicedoc._id }},
 								{ new: true, useFindAndModify: false },()=>{

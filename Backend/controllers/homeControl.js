@@ -23,7 +23,6 @@ let functions = {
 						newHome.address = req.body.address;
 					}
 					
-
 					await newHome.save(function (err, newHome) {
 						if (err) {				//If any error occur while saving
 							console.log('addhome-save', err);
