@@ -2,25 +2,6 @@ var mongoose = require('mongoose');
 var schema = mongoose.Schema;
 
 
-let Energy = new schema({
-	current_level: {
-		type: Number,
-		default: 0,
-	},
-	today_level: {
-		type: Number,
-		default: 0,
-	},
-	monthly_level: {
-		type: Number,
-		default: 0,
-	},
-	allTime: {
-		type: Number,
-		default: 0,
-	}
-})
-
 let deviceSchema = new schema({
 	devicename: {
 		type: String,
