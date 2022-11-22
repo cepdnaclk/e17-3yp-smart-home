@@ -32,8 +32,8 @@ let deviceSchema = new schema({
 		require: true,
 	},
 	energy: {
-		type: schema.Types.ObjectId,
-		ref: 'energy'
+		type: Number,
+		default: 0
 	},
 	status: {
 		type: Boolean,
@@ -45,11 +45,6 @@ let deviceSchema = new schema({
 	},
 	port: {
 		type: Number,
-		require: true
-	},
-	homeid: {
-		type:schema.Types.ObjectId,
-		ref: 'homes',
 		require: true
 	},
 	roomid: {
@@ -88,5 +83,4 @@ let deviceSchema = new schema({
 		default: false
 	}
 });
-module.exports = mongoose.model('energy', Energy);
 module.exports = mongoose.model('devices', deviceSchema);
