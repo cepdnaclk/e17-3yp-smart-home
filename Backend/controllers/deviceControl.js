@@ -1,3 +1,4 @@
+const e = require('express')
 let devices = require('../models/devices')
 let rooms = require('../models/rooms')
 
@@ -34,7 +35,10 @@ let functions ={
                                     device: devicedoc,
                                     msg: "device successfully added"
                                 })
-                }   )
+                        }).catch((e) => {
+                            console.log(e.message)
+                            return res.json({success:false, msg: e.message})
+                })
             }
         })
             } else {
