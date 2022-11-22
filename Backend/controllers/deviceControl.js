@@ -8,7 +8,8 @@ let functions ={
                 console.log("reached add device")
                 devices.findOne({
                     devicename : req.body.devicename,
-                }, (err, data)=>{
+                }, (err, data) => {
+                    if(err) res.json({success:false, msg:err.message})
                     if (data){
                         return res.status(404).json({
                         success: false,
@@ -18,9 +19,7 @@ let functions ={
                         let newdevice = new devices({
                             devicename : req.body.devicename,
                             deviceType : req.body.deviceType,
-                            homeid : req.body.homeid,
                             roomid: req.body.roomid,
-                            cdeviceNumber: req.body.cdeviceNumber,
                             port:parseInt(req.body.port)
                         })
                         devices.create(newdevice).then(devicedoc => {
