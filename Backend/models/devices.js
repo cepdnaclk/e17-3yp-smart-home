@@ -39,10 +39,6 @@ let deviceSchema = new schema({
 		type: Boolean,
 		default: false,
 	},
-	cdeviceid:{
-		type: String,
-		require: true,
-	},
 	port: {
 		type: Number,
 		require: true
