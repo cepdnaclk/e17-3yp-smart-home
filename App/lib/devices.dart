@@ -33,6 +33,7 @@ class _SampleState extends State<Sample> {
   String? selectedIcon;
   String? selectedDevice;
   String? selectedPort;
+  String? deviceName;
 
   var selectedInfo;
   //var dataNo;
@@ -42,6 +43,7 @@ class _SampleState extends State<Sample> {
     super.initState();
     getData();
     print(showDelete);
+    print(roomId);
   }
 
   List data = [];
@@ -274,15 +276,10 @@ class _SampleState extends State<Sample> {
   }
 
   saveDevice() async {
-    // data.add(({
-    //   'roomName': roomNameController.text.trim(),
-    //   'icon': selectedIcon,
-    // }));
-
     try {
       //print("1\n");
 
-      String deviceName = roomNameController.text.trim().toString();
+      deviceName = roomNameController.text.trim().toString();
       String deviceType = selectedIcon.toString();
       String port = selectedPort.toString();
 
@@ -294,25 +291,20 @@ class _SampleState extends State<Sample> {
       prefs.setString('token', token.toString());
       //print(token);
 
-      //portNo.remove(port);
-
       final response = await http.post(
           Uri.parse('http://$publicIP:$PORT/api/devices/adddevice'),
           headers: <String, String>{
             'Content-Type': 'application/json; charset=UTF-8',
             "Authorization": "Bearer $token"
-            // "Authorization":
-            //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiLCI2MTcyNmM2MDEzZDBkZTFjNDUyNTE1NzUiLCI2MTcyNzI4ZjEzZDBkZTFjNDUyNTE1ODgiXSwiX192IjowfSwiaWF0IjoxNjM0OTc2MDA4LCJleHAiOjE2MzQ5ODMyMDh9.ZhtMPZfQi9zRZx5GZ46HMNo8tGUqY_eBue4hs9JnLy8"
           },
           body: jsonEncode(
-            <String, String>{
+            {
               'homeid': homeId,
               'roomid': roomId,
               'deviceType': deviceType,
-              'devicename': deviceName,
               'cdeviceNumber': '1234567890',
               'port': port,
-              //print(widget.noOfRooms)
+              'devicename': deviceName,
             },
           ));
       //

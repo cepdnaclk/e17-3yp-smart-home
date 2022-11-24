@@ -1,7 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
+import 'dart:math';
+
+import '../../constants.dart';
 
 class WhiteLight extends StatefulWidget {
   final String homeId;
@@ -28,41 +34,49 @@ class _WhiteLightState extends State<WhiteLight> {
   String port;
   _WhiteLightState(this.homeId, this.roomId, this.deviceid, this.port);
 
-
   String _lightName = 'Bed Room';
   String _roomName = 'Bed Room';
   bool _lightIsOn = false;
   bool _scheduleIsOn = false;
+  String? userid;
+  String? tokensend;
 
-  TimeOfDay _time = TimeOfDay(hour: 7, minute: 00);
-  TimeOfDay _endTime = TimeOfDay(hour: 8, minute: 00);
+  TimeOfDay _time = TimeOfDay(hour: 13, minute: 00);
+  TimeOfDay _endTime = TimeOfDay(hour: 13, minute: 15);
 
+  @override
+  initState() {
+    super.initState();
+    getData();
+  }
 
   //send Data
   void sendData() async {
     try {
-      print("1\n");
-
+      print(deviceid);
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
       userid = prefs.getString('userid');
-      print(token);
+      //print(token);
       tokensend = token.toString();
 
-      //final queryParameters = {'userid': '$userid'};
+      //print
+      print(_lightIsOn);
+      print(port);
 
-      final response =
-          await http.post(Uri.parse('http://$publicIP:$PORT/api/devices/...'),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8',
-                "Authorization": "Bearer $token"
-              },
-              body: jsonEncode(
-                <String, String>{
-                  //'_id': homeId,
-                  '_id': roomId,
-                },
-              ));
+      final response = await http.post(
+          Uri.parse('http://$publicIP:$PORT/api/devices/turnOn'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            "Authorization": "Bearer $token"
+          },
+          body: jsonEncode(
+            {
+              'state': _lightIsOn.toString(),
+              'port': port,
+              'deviceid': deviceid
+            },
+          ));
 
       print(response.statusCode);
       print(response.body);
@@ -70,12 +84,7 @@ class _WhiteLightState extends State<WhiteLight> {
       if (response.statusCode == 200) {
         Map<String, dynamic> resp = json.decode(response.body);
 
-        //print(resp["numberOfhomes"]);
-        //data = resp["rooms"];
-        //NoOfRooms = resp["numberOfrooms"];
-
-        setState(() {
-        });
+        setState(() {});
       } else if (response.statusCode == 403) {
         Fluttertoast.showToast(
             msg: "Requested time out. Please log in again.",
@@ -105,6 +114,7 @@ class _WhiteLightState extends State<WhiteLight> {
   void getData() async {
     try {
       print("1\n");
+      print(deviceid);
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
@@ -112,17 +122,17 @@ class _WhiteLightState extends State<WhiteLight> {
       print(token);
       tokensend = token.toString();
 
-      final response =
-          await http.post(Uri.parse('http://$publicIP:$PORT/api/devices/status'),
-              headers: <String, String>{
-                'Content-Type': 'application/json; charset=UTF-8',
-                "Authorization": "Bearer $token"
-              },
-              body: jsonEncode(
-                <String, String>{
-                  'deviceid': deviceid,
-                },
-              ));
+      final response = await http.post(
+          Uri.parse('http://$publicIP:$PORT/api/devices/status'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            "Authorization": "Bearer $token"
+          },
+          body: jsonEncode(
+            {
+              'deviceid': deviceid,
+            },
+          ));
 
       print(response.statusCode);
       print(response.body);
@@ -130,12 +140,10 @@ class _WhiteLightState extends State<WhiteLight> {
       if (response.statusCode == 200) {
         Map<String, dynamic> resp = json.decode(response.body);
 
-        //print(resp["numberOfhomes"]);
-        //data = resp["rooms"];
-        //NoOfRooms = resp["numberOfrooms"];
+        //_lightIsOn = resp["device"]["status"] == 0 ? false : true;
+        _lightIsOn = resp["device"]["status"];
 
-        setState(() {
-        });
+        setState(() {});
       } else if (response.statusCode == 403) {
         Fluttertoast.showToast(
             msg: "Requested time out. Please log in again.",
@@ -161,7 +169,74 @@ class _WhiteLightState extends State<WhiteLight> {
     }
   }
 
+//schedule
+  void sheduleData() async {
+    try {
+      print("shedule\n");
+      print(_time.format(context));
 
+      DateTime startTime = DateFormat.jm().parse(_time.format(context));
+      DateTime endTime = DateFormat.jm().parse(_endTime.format(context));
+      print(startTime);
+      print(endTime);
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      userid = prefs.getString('userid');
+      //print(token);
+      tokensend = token.toString();
+
+      final response = await http.post(
+          Uri.parse('http://$publicIP:$PORT/api/devices/schedule'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            "Authorization": "Bearer $token"
+          },
+          body: jsonEncode(
+            {
+              'port': port,
+              'deviceid': deviceid,
+              'StartTime': startTime.toString(),
+              'EndTime': endTime.toString(),
+              'schedulestate': _scheduleIsOn.toString(),
+              'd_t': 2,
+            },
+          ));
+
+      print(deviceid);
+      print(_time);
+      print(_scheduleIsOn.toString());
+      print(response.statusCode);
+      print(response.body);
+
+      if (response.statusCode == 200) {
+        Map<String, dynamic> resp = json.decode(response.body);
+
+        setState(() {});
+      } else if (response.statusCode == 403) {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      }
+    } on Exception catch (e) {
+      print("exep");
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+  }
 
   void _selectTime() async {
     final TimeOfDay? newTime = await showTimePicker(
@@ -189,7 +264,7 @@ class _WhiteLightState extends State<WhiteLight> {
     }
   }
 
-  double _rating = 0;
+  double _rating = 100;
 
   @override
   Widget build(BuildContext context) {
@@ -260,6 +335,7 @@ class _WhiteLightState extends State<WhiteLight> {
                               setState(() {
                                 // Toggle light when tapped.
                                 _lightIsOn = !_lightIsOn;
+                                sendData();
                               });
                             },
                             child: Container(
@@ -327,6 +403,7 @@ class _WhiteLightState extends State<WhiteLight> {
                               setState(() {
                                 // Toggle light when tapped.
                                 _scheduleIsOn = !_scheduleIsOn;
+                                sheduleData();
                               });
                             },
                             child: Container(

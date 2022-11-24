@@ -5,6 +5,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import '../../constants.dart';
+import 'package:intl/intl.dart';
 
 class RGB_light extends StatefulWidget {
   final String homeId;
@@ -41,8 +42,9 @@ class _RGB_lightState extends State<RGB_light> {
   int g = 0;
   int b = 0;
 
-  TimeOfDay _time = TimeOfDay(hour: 7, minute: 15);
-  TimeOfDay _endTime = TimeOfDay(hour: 7, minute: 15);
+  TimeOfDay _time = TimeOfDay(hour: 13, minute: 00);
+  TimeOfDay _endTime = TimeOfDay(hour: 13, minute: 15);
+  //TimeOfDay _startTime = TimeOfDay(hour:int.parse(s.split(":")[0]),minute: int.parse(s.split(":")[1]));
 
   double _rating = 100;
 
@@ -52,7 +54,8 @@ class _RGB_lightState extends State<RGB_light> {
     print(port);
     super.initState();
     getData();
-    //print(showDelete);
+    print("deviceid");
+    print(deviceid);
   }
 
   List data = [];
@@ -65,7 +68,6 @@ class _RGB_lightState extends State<RGB_light> {
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
       userid = prefs.getString('userid');
-      //print(token);
       tokensend = token.toString();
 
       final response = await http.post(
@@ -93,7 +95,8 @@ class _RGB_lightState extends State<RGB_light> {
         g = resp["device"]['g'];
         b = resp["device"]['b'];
         _rating = resp["device"]["brightness"].toDouble();
-        _lightIsOn = resp["device"]["status"] == 0 ? false : true;
+        //_lightIsOn = resp["device"]["status"] == 0 ? false : true;
+        _lightIsOn = resp["device"]["status"];
         print(r);
         print(g);
 
@@ -126,27 +129,21 @@ class _RGB_lightState extends State<RGB_light> {
   void sendData() async {
     try {
       print("1\n");
-      print(homeId);
 
       SharedPreferences prefs = await SharedPreferences.getInstance();
       String? token = prefs.getString('token');
       userid = prefs.getString('userid');
-      //print(token);
       tokensend = token.toString();
-
-      //final queryParameters = {'userid': '$userid'};
 
       final response =
           await http.post(Uri.parse('http://$publicIP:$PORT/api/devices/rgb'),
               headers: <String, String>{
                 'Content-Type': 'application/json; charset=UTF-8',
                 "Authorization": "Bearer $token"
-                // "Authorization":
-                //     "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyIjp7Il9pZCI6IjYxNzI0NGQwYjhjMDY3NDY5ZDQ1NWFiZSIsIm5hbWUiOiJhcnNoYWQxMjMiLCJtYWlsIjoibW9tYXJkOThAZ21haWwuY29tIiwicGFzc3dvcmQiOiIkMmIkMTAkTVdiMGpzSGhRLzFVL001WjBjN2xqLjAxN3RKZTgxZTIySDJsNjlBMTVjZU9hRkhqMTFFSm0iLCJob21lcyI6WyI2MTcyNTNjNjFmZjk0Yzc4MmFiOGQyNzQiLCI2MTcyNmM2MDEzZDBkZTFjNDUyNTE1NzUiLCI2MTcyNzI4ZjEzZDBkZTFjNDUyNTE1ODgiXSwiX192IjowfSwiaWF0IjoxNjM0OTE1MzQzLCJleHAiOjE2MzQ5MjI1NDN9.L9XenAuK9qjmsgFWuP-AQzll5EgAaT4YjEAPkYfKbqQ"
               },
               body: jsonEncode(
                 {
-                  'state': _lightIsOn,
+                  'state': _lightIsOn.toString(),
                   'deviceType': 'rgb',
                   'port': port,
                   //color
@@ -154,32 +151,86 @@ class _RGB_lightState extends State<RGB_light> {
                   'g': g,
                   'b': b,
                   'brightness': _rating.toInt(),
-                  'deviceid': deviceid
+                  'deviceid': deviceid,
                 },
               ));
 
       print(response.statusCode);
       print(response.body);
 
-      //int NoOfRooms;
+      if (response.statusCode == 200) {
+        Map<String, dynamic> resp = json.decode(response.body);
+
+        setState(() {});
+      } else if (response.statusCode == 403) {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      } else {
+        Fluttertoast.showToast(
+            msg: "Requested time out. Please log in again.",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            fontSize: 16.0,
+            backgroundColor: Colors.red,
+            textColor: Colors.white);
+      }
+    } on Exception catch (e) {
+      print("exep");
+      print(e);
+    } catch (e) {
+      print(e);
+    }
+  }
+
+  //schedule
+  void sheduleData() async {
+    try {
+      print("shedule\n");
+      print(_time.format(context));
+
+      DateTime startTime = DateFormat.jm().parse(_time.format(context));
+      DateTime endTime = DateFormat.jm().parse(_endTime.format(context));
+      print(startTime);
+      print(endTime);
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      String? token = prefs.getString('token');
+      userid = prefs.getString('userid');
+      //print(token);
+      tokensend = token.toString();
+
+      final response = await http.post(
+          Uri.parse('http://$publicIP:$PORT/api/devices/schedule'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+            "Authorization": "Bearer $token"
+          },
+          body: jsonEncode(
+            {
+              'port': port,
+              'deviceid': deviceid,
+              'StartTime': startTime.toString(),
+              'EndTime': endTime.toString(),
+              'schedulestate': _scheduleIsOn.toString(),
+              'd_t': 1,
+            },
+          ));
+
+      print(deviceid);
+      print(_time);
+      print(_scheduleIsOn.toString());
+      print(response.statusCode);
+      print(response.body);
 
       if (response.statusCode == 200) {
         Map<String, dynamic> resp = json.decode(response.body);
 
-        //data = resp["rooms"];
-        //NoOfRooms = resp["numberOfrooms"];
-
-        print(data);
-
-        //print(NoOfRooms);
-
-        setState(() {
-          // if (NoOfRooms == 0) {
-          //   page = startpage();
-          // } else {
-          //   page = HomesMainPage(homeList);
-          // }
-        });
+        setState(() {});
       } else if (response.statusCode == 403) {
         Fluttertoast.showToast(
             msg: "Requested time out. Please log in again.",
@@ -306,6 +357,9 @@ class _RGB_lightState extends State<RGB_light> {
                               setState(() {
                                 // Toggle light when tapped.
                                 _lightIsOn = !_lightIsOn;
+                                r = 255;
+                                g = 255;
+                                b = 255;
                                 sendData();
                               });
                             },
@@ -595,6 +649,7 @@ class _RGB_lightState extends State<RGB_light> {
                               setState(() {
                                 // Toggle light when tapped.
                                 _scheduleIsOn = !_scheduleIsOn;
+                                sheduleData();
                               });
                             },
                             child: Container(

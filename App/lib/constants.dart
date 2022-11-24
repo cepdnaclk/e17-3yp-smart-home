@@ -4,7 +4,7 @@ const kPrimaryColor = Color(0xFF6F35A5);
 const kPrimaryLightColor = Color(0xFFF1E6FF);
 //const publicIP = "54.209.2.221";
 //const publicIP = "192.168.137.1"; //mobile
-const publicIP = "ec2-13-212-21-9.ap-southeast-1.compute.amazonaws.com";
+const publicIP = "ec2-13-212-238-149.ap-southeast-1.compute.amazonaws.com";
 const PORT = "5001";
 
 const kTextFieldDecoration = InputDecoration(
